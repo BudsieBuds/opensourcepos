@@ -2,12 +2,6 @@ module.exports = function(grunt) {
 
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
-		wiredep: {
-			task: {
-				ignorePath: '../../../public/',
-				src: ['application/views/partial/header.php']
-			}
-		},
 		bower_concat: {
 			all: {
 				mainFiles: {
@@ -39,6 +33,7 @@ module.exports = function(grunt) {
 				files: {
 					'jquery-ui': 'themes/base/jquery-ui.min.css'
 				}
+<<<<<<< Updated upstream
 			},
 			targetdistbootswatch: {
 				options: {
@@ -58,6 +53,97 @@ module.exports = function(grunt) {
 				}
 			}
 		},
+=======
+			}
+		},
+		copy: {
+			jqueryui: {
+				files: [{
+					expand: true,
+					cwd: 'node_modules/bootstrap/dist/css',
+					src: ['bootstrap.css', 'bootstrap.min.css'],
+					dest: 'public/dist/bootswatch/bootstrap/',
+					filter: 'isFile'},
+				],
+			},
+			themes: {
+				files: [{
+					expand: true,
+					cwd: 'node_modules/bootstrap/dist/css',
+					src: ['bootstrap.css', 'bootstrap.min.css'],
+					dest: 'public/dist/bootswatch/bootstrap/',
+					filter: 'isFile'},
+					{
+					expand: true,
+					cwd: 'node_modules/bootstrap-5/dist/css',
+					src: ['bootstrap.css', 'bootstrap.min.css'],
+					dest: 'public/dist/bootswatch-5/bootstrap/',
+					filter: 'isFile'},
+					{
+					expand: true,
+					cwd: 'node_modules/bootstrap/dist/js',
+					src: ['bootstrap.js', 'bootstrap.min.js'],
+					dest: 'public/dist/bootstrap/js/',
+					filter: 'isFile'},
+					{
+					expand: true,
+					cwd: 'node_modules/bootswatch',
+					src: ['**/bootstrap.css', '**/bootstrap.min.css'],
+					dest: 'public/dist/bootswatch/',
+					filter: 'isFile'},
+					{
+					expand: true,
+					cwd: 'node_modules/bootswatch-5/dist',
+					src: ['**/bootstrap.css', '**/bootstrap.min.css'],
+					dest: 'public/dist/bootswatch-5/',
+					filter: 'isFile'},
+				],
+			},
+			licenses: {
+				files: [{
+					expand: true,
+					src: 'LICENSE',
+					dest: 'public/license/',
+					filter: 'isFile',},
+					{
+					expand: true,
+					cwd: 'node_modules/bootstrap-5',
+					src: 'LICENSE',
+					dest: 'public/license/',
+					rename: function(dest, src) { return dest + src.replace('LICENSE', 'bootstrap-5.license'); },
+					filter: 'isFile',},
+					{
+					expand: true,
+					cwd: 'node_modules/bootstrap',
+					src: 'LICENSE',
+					dest: 'public/license/',
+					rename: function(dest, src) { return dest + src.replace('LICENSE', 'bootstrap.license'); },
+					filter: 'isFile',},
+					{
+					expand: true,
+					cwd: 'node_modules/bootstrap-icons',
+					src: 'LICENSE.md',
+					dest: 'public/license/',
+					rename: function(dest, src) { return dest + src.replace('LICENSE.md', 'bootstrap-icons.license'); },
+					filter: 'isFile',},
+					{
+					expand: true,
+					cwd: 'node_modules/bootswatch',
+					src: 'LICENSE',
+					dest: 'public/license/',
+					rename: function(dest, src) { return dest + src.replace('LICENSE', 'bootswatch.license'); },
+					filter: 'isFile',},
+					{
+					expand: true,
+					cwd: 'node_modules/bootswatch-5',
+					src: 'LICENSE',
+					dest: 'public/license/',
+					rename: function(dest, src) { return dest + src.replace('LICENSE', 'bootswatch-5.license'); },
+					filter: 'isFile',},
+				],
+			},
+		},
+>>>>>>> Stashed changes
 		cssmin: {
 			target: {
 				files: {
@@ -263,17 +349,21 @@ module.exports = function(grunt) {
 		}
 	});
 
-	require('load-grunt-tasks')(grunt);
-	grunt.loadNpmTasks('grunt-mocha-webdriver');
-	grunt.loadNpmTasks('grunt-composer');
-	grunt.loadNpmTasks('grunt-apigen');
+	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-contrib-compress');
+	grunt.loadNpmTasks('grunt-contrib-concat');
+	grunt.loadNpmTasks('grunt-contrib-copy');
+	grunt.loadNpmTasks('grunt-contrib-cssmin');
+	grunt.loadNpmTasks('grunt-contrib-jshint');
+	grunt.loadNpmTasks('grunt-contrib-uglify');
+	grunt.loadNpmTasks('grunt-contrib-watch');
 
+<<<<<<< Updated upstream
 	grunt.registerTask('default', ['wiredep', 'bower_concat', 'bowercopy', 'concat', 'uglify', 'cssmin', 'tags', 'cachebreaker']);
 	grunt.registerTask('update', ['composer:update', 'bower:update']);
+=======
+	grunt.registerTask('default', ['copy', 'concat', 'uglify', 'cssmin']);
+>>>>>>> Stashed changes
 	grunt.registerTask('genlicense', ['clean:license', 'license', 'bower-licensechecker']);
-	grunt.registerTask('package', ['default', 'compress']);
-	grunt.registerTask('packages', ['composer:update']);
-	grunt.registerTask('gendocs', ['apigen:generate']);
 
 };
