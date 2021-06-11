@@ -358,12 +358,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 
-<<<<<<< Updated upstream
-	grunt.registerTask('default', ['wiredep', 'bower_concat', 'bowercopy', 'concat', 'uglify', 'cssmin', 'tags', 'cachebreaker']);
-	grunt.registerTask('update', ['composer:update', 'bower:update']);
-=======
 	grunt.registerTask('default', ['copy', 'concat', 'uglify', 'cssmin']);
->>>>>>> Stashed changes
 	grunt.registerTask('genlicense', ['clean:license', 'license', 'bower-licensechecker']);
 
 };
