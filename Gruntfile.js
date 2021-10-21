@@ -70,6 +70,13 @@ module.exports = function(grunt) {
 					},
 					{
 						expand: true,
+						cwd: "node_modules/bootstrap-icons/font",
+						src: ["fonts/**", "bootstrap-icons.css"],
+						dest: "public/dist/bootstrap-icons/",
+						filter: "isFile",
+					},
+					{
+						expand: true,
 						cwd: 'node_modules/bootswatch/dist',
 						src: ['**/bootstrap.css', '**/bootstrap.min.css'],
 						dest: 'public/dist/bootswatch-5/',

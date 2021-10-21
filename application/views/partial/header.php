@@ -1,11 +1,17 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!doctype html>
+<html lang="<?= current_language_code(); ?>">
+
 <head>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<base href="<?php echo base_url();?>" />
-	<title><?php echo $this->config->item('company') . ' | ' . $this->lang->line('common_powered_by') . ' OSPOS ' . $this->config->item('application_version') ?></title>
+	<meta charset="utf-8">
+	<base href="<?= base_url(); ?>">
+	<title><?= $this->config->item('company') . '&nbsp;|&nbsp;' . $this->lang->line('common_powered_by') . '&nbsp;' . $this->lang->line('common_software_short') . '&nbsp;' . $this->config->item('application_version') ?></title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="robots" content="noindex, nofollow">
 	<link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico">
-	<link rel="stylesheet" type="text/css" href="<?php echo 'dist/bootswatch/' . (empty($this->config->item('theme')) ? 'flatly' : $this->config->item('theme')) . '/bootstrap.min.css' ?>"/>
+	<link rel="stylesheet" type="text/css" href="<?= 'dist/bootswatch-5/' . (empty($this->config->item('theme')) ? 'flatly' : $this->config->item('theme')) . '/bootstrap.min.css' ?>">
+	<link rel="stylesheet" type="text/css" href="dist/bootstrap-icons/bootstrap-icons.css">
+	<link rel="stylesheet" type="text/css" href="css/new.css">
+	<meta name="theme-color" content="#2c3e50">
 
 	<?php if ($this->input->cookie('debug') == 'true' || $this->input->get('debug') == 'true') : ?>
 		<!-- bower:css -->
@@ -23,14 +29,13 @@
 		<link rel="stylesheet" href="bower_components/bootstrap-toggle/css/bootstrap-toggle.min.css" />
 		<!-- endbower -->
 		<!-- start css template tags -->
-		<link rel="stylesheet" type="text/css" href="css/bootstrap.autocomplete.css"/>
-		<link rel="stylesheet" type="text/css" href="css/invoice.css"/>
-		<link rel="stylesheet" type="text/css" href="css/ospos_print.css"/>
-		<link rel="stylesheet" type="text/css" href="css/ospos.css"/>
-		<link rel="stylesheet" type="text/css" href="css/popupbox.css"/>
-		<link rel="stylesheet" type="text/css" href="css/receipt.css"/>
-		<link rel="stylesheet" type="text/css" href="css/register.css"/>
-		<link rel="stylesheet" type="text/css" href="css/reports.css"/>
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.autocomplete.css" />
+		<link rel="stylesheet" type="text/css" href="css/invoice.css" />
+		<link rel="stylesheet" type="text/css" href="css/ospos_print.css" />
+		<link rel="stylesheet" type="text/css" href="css/popupbox.css" />
+		<link rel="stylesheet" type="text/css" href="css/receipt.css" />
+		<link rel="stylesheet" type="text/css" href="css/register.css" />
+		<link rel="stylesheet" type="text/css" href="css/reports.css" />
 		<!-- end css template tags -->
 		<!-- bower:js -->
 		<script src="bower_components/jquery/dist/jquery.js"></script>
@@ -64,7 +69,6 @@
 		<script src="bower_components/bootstrap-toggle/js/bootstrap-toggle.min.js"></script>
 		<!-- endbower -->
 		<!-- start js template tags -->
-		<script type="text/javascript" src="dist/bootstrap/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="js/clipboard.min.js"></script>
 		<script type="text/javascript" src="js/imgpreview.full.jquery.js"></script>
 		<script type="text/javascript" src="js/manage_tables.js"></script>
@@ -75,17 +79,17 @@
 		<link rel="stylesheet" media="print" href="dist/print.css" type="text/css" />
 		<![endif]-->
 		<!-- start mincss template tags -->
-		<link rel="stylesheet" type="text/css" href="dist/jquery-ui/jquery-ui.min.css"/>
-		<link rel="stylesheet" type="text/css" href="dist/opensourcepos.min.css?rel=88e63d8098"/>
+		<link rel="stylesheet" type="text/css" href="dist/jquery-ui/jquery-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="dist/opensourcepos.min.css?rel=d783620a21" />
 		<!-- end mincss template tags -->
 
 		<!-- Tweaks to the UI for a particular theme should drop here  -->
-	<?php if ($this->config->item('theme') != 'flatly' && file_exists($_SERVER['DOCUMENT_ROOT'] . '/public/css/' . $this->config->item('theme') . '.css')) { ?>
-		<link rel="stylesheet" type="text/css" href="<?php echo 'css/' . $this->config->item('theme') . '.css' ?>"/>
-	<?php } ?>
+		<?php if ($this->config->item('theme') != 'flatly' && file_exists($_SERVER['DOCUMENT_ROOT'] . '/public/css/' . $this->config->item('theme') . '.css')) { ?>
+			<link rel="stylesheet" type="text/css" href="<?php echo 'css/' . $this->config->item('theme') . '.css' ?>" />
+		<?php } ?>
 
 		<!-- start minjs template tags -->
-		<script type="text/javascript" src="dist/opensourcepos.min.js?rel=64a537c419"></script>
+		<script type="text/javascript" src="dist/opensourcepos.min.js?rel=d5a833fa34"></script>
 		<!-- end minjs template tags -->
 	<?php endif; ?>
 
@@ -99,53 +103,53 @@
 	</style>
 </head>
 
-<body>
-	<div class="wrapper">
-		<div class="topbar">
-			<div class="container">
-				<div class="navbar-left">
-					<div id="liveclock"><?php echo date($this->config->item('dateformat') . ' ' . $this->config->item('timeformat')) ?></div>
-				</div>
-
-				<div class="navbar-right" style="margin:0">
-					<?php echo anchor('home/change_password/'.$user_info->person_id, $user_info->first_name . ' ' . $user_info->last_name, array('class' => 'modal-dlg', 'data-btn-submit' => $this->lang->line('common_submit'), 'title' => $this->lang->line('employees_change_password'))); ?>
-					<?php echo '  |  ' . ($this->input->get('debug') == 'true' ? $this->session->userdata('session_sha1') . '  |  ' : ''); ?>
-					<?php echo anchor('home/logout', $this->lang->line('login_logout')); ?>
-				</div>
-
-				<div class="navbar-center" style="text-align:center">
-					<strong><?php echo $this->config->item('company'); ?></strong>
-				</div>
+<body class="d-flex flex-column">
+	<header class="flex-shrink-0 small bg-light py-1">
+		<div class="container-lg container-navbar d-flex flex-wrap-reverse justify-content-between align-items-center">
+			<div class="flex-grow-1 d-none d-md-block ps-md-3 ps-lg-0">
+				<span id="liveclock">
+					<?= date($this->config->item('dateformat') . ' ' . $this->config->item('timeformat')) ?>
+				</span>
+			</div>
+			<div class="fw-bold ps-3 ps-md-0">
+				<?= $this->config->item('company'); ?>
+			</div>
+			<div class="flex-grow-1 text-end pe-3 pe-lg-0">
+				<button href="home/change_password/<?= $user_info->person_id; ?>" type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#profile-modal" title="<?= $this->lang->line('employees_change_password'); ?>">
+					<?= $user_info->first_name . '&nbsp;' . $user_info->last_name; ?>
+				</button>
+				<a href="home/logout" class="btn btn-sm btn-outline-primary ms-1" role="button" data-bs-toggle="button">
+					<?= $this->lang->line('login_logout'); ?>
+				</a>
 			</div>
 		</div>
+	</header>
 
-		<div class="navbar navbar-default" role="navigation">
-			<div class="container">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
-						<span class="sr-only">Toggle navigation</span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark py-0">
+		<div class="container-lg container-navbar">
+			<a class="navbar-brand py-2 pe-1 ps-3 ps-lg-0" href="<?= site_url(); ?>"><?= $this->lang->line('common_software_short'); ?></a>
+			<button class="navbar-toggler my-2 mx-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
 
-					<a class="navbar-brand hidden-sm" href="<?php echo site_url(); ?>">OSPOS</a>
-				</div>
-
-				<div class="navbar-collapse collapse">
-					<ul class="nav navbar-nav navbar-right">
-						<?php foreach($allowed_modules as $module): ?>
-							<li class="<?php echo $module->module_id == $this->uri->segment(1) ? 'active' : ''; ?>">
-								<a href="<?php echo site_url("$module->module_id"); ?>" title="<?php echo $this->lang->line("module_" . $module->module_id); ?>" class="menu-icon">
-									<img src="<?php echo base_url() . 'images/menubar/' . $module->module_id . '.png'; ?>" border="0" alt="Module Icon"/><br/>
-									<?php echo $this->lang->line("module_" . $module->module_id) ?>
-								</a>
-							</li>
-						<?php endforeach; ?>
-					</ul>
-				</div>
+			<div class="collapse navbar-collapse" id="navbar">
+				<ul class="navbar-nav ms-0 ms-lg-auto">
+					<?php foreach ($allowed_modules as $module) : ?>
+						<li class="d-none d-lg-block nav-item ms-1 <?= $module->module_id == $this->uri->segment(1) ? 'active bg-body border border-2 border-top-0 border-bottom-0 border-secondary' : ''; ?>" data-bs-toggle="tooltip" data-bs-placement="bottom" title="<?= $this->lang->line("module_" . $module->module_id); ?>">
+							<a class="nav-link p-2" href="<?= site_url("$module->module_id"); ?>">
+								<img src="<?= base_url() . 'images/menubar/' . $module->module_id . '.svg'; ?>" alt="<?= $this->lang->line('common_icon') . '&nbsp;' . $this->lang->line("module_" . $module->module_id); ?>">
+							</a>
+						</li>
+						<li class="d-lg-none nav-item py-1 <?= $module->module_id == $this->uri->segment(1) ? 'active bg-light' : ''; ?>">
+							<a class="nav-link p-0 <?= $module->module_id == $this->uri->segment(1) ? 'text-body' : ''; ?>" href="<?= site_url("$module->module_id"); ?>">
+								<img class="ps-3 pe-1 my-1" src="<?= base_url() . 'images/menubar/' . $module->module_id . '.svg'; ?>" alt="<?= $this->lang->line('common_icon') . '&nbsp;' . $this->lang->line("module_" . $module->module_id); ?>">
+								<span class="align-middle"><?= $this->lang->line("module_" . $module->module_id) ?></span>
+							</a>
+						</li>
+					<?php endforeach; ?>
+				</ul>
 			</div>
 		</div>
+	</nav>
 
-		<div class="container">
-			<div class="row">
+	<main class="container-lg flex-grow-1 py-3">
