@@ -1,6 +1,6 @@
 <?php $this->load->view("partial/header"); ?>
 
-<h3 class="text-center pb-3"><?= $this->lang->line('common_welcome_message'); ?></h3>
+<h3 class="text-center pb-2"><?= $this->lang->line('common_welcome_message'); ?></h3>
 
 <section class="container-fluid d-flex flex-wrap justify-content-center gap-3 p-0">
 	<?php foreach ($allowed_modules as $module) { ?>

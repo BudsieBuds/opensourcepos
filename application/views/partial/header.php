@@ -2,15 +2,17 @@
 <html lang="<?= current_language_code(); ?>">
 
 <head>
+
 	<meta charset="utf-8">
 	<base href="<?= base_url(); ?>">
 	<title><?= $this->config->item('company') . '&nbsp;|&nbsp;' . $this->lang->line('common_powered_by') . '&nbsp;' . $this->lang->line('common_software_short') . '&nbsp;' . $this->config->item('application_version') ?></title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="robots" content="noindex, nofollow">
 	<link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico">
+
 	<link rel="stylesheet" type="text/css" href="<?= 'dist/bootswatch-5/' . (empty($this->config->item('theme')) ? 'flatly' : $this->config->item('theme')) . '/bootstrap.min.css' ?>">
 	<link rel="stylesheet" type="text/css" href="dist/bootstrap-icons/bootstrap-icons.css">
-	<link rel="stylesheet" type="text/css" href="css/new.css">
+
 	<meta name="theme-color" content="#2c3e50">
 
 	<?php if ($this->input->cookie('debug') == 'true' || $this->input->get('debug') == 'true') : ?>
@@ -29,13 +31,14 @@
 		<link rel="stylesheet" href="bower_components/bootstrap-toggle/css/bootstrap-toggle.min.css" />
 		<!-- endbower -->
 		<!-- start css template tags -->
-		<link rel="stylesheet" type="text/css" href="css/bootstrap.autocomplete.css" />
-		<link rel="stylesheet" type="text/css" href="css/invoice.css" />
-		<link rel="stylesheet" type="text/css" href="css/ospos_print.css" />
-		<link rel="stylesheet" type="text/css" href="css/popupbox.css" />
-		<link rel="stylesheet" type="text/css" href="css/receipt.css" />
-		<link rel="stylesheet" type="text/css" href="css/register.css" />
-		<link rel="stylesheet" type="text/css" href="css/reports.css" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.autocomplete.css"/>
+		<link rel="stylesheet" type="text/css" href="css/general.css"/>
+		<link rel="stylesheet" type="text/css" href="css/invoice.css"/>
+		<link rel="stylesheet" type="text/css" href="css/ospos_print.css"/>
+		<link rel="stylesheet" type="text/css" href="css/popupbox.css"/>
+		<link rel="stylesheet" type="text/css" href="css/receipt.css"/>
+		<link rel="stylesheet" type="text/css" href="css/register.css"/>
+		<link rel="stylesheet" type="text/css" href="css/reports.css"/>
 		<!-- end css template tags -->
 		<!-- bower:js -->
 		<script src="bower_components/jquery/dist/jquery.js"></script>
@@ -69,6 +72,7 @@
 		<script src="bower_components/bootstrap-toggle/js/bootstrap-toggle.min.js"></script>
 		<!-- endbower -->
 		<!-- start js template tags -->
+		<script type="text/javascript" src="js/bs-tooltips.js"></script>
 		<script type="text/javascript" src="js/clipboard.min.js"></script>
 		<script type="text/javascript" src="js/imgpreview.full.jquery.js"></script>
 		<script type="text/javascript" src="js/manage_tables.js"></script>
@@ -79,8 +83,8 @@
 		<link rel="stylesheet" media="print" href="dist/print.css" type="text/css" />
 		<![endif]-->
 		<!-- start mincss template tags -->
-		<link rel="stylesheet" type="text/css" href="dist/jquery-ui/jquery-ui.min.css" />
-		<link rel="stylesheet" type="text/css" href="dist/opensourcepos.min.css?rel=d783620a21" />
+		<link rel="stylesheet" type="text/css" href="dist/jquery-ui/jquery-ui.min.css"/>
+		<link rel="stylesheet" type="text/css" href="dist/opensourcepos.min.css?rel=b6314fe244"/>
 		<!-- end mincss template tags -->
 
 		<!-- Tweaks to the UI for a particular theme should drop here  -->
@@ -89,21 +93,17 @@
 		<?php } ?>
 
 		<!-- start minjs template tags -->
-		<script type="text/javascript" src="dist/opensourcepos.min.js?rel=d5a833fa34"></script>
+		<script type="text/javascript" src="dist/opensourcepos.min.js?rel=ef7faeb89c"></script>
 		<!-- end minjs template tags -->
 	<?php endif; ?>
 
 	<?php $this->load->view('partial/header_js'); ?>
 	<?php $this->load->view('partial/lang_lines'); ?>
 
-	<style type="text/css">
-		html {
-			overflow: auto;
-		}
-	</style>
 </head>
 
 <body class="d-flex flex-column">
+
 	<header class="flex-shrink-0 small bg-light py-1">
 		<div class="container-lg container-navbar d-flex flex-wrap-reverse justify-content-between align-items-center">
 			<div class="flex-grow-1 d-none d-md-block ps-md-3 ps-lg-0">
@@ -118,7 +118,7 @@
 				<button href="home/change_password/<?= $user_info->person_id; ?>" type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#profile-modal" title="<?= $this->lang->line('employees_change_password'); ?>">
 					<?= $user_info->first_name . '&nbsp;' . $user_info->last_name; ?>
 				</button>
-				<a href="home/logout" class="btn btn-sm btn-outline-primary ms-1" role="button" data-bs-toggle="button">
+				<a href="home/logout" class="btn btn-sm btn-outline-primary ms-1" role="button">
 					<?= $this->lang->line('login_logout'); ?>
 				</a>
 			</div>
