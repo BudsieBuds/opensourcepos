@@ -2,6 +2,7 @@
 node_modules
 vendor
 public/resources
+public/images/menubar
 app/Config/email.php
 npm-debug.log*
 
