@@ -271,14 +271,6 @@ gulp.task('copy-menubar', function() {
 });
 
 
-gulp.task('inject-login', function() {
-	return pipeline(gulp.src('./app/Views/login.php'),
-		inject(gulp.src('./public/css/login.min.css', {read: false}), {addRootSlash: false, ignorePath: '/public/', starttag: '<!-- inject:login:{{ext}} -->'}),
-		gulp.dest('./app/Views')
-	);
-});
-
-
 gulp.task('update-licenses', function() {
 	run('composer licenses --format=json --no-dev > public/license/composer.LICENSES').exec();
 	return pipeline(gulp.src('LICENSE'),gulp.dest('public/license'));
@@ -304,7 +296,6 @@ gulp.task('default',
 		'prod-css',
 		'copy-fonts',
 		'copy-menubar',
-		'inject-login',
 		'update-licenses',
 		'build-database'
 	));
