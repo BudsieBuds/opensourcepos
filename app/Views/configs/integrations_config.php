@@ -15,7 +15,7 @@
 				<?= form_label(lang('Config.mailchimp_api_key'), 'mailchimp_api_key', ['class' => 'control-label col-xs-2']) ?>
 				<div class="col-xs-4">
 					<div class="input-group">
-						<span class="input-group-addon input-sm"><span class="glyphicon glyphicon-cloud"></span></span>
+						<span class="input-group-addon input-sm"><i class="bi-key"></i></span>
 						<?= form_input ([
 							'name' => 'mailchimp_api_key',
 							'id' => 'mailchimp_api_key',
@@ -26,7 +26,7 @@
 				</div>
 				<div class="col-xs-1">
 					<label class="control-label">
-						<a href="https://eepurl.com/b9a05b" target="_blank"><span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="<?= lang('Config.mailchimp_tooltip') //TODO: Possibly need to change the URL here to HTTPS? ?>"></span></a>
+						<a href="https://eepurl.com/b9a05b" target="_blank"><span class="bi-info-circle" data-toggle="tooltip" data-placement="right" title="<?= lang('Config.mailchimp_tooltip') //TODO: Possibly need to change the URL here to HTTPS? ?>"></span></a>
 					</label>
 				</div>
 			</div>
@@ -35,7 +35,7 @@
 				<?= form_label(lang('Config.mailchimp_lists'), 'mailchimp_list_id', ['class' => 'control-label col-xs-2']) ?>
 				<div class='col-xs-4'>
 					<div class="input-group">
-						<span class="input-group-addon input-sm"><span class="glyphicon glyphicon-user"></span></span>
+						<span class="input-group-addon input-sm"><i class="bi-person-lines-fill"></i></span>
 						<?= form_dropdown(
 							'mailchimp_list_id',
 							$mailchimp['lists'],

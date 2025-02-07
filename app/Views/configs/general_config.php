@@ -28,7 +28,7 @@
 						</div>
 						<div class="col-sm-7">
 							<a href="<?= 'https://bootswatch.com/3/' . ('bootstrap' == ($config['theme']) ? 'default' : esc($config['theme'])) ?>" target="_blank" rel=”noopener”>
-								<span><?= lang('Config.theme_preview') . ' ' . ucfirst(esc($config['theme'])) . ' ' ?></span><span class="glyphicon glyphicon-new-window"></span>
+								<span><?= lang('Config.theme_preview') . ' ' . ucfirst(esc($config['theme'])) . ' ' ?></span><i class="bi-box-arrow-up-right"></i></span>
 							</a>
 						</div>
 					</div>
@@ -121,7 +121,7 @@
 					]) ?>
 					&nbsp
 					<label class="control-label">
-						<span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="<?= lang('Config.enforce_privacy_tooltip') ?>"></span>
+						<span class="bi-info-circle" data-toggle="tooltip" data-placement="right" title="<?= lang('Config.enforce_privacy_tooltip') ?>"></span>
 					</label>
 				</div>
 			</div>
@@ -190,7 +190,7 @@
 					<div class="form-group form-group-sm row">
 						<div class='col-sm-2'>
 							<div class='input-group'>
-								<span class="input-group-addon input-sm"><span class="glyphicon glyphicon-resize-horizontal"></span></span>
+								<span class="input-group-addon input-sm"><i class="bi-arrows"></i></span>
 								<?= form_input ([
 									'name' => 'image_max_width',
 									'id' => 'image_max_width',
@@ -207,7 +207,7 @@
 						</div>
 						<div class='col-sm-2'>
 							<div class='input-group'>
-								<span class="input-group-addon input-sm"><span class="glyphicon glyphicon-resize-vertical"></span></span>
+								<span class="input-group-addon input-sm"><i class="bi-arrows-vertical"></i></span></span>
 								<?= form_input ([
 									'name' => 'image_max_height',
 									'id' => 'image_max_height',
@@ -224,7 +224,7 @@
 						</div>
 						<div class='col-sm-2'>
 							<div class='input-group'>
-								<span class="input-group-addon input-sm"><span class="glyphicon glyphicon-hdd"></span></span>
+								<span class="input-group-addon input-sm"><i class="bi-hdd"></i></span>
 								<?= form_input ([
 									'name' => 'image_max_size',
 									'id' => 'image_max_size',
@@ -270,7 +270,7 @@
 					]) ?>
 					<label class="control-label">
 						<a href="https://www.google.com/recaptcha/admin" target="_blank">
-							<span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="<?= lang('Config.gcaptcha_tooltip') ?>"></span>
+							<span class="bi-info-circle" data-toggle="tooltip" data-placement="right" title="<?= lang('Config.gcaptcha_tooltip') ?>"></span>
 						</a>
 					</label>
 				</div>
@@ -389,7 +389,7 @@
 					]) ?>
 					&nbsp
 					<label class="control-label">
-						<span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="<?= lang('Config.derive_sale_quantity_tooltip') ?>"></span>
+						<span class="bi-info-circle" data-toggle="tooltip" data-placement="right" title="<?= lang('Config.derive_sale_quantity_tooltip') ?>"></span>
 					</label>
 				</div>
 			</div>

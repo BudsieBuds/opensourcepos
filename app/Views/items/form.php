@@ -34,7 +34,7 @@
 			<?= form_label(lang('Items.item_number'), 'item_number', ['class' => 'control-label col-xs-3']) ?>
 			<div class='col-xs-8'>
 				<div class="input-group">
-					<span class="input-group-addon input-sm"><span class="glyphicon glyphicon-barcode"></span></span>
+					<span class="input-group-addon input-sm"><i class="bi-upc-scan"></i></span>
 					<?= form_input ([
 						'name' => 'item_number',
 						'id' => 'item_number',
@@ -61,7 +61,7 @@
 			<?= form_label(lang('Items.category'), 'category', ['class' => 'required control-label col-xs-3']) ?>
 			<div class='col-xs-8'>
 				<div class="input-group">
-					<span class="input-group-addon input-sm"><span class="glyphicon glyphicon-tag"></span></span>
+					<span class="input-group-addon input-sm"><i class="bi-tag"></i></span>
 					<?php
 						if($config['category_dropdown'])
 						{

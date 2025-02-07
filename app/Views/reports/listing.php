@@ -30,7 +30,7 @@ $detailed_reports = [
 	<div class="col-md-4">
 		<div class="panel panel-primary">
 			<div class="panel-heading">
-				<h3 class="panel-title"><span class="glyphicon glyphicon-stats">&nbsp</span><?= lang('Reports.graphical_reports') ?></h3>
+				<h3 class="panel-title"><i class="bi-bar-chart icon-spacing"></i><?= lang('Reports.graphical_reports') ?></h3>
 			</div>
 			<div class="list-group">
 				<?php foreach ($permission_ids as $permission_id)
@@ -51,7 +51,7 @@ $detailed_reports = [
 	<div class="col-md-4">
 		<div class="panel panel-primary">
 			<div class="panel-heading">
-				<h3 class="panel-title"><span class="glyphicon glyphicon-list">&nbsp</span><?= lang('Reports.summary_reports') ?></h3>
+				<h3 class="panel-title"><i class="bi-card-list icon-spacing"></i><?= lang('Reports.summary_reports') ?></h3>
 			</div>
 			<div class="list-group">
 				<?php foreach ($permission_ids as $permission_id)
@@ -72,7 +72,7 @@ $detailed_reports = [
 	<div class="col-md-4">
 		<div class="panel panel-primary">
 			<div class="panel-heading">
-				<h3 class="panel-title"><span class="glyphicon glyphicon-list-alt">&nbsp</span><?= lang('Reports.detailed_reports') ?></h3>
+				<h3 class="panel-title"><i class="bi-card-checklist icon-spacing"></i><?= lang('Reports.detailed_reports') ?></h3>
 			</div>
 			<div class="list-group">
 				<?php foreach ($detailed_reports as $report_name => $prefix)
@@ -95,7 +95,7 @@ $detailed_reports = [
 			?>
 			<div class="panel panel-primary">
 				<div class="panel-heading">
-					<h3 class="panel-title"><span class="glyphicon glyphicon-book">&nbsp</span><?= lang('Reports.inventory_reports') ?></h3>
+					<h3 class="panel-title"><i class="bi-box icon-spacing"></i><?= lang('Reports.inventory_reports') ?></h3>
 				</div>
 				<div class="list-group">
 				<?php
