@@ -30,7 +30,7 @@
 				<div class="col-xs-2">
 					<label class="control-label">
 						<a href="https://github.com/opensourcepos/opensourcepos/wiki/Localisation-support" target="_blank">
-							<span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="<?= lang('Config.number_locale_tooltip') ?>"></span>
+							<span class="bi-info-circle" data-toggle="tooltip" data-placement="right" title="<?= lang('Config.number_locale_tooltip') ?>"></span>
 						</a>
 						<span id="number_locale_example">
 							&nbsp;&nbsp;<?= to_currency(1234567890.12300) ?>
@@ -143,7 +143,7 @@
 				</div>
 				<div class='col-xs-1'>
 					<label class="control-label">
-						<span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="<?= lang('Config.cash_decimals_tooltip') ?>"></span>
+						<span class="bi-info-circle" data-toggle="tooltip" data-placement="right" title="<?= lang('Config.cash_decimals_tooltip') ?>"></span>
 					</label>
 				</div>
 			</div>
@@ -189,7 +189,7 @@
 				</div>
 				<div class="col-xs-1">
 					<label class="control-label">
-						<a href="https://wiki.openstreetmap.org/wiki/Nominatim/Country_Codes" target="_blank"><span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="<?= lang('Config.country_codes_tooltip'); //TODO: May need to change the URL at the beginning to HTTPS?>"></span></a>
+						<a href="https://wiki.openstreetmap.org/wiki/Nominatim/Country_Codes" target="_blank"><span class="bi-info-circle" data-toggle="tooltip" data-placement="right" title="<?= lang('Config.country_codes_tooltip'); //TODO: May need to change the URL at the beginning to HTTPS?>"></span></a>
 					</label>
 				</div>
 			</div>

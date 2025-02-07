@@ -197,3 +197,7 @@ label.required
 	padding-right:0;
 	padding-left: 0;
 }
+
+.icon-spacing {
+	margin-right: .5em;
+}

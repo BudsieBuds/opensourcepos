@@ -93,7 +93,7 @@
 				<?= form_label(lang('Config.email_smtp_user'), 'smtp_user', ['class' => 'control-label col-xs-2']) ?>
 				<div class="col-xs-4">
 					<div class="input-group">
-						<span class="input-group-addon input-sm"><span class="glyphicon glyphicon-user"></span></span>
+						<span class="input-group-addon input-sm"><i class="bi-person"></i></span>
 						<?= form_input ([
 							'name' => 'smtp_user',
 							'id' => 'smtp_user',
@@ -108,7 +108,7 @@
 				<?= form_label(lang('Config.email_smtp_pass'), 'smtp_pass', ['class' => 'control-label col-xs-2']) ?>
 				<div class="col-xs-4">
 					<div class="input-group">
-						<span class="input-group-addon input-sm"><span class="glyphicon glyphicon-asterisk"></span></span>
+						<span class="input-group-addon input-sm"><i class="bi-lock"></i></span>
 						<?= form_password ([
 							'name' => 'smtp_pass',
 							'id' => 'smtp_pass',

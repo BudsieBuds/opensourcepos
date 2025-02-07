@@ -21,7 +21,7 @@
 			<?= form_label(lang('Cashups.open_date'), 'open_date', ['class' => 'required control-label col-xs-3']) ?>
 			<div class='col-xs-6'>
 				<div class="input-group">
-					<span class="input-group-addon input-sm"><span class="glyphicon glyphicon-calendar"></span></span>
+					<span class="input-group-addon input-sm"><i class="bi-calendar"></i></span>
 					<?= form_input ([
 							'name' => 'open_date',
 							'id' => 'open_date',
@@ -84,7 +84,7 @@
 			<?= form_label(lang('Cashups.close_date'), 'close_date', ['class' => 'required control-label col-xs-3']) ?>
 			<div class='col-xs-6'>
 				<div class="input-group">
-					<span class="input-group-addon input-sm"><span class="glyphicon glyphicon-calendar"></span></span>
+					<span class="input-group-addon input-sm"><i class="bi-calendar"></i></span>
 					<?= form_input ([
 							'name' => 'close_date',
 							'id' => 'close_date',

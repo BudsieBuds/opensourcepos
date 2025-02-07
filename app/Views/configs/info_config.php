@@ -15,7 +15,7 @@
 				<?= form_label(lang('Config.company'), 'company', ['class' => 'control-label col-xs-2 required']) ?>
 				<div class="col-xs-6">
 					<div class="input-group">
-						<span class="input-group-addon input-sm"><span class="glyphicon glyphicon-home"></span></span>
+						<span class="input-group-addon input-sm"><i class="bi-shop-window"></i></span>
 						<?= form_input ([
 							'name' => 'company',
 							'id' => 'company',
@@ -64,7 +64,7 @@
 				<?= form_label(lang('Config.website'), 'website', ['class' => 'control-label col-xs-2']) ?>
 				<div class="col-xs-6">
 					<div class="input-group">
-						<span class="input-group-addon input-sm"><span class="glyphicon glyphicon-globe"></span></span>
+						<span class="input-group-addon input-sm"><i class="bi-globe"></i></span>
 						<?= form_input ([
 							'name' => 'website',
 							'id' => 'website',
@@ -79,7 +79,7 @@
 				<?= form_label(lang('Common.email'), 'email', ['class' => 'control-label col-xs-2']) ?>
 				<div class="col-xs-6">
 					<div class="input-group">
-						<span class="input-group-addon input-sm"><span class="glyphicon glyphicon-envelope"></span></span>
+						<span class="input-group-addon input-sm"><i class="bi-envelope"></i></span>
 						<?= form_input ([
 							'name' => 'email',
 							'id' => 'email',
@@ -95,7 +95,7 @@
 				<?= form_label(lang('Config.phone'), 'phone', ['class' => 'control-label col-xs-2 required']) ?>
 				<div class="col-xs-6">
 					<div class="input-group">
-						<span class="input-group-addon input-sm"><span class="glyphicon glyphicon-phone-alt"></span></span>
+						<span class="input-group-addon input-sm"><i class="bi-telephone"></i></span>
 						<?= form_input ([
 							'name' => 'phone',
 							'id' => 'phone',
@@ -110,7 +110,7 @@
 				<?= form_label(lang('Config.fax'), 'fax', ['class' => 'control-label col-xs-2']) ?>
 				<div class="col-xs-6">
 					<div class="input-group">
-						<span class="input-group-addon input-sm"><span class="glyphicon glyphicon-phone-alt"></span></span>
+						<span class="input-group-addon input-sm"><i class="bi-printer"></i></span>
 						<?= form_input ([
 							'name' => 'fax',
 							'id' => 'fax',

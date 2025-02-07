@@ -42,24 +42,24 @@ $(document).ready(function()
 	?>
 		<button class='btn btn-info btn-sm pull-right modal-dlg' data-btn-submit='<?= lang('Common.submit') ?>' data-href='<?= "$controller_name/csvImport" ?>'
 				title='<?= lang(ucfirst($controller_name) .'.import_items_csv') ?>'>
-			<span class="glyphicon glyphicon-import">&nbsp</span><?= lang('Common.import_csv') ?>
+			<i class="bi-file-earmark-plus icon-spacing"></i><?= lang('Common.import_csv') ?>
 		</button>
 	<?php
 	}
 	?>
 	<button class='btn btn-info btn-sm pull-right modal-dlg' data-btn-submit='<?= lang('Common.submit') ?>' data-href='<?= "$controller_name/view" ?>'
 			title='<?= lang(ucfirst($controller_name). ".new") ?>'>
-		<span class="glyphicon glyphicon-user">&nbsp</span><?= lang(ucfirst($controller_name) .".new") ?>
+		<i class="bi-person-add icon-spacing"></i><?= lang(ucfirst($controller_name) .".new") ?>
 	</button>
 </div>
 
 <div id="toolbar">
 	<div class="pull-left btn-toolbar">
 		<button id="delete" class="btn btn-default btn-sm">
-			<span class="glyphicon glyphicon-trash">&nbsp</span><?= lang('Common.delete') ?>
+			<i class="bi-trash icon-spacing"></i><?= lang('Common.delete') ?>
 		</button>
 		<button id="email" class="btn btn-default btn-sm">
-			<span class="glyphicon glyphicon-envelope">&nbsp</span><?= lang('Common.email') ?>
+			<i class="bi-envelope icon-spacing"></i><?= lang('Common.email') ?>
 		</button>
 	</div>
 </div>

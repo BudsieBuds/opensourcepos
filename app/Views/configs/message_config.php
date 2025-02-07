@@ -13,7 +13,7 @@
 				<?= form_label(lang('Config.msg_uid'), 'msg_uid', ['class' => 'control-label col-xs-2 required']) ?>
 				<div class="col-xs-4">
 					<div class="input-group">
-						<span class="input-group-addon input-sm"><span class="glyphicon glyphicon-user"></span></span>
+						<span class="input-group-addon input-sm"><i class="bi-person"></i></span>
 						<?= form_input ([
 							'name' => 'msg_uid',
 							'id' => 'msg_uid',
@@ -28,7 +28,7 @@
 				<?= form_label(lang('Config.msg_pwd'), 'msg_pwd', ['class' => 'control-label col-xs-2 required']) ?>
 				<div class="col-xs-4">
 					<div class="input-group">
-						<span class="input-group-addon input-sm"><span class="glyphicon glyphicon-lock"></span></span>
+						<span class="input-group-addon input-sm"><i class="bi-lock"></i></span>
 						<?= form_password ([
 							'name' => 'msg_pwd',
 							'id' => 'msg_pwd',
@@ -43,7 +43,7 @@
 				<?= form_label(lang('Config.msg_src'), 'msg_src', ['class' => 'control-label col-xs-2 required']) ?>
 				<div class="col-xs-4">
 					<div class="input-group">
-						<span class="input-group-addon input-sm"><span class="glyphicon glyphicon-bullhorn"></span></span>
+						<span class="input-group-addon input-sm"><i class="bi-megaphone"></i></span>
 						<?= form_input ([
 							'name' => 'msg_src',
 							'id' => 'msg_src',

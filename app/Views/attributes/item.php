@@ -95,7 +95,7 @@ foreach($definition_values as $definition_id => $definition_value)
 						break;
 				}
 			?>
-			<span class="input-group-addon input-sm btn btn-default remove_attribute_btn"><span class="glyphicon glyphicon-trash"></span></span>
+			<span class="input-group-addon input-sm btn btn-default remove_attribute_btn"><i class="bi-trash"></i></span>
 		</div>
 	</div>
 </div>

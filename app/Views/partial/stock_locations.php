@@ -25,9 +25,9 @@ foreach($stock_locations as $location => $location_data)
 				echo form_input($form_data);
 			?>
 		</div>
-		<span class="add_stock_location glyphicon glyphicon-plus" style="padding-top: 0.5em;"></span>
+		<span class="add_stock_location bi-plus-circle" style="padding-top: 0.5em;"></span>
 		<span>&nbsp;&nbsp;</span>
-		<span class="remove_stock_location glyphicon glyphicon-minus" style="padding-top: 0.5em;"></span>
+		<span class="remove_stock_location bi-dash-circle" style="padding-top: 0.5em;"></span>
 	</div>
 <?php
 }
