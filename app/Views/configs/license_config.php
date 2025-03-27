@@ -18,6 +18,7 @@
 							'name' => 'license',
 							'id' => 'license_' . $counter++,	//TODO: String Interpolation
 							'class' => 'form-control',
+							'style' => 'font-family: monospace;',
 							'readonly' => '',
 							'value' => $license['text']
 						]) ?>
