@@ -76,4 +76,9 @@
         setup_csrf_token();
         submit.apply(this, arguments);
     };
+
+    // Initialize Bootstrap 3 Tooltips
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
 </script>

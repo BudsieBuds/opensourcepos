@@ -3,15 +3,23 @@
 use Config\OSPOS;
 
 ?>
-</div>
-        </div>
 
-        <div id="footer">
-            <div class="jumbotron push-spaces">
-                <strong><?= lang('Common.copyrights', [date('Y')]) ?> ·
-                <a href="https://opensourcepos.org" target="_blank"><?= lang('Common.website') ?></a>  ·
-                <?= esc(config('App')->application_version) ?> - <a target="_blank" href="https://github.com/opensourcepos/opensourcepos/commit/<?= esc(config(OSPOS::class)->commit_sha1) ?>"><?= esc(substr(config(OSPOS::class)->commit_sha1, 0, 6)); ?></a></strong>.
-            </div>
+    </main>
+
+    <footer class="text-muted small text-center" style="padding-top: 1em;">
+        <div class="jumbotron">
+            <?= lang('Common.copyrights', [date('Y')]) ?>
+            <span>·</span>
+            <a href="https://opensourcepos.org" target="_blank" rel="noopener"><?= lang('Common.website') ?></a>
+            <span>·</span>
+            <?= esc(config('App')->application_version) ?>
+            <span>-</span>
+            <a href="https://github.com/opensourcepos/opensourcepos/commit/<?= esc(config(OSPOS::class)->commit_sha1) ?>" target="_blank" rel="noopener">
+                <?= esc(substr(config(OSPOS::class)->commit_sha1, 0, 6)); ?>
+            </a>
         </div>
-    </body>
+    </footer>
+
+</body>
+
 </html>

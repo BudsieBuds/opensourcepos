@@ -4,57 +4,54 @@
  * @var string $controller_name
  */
 ?>
-<?= form_open('config/saveMailchimp/', ['id' => 'mailchimp_config_form', 'enctype' => 'multipart/form-data', 'class' => 'form-horizontal']) ?>
-    <div id="config_wrapper">
-        <fieldset id="config_info">
-            <div id="required_fields_message"><?= lang('Common.fields_required_message') ?></div>
-            <div id="integrations_header"><?= lang('Config.mailchimp_configuration') ?></div>
-            <ul id="mailchimp_error_message_box" class="error_message_box"></ul>
 
-            <div class="form-group form-group-sm">
-                <?= form_label(lang('Config.mailchimp_api_key'), 'mailchimp_api_key', ['class' => 'control-label col-xs-2']) ?>
-                <div class="col-xs-4">
-                    <div class="input-group">
-                        <span class="input-group-addon input-sm"><span class="glyphicon glyphicon-cloud"></span></span>
-                        <?= form_input ([
-                            'name' => 'mailchimp_api_key',
-                            'id' => 'mailchimp_api_key',
-                            'class' => 'form-control input-sm',
-                            'value' => $mailchimp['api_key']
-                        ]) ?>
-                    </div>
-                </div>
-                <div class="col-xs-1">
-                    <label class="control-label">
-                        <a href="https://eepurl.com/b9a05b" target="_blank"><span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="<?= lang('Config.mailchimp_tooltip') //TODO: Possibly need to change the URL here to HTTPS? ?>"></span></a>
-                    </label>
-                </div>
-            </div>
+<h4 style="margin-top: 0;"><strong><i class="bi-share icon-spacing"></i><?= lang('Config.integrations_configuration'); ?></strong></h4>
+<hr style="margin-top: 0;">
 
-            <div class="form-group form-group-sm">
-                <?= form_label(lang('Config.mailchimp_lists'), 'mailchimp_list_id', ['class' => 'control-label col-xs-2']) ?>
-                <div class='col-xs-4'>
-                    <div class="input-group">
-                        <span class="input-group-addon input-sm"><span class="glyphicon glyphicon-user"></span></span>
-                        <?= form_dropdown(
-                            'mailchimp_list_id',
-                            $mailchimp['lists'],
-                            $mailchimp['list_id'],
-                            "id='mailchimp_list_id' class='form-control input-sm'"
-                        ) ?>
-                    </div>
-                </div>
-            </div>
+<form action="<?= site_url('config/saveMailchimp/') ?>" method="post" id="config_form_integrations" enctype="multipart/form-data">
 
-            <?= form_submit ([
-                'name' => 'submit_mailchimp',
-                'id' => 'submit_mailchimp',
-                'value' => lang('Common.submit'),
-                'class' => 'btn btn-primary btn-sm pull-right'
-            ]) ?>
-        </fieldset>
+    <div class="form-group">
+        <div id="error_alert_integrations" class="alert alert-warning d-none" style="padding-left: 2em;"></div>
     </div>
-<?= form_close() ?>
+
+    <legend><h5><strong><?= lang('Config.mailchimp_configuration') ?></strong></h5></legend>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="mailchimp_api_key"><?= lang('Config.mailchimp_api_key') ?></label>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="bi-key"></i></span>
+                    <input type="text" name="mailchimp_api_key" id="mailchimp_api_key" class="form-control" value="<?= $mailchimp['api_key'] ?>">
+                </div>
+                <a class="help-block" href="https://eepurl.com/dyijVH" target="_blank" rel="noopener">
+                    <i class="bi-info-square icon-spacing"></i><?= lang('Config.mailchimp_tooltip') ?>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="mailchimp_list_id"><?= lang('Config.mailchimp_lists') ?></label>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="bi-list"></i></span>
+                    <select name="mailchimp_list_id" id="mailchimp_list_id" class="form-control" <?= $mailchimp['api_key'] == null ? 'disabled' : '' ?>>
+                        <?php foreach ($mailchimp['lists'] as $list_id => $list_name): ?>
+                            <option value="<?= $list_id ?>" <?= $list_id == $mailchimp['list_id'] ? 'selected' : '' ?>><?= $list_name ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group text-right">
+        <button type="submit" name="submit_mailchimp" id="submit_mailchimp" class="btn btn-primary">
+            <i class="bi-check-lg icon-spacing"></i><?= lang('Common.submit') ?>
+        </button>
+    </div>
+
+</form>
 
 <script type="application/javascript">
 //validation and submit handling
@@ -76,7 +73,7 @@ $(document).ready(function()
         );
     });
 
-    $('#mailchimp_config_form').validate($.extend(form_support.handler, {
+    $('#config_form_integrations').validate($.extend(form_support.handler, {
         submitHandler: function(form) {
             $(form).ajaxSubmit({
                 success: function(response) {
@@ -86,7 +83,7 @@ $(document).ready(function()
             });
         },
 
-        errorLabelContainer: '#mailchimp_error_message_box'
+        errorLabelContainer: '#error_alert_integrations'
     }));
 });
 </script>

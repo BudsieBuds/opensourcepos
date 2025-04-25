@@ -3,30 +3,24 @@
  * @var array $licenses
  */
 ?>
-<?= form_open('', ['id' => 'license_config_form', 'enctype' => 'multipart/form-data', 'class' => 'form-horizontal']) ?>
-    <div id="config_wrapper">
-        <fieldset>
-            <?php
-            $counter = 0;
-            foreach($licenses as $license)
-            {
-            ?>
-                <div class="form-group form-group-sm">
-                    <?= form_label($license['title'], 'license', ['class' => 'control-label col-xs-3']) ?>
-                    <div class='col-xs-6'>
-                        <?= form_textarea ([
-                            'name' => 'license',
-                            'id' => 'license_' . $counter++,    //TODO: String Interpolation
-                            'class' => 'form-control font-monospace',
-                            'rows' => '14',
-                            'readonly' => '',
-                            'value' => $license['text']
-                        ]) ?>
-                    </div>
-                </div>
-            <?php
-            }
-            ?>
-        </fieldset>
-    </div>
-<?= form_close() ?>
+
+<?php
+/**
+ * @var array $licenses
+ */
+?>
+
+<h4 style="margin-top: 0;"><strong><i class="bi-journal-check icon-spacing"></i><?= lang('Config.license_configuration'); ?></strong></h4>
+<hr style="margin-top: 0;">
+
+<form id="config_form_license" enctype="multipart/form-data">
+
+        <?php $counter = 0; ?>
+        <?php foreach($licenses as $license): ?>
+            <div class="form-group">
+                <label for="license_<?= $counter ?>"><?= $license['title'] ?></label>
+                <textarea name="license" rows="15" id="license_<?= $counter++; ?>" class="form-control" style="font-family: monospace; font-size: .9em; resize: vertical; min-height: 2.5em;" readonly><?= $license['text']; ?></textarea>
+            </div>
+        <?php endforeach; ?>
+
+</form>

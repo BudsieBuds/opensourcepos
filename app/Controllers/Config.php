@@ -363,8 +363,6 @@ class Config extends Secure_Controller
     public function postSaveGeneral(): void
     {
         $batch_save_data = [
-            'theme' => $this->request->getPost('theme'),
-            'login_form' => $this->request->getPost('login_form'),
             'default_sales_discount_type' => $this->request->getPost('default_sales_discount_type') != null,
             'default_sales_discount' => parse_decimals($this->request->getPost('default_sales_discount')),
             'default_receivings_discount_type' => $this->request->getPost('default_receivings_discount_type') != null,
@@ -372,8 +370,6 @@ class Config extends Secure_Controller
             'enforce_privacy' => $this->request->getPost('enforce_privacy') != null,
             'receiving_calculate_average_price' => $this->request->getPost('receiving_calculate_average_price') != null,
             'lines_per_page' => $this->request->getPost('lines_per_page', FILTER_SANITIZE_NUMBER_INT),
-            'notify_horizontal_position' => $this->request->getPost('notify_horizontal_position'),
-            'notify_vertical_position' => $this->request->getPost('notify_vertical_position'),
             'image_max_width' => $this->request->getPost('image_max_width', FILTER_SANITIZE_NUMBER_INT),
             'image_max_height' => $this->request->getPost('image_max_height', FILTER_SANITIZE_NUMBER_INT),
             'image_max_size' => $this->request->getPost('image_max_size', FILTER_SANITIZE_NUMBER_INT),
@@ -407,6 +403,19 @@ class Config extends Secure_Controller
 
         $success = $this->appconfig->batch_save($batch_save_data);
 
+        echo json_encode(['success' => $success, 'message' => lang('Config.saved_' . ($success ? '' : 'un') . 'successfully')]);
+    }
+
+    public function postSaveAppearance(): void
+    {
+        $batch_save_data = [
+            'theme' => $this->request->getPost('theme'),
+            'login_form' => $this->request->getPost('login_form'),
+            'notify_horizontal_position' => $this->request->getPost('notify_horizontal_position'),
+            'notify_vertical_position' => $this->request->getPost('notify_vertical_position'),
+            'config_menu_position' => $this->request->getPost('config_menu_position')
+        ];
+        $success = $this->appconfig->batch_save($batch_save_data);
         echo json_encode(['success' => $success, 'message' => lang('Config.saved_' . ($success ? '' : 'un') . 'successfully')]);
     }
 

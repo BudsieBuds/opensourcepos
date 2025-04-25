@@ -5,142 +5,132 @@
  * @var array $config
  */
 ?>
-<?= form_open('config/saveInfo/', ['id' => 'info_config_form', 'enctype' => 'multipart/form-data', 'class' => 'form-horizontal']) ?>
-    <div id="config_wrapper">
-        <fieldset id="config_info">
-            <div id="required_fields_message"><?= lang('Common.fields_required_message') ?></div>
-            <ul id="info_error_message_box" class="error_message_box"></ul>
 
-            <div class="form-group form-group-sm">
-                <?= form_label(lang('Config.company'), 'company', ['class' => 'control-label col-xs-2 required']) ?>
-                <div class="col-xs-6">
-                    <div class="input-group">
-                        <span class="input-group-addon input-sm"><span class="glyphicon glyphicon-home"></span></span>
-                        <?= form_input ([
-                            'name' => 'company',
-                            'id' => 'company',
-                            'class' => 'form-control input-sm required',
-                            'value' => $config['company']
-                        ]) ?>
-                    </div>
-                </div>
-            </div>
+<h4 style="margin-top: 0;"><strong><i class="bi-shop icon-spacing"></i><?= lang('Config.info_configuration'); ?></strong></h4>
+<hr style="margin-top: 0;">
 
-            <div class="form-group form-group-sm">
-                <?= form_label(lang('Config.company_logo'), 'company_logo', ['class' => 'control-label col-xs-2']) ?>
-                <div class='col-xs-6'>
-                    <div class="fileinput <?= $logo_exists ? 'fileinput-exists' : 'fileinput-new' ?>" data-provides="fileinput">
-                        <div class="fileinput-new thumbnail" style="width: 200px; height: 200px;"></div>
-                        <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 200px;">
-                            <img data-src="holder.js/100%x100%" alt="<?= lang('Config.company_logo') ?>"
-                                 src="<?php if($logo_exists) echo base_url('uploads/' . $config['company_logo']); else echo '' ?>"
-                                 style="max-height: 100%; max-width: 100%;">
-                        </div>
-                        <div>
-                            <span class="btn btn-default btn-sm btn-file">
-                                <span class="fileinput-new"><?= lang('Config.company_select_image') ?></span>
-                                <span class="fileinput-exists"><?= lang('Config.company_change_image') ?></span>
-                                <input type="file" name="company_logo">
-                            </span>
-                            <a href="#" class="btn btn-default btn-sm fileinput-exists" data-dismiss="fileinput"><?= lang('Config.company_remove_image') ?></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<form action="<?= site_url('config/saveInfo/') ?>" method="post" id="config_form_info" enctype="multipart/form-data">
 
-            <div class="form-group form-group-sm">
-                <?= form_label(lang('Config.address'), 'address', ['class' => 'control-label col-xs-2 required']) ?>
-                <div class='col-xs-6'>
-                    <?= form_textarea ([
-                        'name' => 'address',
-                        'id' => 'address',
-                        'class' => 'form-control input-sm required',
-                        'value'=> $config['address']
-                    ]) ?>
-                </div>
-            </div>
-
-            <div class="form-group form-group-sm">
-                <?= form_label(lang('Config.website'), 'website', ['class' => 'control-label col-xs-2']) ?>
-                <div class="col-xs-6">
-                    <div class="input-group">
-                        <span class="input-group-addon input-sm"><span class="glyphicon glyphicon-globe"></span></span>
-                        <?= form_input ([
-                            'name' => 'website',
-                            'id' => 'website',
-                            'class' => 'form-control input-sm',
-                            'value'=> $config['website']
-                        ]) ?>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group form-group-sm">
-                <?= form_label(lang('Common.email'), 'email', ['class' => 'control-label col-xs-2']) ?>
-                <div class="col-xs-6">
-                    <div class="input-group">
-                        <span class="input-group-addon input-sm"><span class="glyphicon glyphicon-envelope"></span></span>
-                        <?= form_input ([
-                            'name' => 'email',
-                            'id' => 'email',
-                            'type' => 'email',
-                            'class' => 'form-control input-sm',
-                            'value'=> $config['email']
-                        ]) ?>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group form-group-sm">
-                <?= form_label(lang('Config.phone'), 'phone', ['class' => 'control-label col-xs-2 required']) ?>
-                <div class="col-xs-6">
-                    <div class="input-group">
-                        <span class="input-group-addon input-sm"><span class="glyphicon glyphicon-phone-alt"></span></span>
-                        <?= form_input ([
-                            'name' => 'phone',
-                            'id' => 'phone',
-                            'class' => 'form-control input-sm required',
-                            'value'=> $config['phone']
-                        ]) ?>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group form-group-sm">
-                <?= form_label(lang('Config.fax'), 'fax', ['class' => 'control-label col-xs-2']) ?>
-                <div class="col-xs-6">
-                    <div class="input-group">
-                        <span class="input-group-addon input-sm"><span class="glyphicon glyphicon-phone-alt"></span></span>
-                        <?= form_input ([
-                            'name' => 'fax',
-                            'id' => 'fax',
-                            'class' => 'form-control input-sm',
-                            'value'=> $config['fax']
-                        ]) ?>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group form-group-sm">
-                <?= form_label(lang('Common.return_policy'), 'return_policy', ['class' => 'control-label col-xs-2 required']) ?>
-                <div class='col-xs-6'>
-                    <?= form_textarea ([
-                        'name' => 'return_policy',
-                        'id' => 'return_policy',
-                        'class' => 'form-control input-sm required',
-                        'value' => $config['return_policy']
-                    ]) ?>
-                </div>
-            </div>
-
-            <?= form_submit ([
-                'name' => 'submit_info',
-                'id' => 'submit_info',
-                'value' => lang('Common.submit'),
-                'class' => 'btn btn-primary btn-sm pull-right']) ?>
-        </fieldset>
+    <div class="form-group">
+        <div id="error_alert_info" class="alert alert-warning d-none" style="padding-left: 2em;"></div>
     </div>
-<?= form_close() ?>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group has-feedback">
+                <label for="company"><?= lang('Config.company') ?></label>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="bi-shop-window"></i></span>
+                    <input type="text" name="company" id="company" class="form-control" value="<?= $config['company'] ?>" placeholder="Open Source Point of Sale" required>
+                </div>
+                <span class="bi-asterisk text-warning form-control-feedback"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group has-feedback">
+                <label for="company_logo"><?= lang('Config.company_logo') ?></label>
+                <div class="fileinput <?= $logo_exists ? 'fileinput-exists' : 'fileinput-new' ?>" data-provides="fileinput" style="width: 100%;">
+                    <div class="thumbnail fileinput-new" style="width: 100%; height: 200px;"></div>
+                    <div class="thumbnail fileinput-exists fileinput-preview" style="width: 100%; max-height: 200px;">
+                        <img data-src="holder.js/100%x100%" alt="<?= lang('Config.company_logo') ?>"
+                                src="<?php if($logo_exists) echo base_url('uploads/' . $config['company_logo']); else echo '' ?>"
+                                style="max-height: 100%; max-width: 100%;">
+                    </div>
+                    <div>
+                        <button class="btn btn-default btn-file">
+                            <span class="fileinput-new"><i class="bi-hand-index icon-spacing"></i><?= lang('Config.company_select_image') ?></span>
+                            <span class="fileinput-exists"><i class="bi-images icon-spacing"></i><?= lang('Config.company_change_image') ?></span>
+                            <input type="file" name="company_logo">
+                        </button>
+                        <button class="btn btn-default fileinput-exists" data-dismiss="fileinput">
+                            <i class="bi-eraser icon-spacing"></i><?= lang('Config.company_remove_image') ?>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group has-feedback">
+                <label for="address"><?= lang('Config.address') ?></label>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="bi-geo-alt"></i></span>
+                    <textarea name="address" id="address" class="form-control" style="resize: vertical; min-height: 2.5em;" rows="6" placeholder="123 Main Street &#10;Springfield, IL &#10;62701" required><?= $config['address'] ?></textarea>
+                </div>
+                <span class="bi-asterisk text-warning form-control-feedback"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="website"><?= lang('Config.website') ?></label>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="bi-globe"></i></span>
+                    <input type="text" name="website" id="website" class="form-control" value="<?= $config['website'] ?>" placeholder="https://example.com">
+                    <!-- Didn't use type="url" because of the strictness of it -->
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="email"><?= lang('Config.email') ?></label>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="bi-envelope"></i></span>
+                    <input type="email" name="email" id="email" class="form-control" value="<?= $config['email'] ?>" placeholder="example@example.com">
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group has-feedback">
+                <label for="phone"><?= lang('Config.phone') ?></label>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="bi-telephone"></i></span>
+                    <input type="tel" name="phone" id="phone" class="form-control" value="<?= $config['phone'] ?>" placeholder="(123) 456-7890" required>
+                </div>
+                <span class="bi-asterisk text-warning form-control-feedback"></span>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="fax"><?= lang('Config.fax') ?></label>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="bi-printer"></i></span>
+                    <input type="tel" name="fax" id="fax" class="form-control" value="<?= $config['fax'] ?>" placeholder="(123) 456-7890">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group has-feedback">
+                <label for="return_policy"><?= lang('Common.return_policy') ?></label>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="bi-box-arrow-in-down-left"></i></span>
+                    <textarea name="return_policy" id="return_policy" class="form-control" style="resize: vertical; min-height: 2.5em;" rows="10" placeholder="Return within x days with receipt" required><?= $config['return_policy'] ?></textarea>
+                </div>
+                <span class="bi-asterisk text-warning form-control-feedback"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group text-right">
+        <button type="submit" name="submit_info" id="submit_info" class="btn btn-primary">
+            <i class="bi-check-lg icon-spacing"></i><?= lang('Common.submit') ?>
+        </button>
+    </div>
+
+</form>
 
 <script type="application/javascript">
 //validation and submit handling
@@ -154,9 +144,10 @@ $(document).ready(function()
         })
     });
 
-    $('#info_config_form').validate($.extend(form_support.handler, {
+    $('#config_form_info').validate($.extend(form_support.handler, {
 
-        errorLabelContainer: "#info_error_message_box",
+        errorLabelContainer: "#error_alert_info",
+        errorElement: "div",
 
         rules:
         {
