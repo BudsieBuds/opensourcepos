@@ -18,6 +18,7 @@ $request = Services::request();
     <meta charset="utf-8">
     <base href="<?= base_url() ?>">
     <title><?= esc($config['company']) . ' | ' . lang('Common.powered_by') . ' OSPOS ' . esc(config('App')->application_version) ?></title>
+    <meta name="robots" content="noindex, nofollow">
     <link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico">
     <link rel="stylesheet" href="<?= 'resources/bootswatch/' . (empty($config['theme']) ? 'flatly' : esc($config['theme'])) . '/bootstrap.min.css' ?>">
     <link rel="stylesheet" href="resources/bootstrap-icons/bootstrap-icons.min.css">
@@ -41,61 +42,46 @@ $request = Services::request();
 
     <?= view('partial/header_js') ?>
     <?= view('partial/lang_lines') ?>
-
-    <style>
-        html {
-            overflow: auto;
-        }
-    </style>
 </head>
 
 <body>
-    <div class="wrapper">
-        <div class="topbar">
-            <div class="container">
-                <div class="navbar-left">
-                    <div id="liveclock"><?= date($config['dateformat'] . ' ' . $config['timeformat']) ?></div>
-                </div>
+    <header class="bg-primary-subtle py-1 small">
+        <div class="container d-flex justify-content-between align-items-center">
+			<div class="flex-grow-1">
+				<span id="liveclock"><?= date($config['dateformat'] . ' ' . $config['timeformat']) ?></span>
+			</div>
+			<div class="fw-bold">
+				<?= esc($config['company']) ?>
+			</div>
+			<div class="flex-grow-1 text-end">
+                <?= anchor("home/changePassword/$user_info->person_id", "$user_info->first_name $user_info->last_name", ['class' => 'modal-dlg', 'data-btn-submit' => lang('Common.submit'), 'title' => lang('Employees.change_password')]) ?>
+                <span>&nbsp;|&nbsp;</span>
+                <?= anchor('home/logout', lang('Login.logout')) ?>
+			</div>
+		</div>
+    </header>
 
-                <div class="navbar-right" style="margin: 0;">
-                    <?= anchor("home/changePassword/$user_info->person_id", "$user_info->first_name $user_info->last_name", ['class' => 'modal-dlg', 'data-btn-submit' => lang('Common.submit'), 'title' => lang('Employees.change_password')]) ?>
-                    <span>&nbsp;|&nbsp;</span>
-                    <?= anchor('home/logout', lang('Login.logout')) ?>
-                </div>
-
-                <div class="navbar-center" style="text-align: center;">
-                    <strong><?= esc($config['company']) ?></strong>
-                </div>
-            </div>
-        </div>
-
-        <div class="navbar navbar-default" role="navigation">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-
-                    <a class="navbar-brand hidden-sm" href="<?= site_url() ?>">OSPOS</a>
-                </div>
-
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav navbar-right">
-                        <?php foreach ($allowed_modules as $module): ?>
-                            <li class="<?= $module->module_id == $request->getUri()->getSegment(1) ? 'active' : '' ?>">
-                                <a href="<?= base_url($module->module_id) ?>" title="<?= lang("Module.$module->module_id") ?>" class="menu-icon">
-                                    <img src="<?= base_url("images/menubar/$module->module_id.svg") ?>" style="border: none;" alt="Module Icon"><br>
-                                    <?= lang('Module.' . $module->module_id) ?>
-                                </a>
-                            </li>
-                        <?php endforeach; ?>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
+    <nav class="navbar navbar-expand navbar-dark bg-primary py-1">
         <div class="container">
-            <div class="row">
+            <a class="navbar-brand pe-1" href="<?= site_url() ?>">OSPOS</a>
+            <button class="navbar-toggler my-2 mx-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse small" id="navbar">
+                <ul class="navbar-nav ms-auto">
+                    <?php foreach ($allowed_modules as $module): ?>
+                        <li class="nav-item <?= $module->module_id == $request->getUri()->getSegment(1) ? 'active' : '' ?>" title="<?= lang("Module.$module->module_id") ?>">
+                            <a class="nav-link p-2 text-center" href="<?= base_url($module->module_id) ?>">
+                                <img src="<?= base_url("images/menubar/$module->module_id.svg") ?>" alt="<?= lang('Common.icon') . '&nbsp;' . lang("Module.$module->module_id") ?>">
+                                <br>
+                                <span><?= lang('Module.' . $module->module_id) ?></span>
+                            </a>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container py-3">

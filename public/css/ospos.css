@@ -8,51 +8,16 @@ body {
     height: 100%;
 }
 
-a.none {
-    text-decoration: none;
+nav img {
+    height: 24px;
 }
 
-.topbar {
-    color: #eee;
-    font-size: 12px;
-    background: #182735;
-    padding: 0.2em;
+section img {
+    height: 64px;
+    max-width: 64px;
 }
 
-/* Add container-xxl width from Bootstrap 5 */
-@media (min-width: 1400px) {
-    .container {
-        width: 1320px;
-    }
-}
-
-.navbar {
-    border-radius: 0;
-}
-
-.navbar-default .navbar-nav>.active>a,
-.navbar-default .navbar-nav>.active>a:hover,
-.navbar-default .navbar-nav>.active>a:focus {
-    color: #2C3E50;
-    background-color: #FFFFFF;
-}
-
-.jumbotron.push-spaces {
-    margin: 0; /* Add this */
-}
-
-.navbar .menu-icon {
-    text-align: center;
-    font-size: 12px;
-}
-
-.navbar .menu-icon img {
-    width: 24px;
-}
-
-.wrapper {
-    font-size: 13px;
-}
+/*
 
 #title_bar {
     position: relative;
@@ -73,50 +38,12 @@ a.none {
     text-align: center;
 }
 
-#home_module_list,
-#office_module_list {
-    position: relative;
-    padding: 2em 0;
-    text-align: center;
-}
-
-.module_item {
-    min-width: 7em;
-    display: inline-block;
-    text-align: center;
-}
-
-.module_item a {
-    display: block;
-}
-
-#config_wrapper {
-    text-align: center;
-}
-
-#config_info {
-    text-align: left;
-}
-
-#config_info .wide {
-    width: 30%;
-}
-
 #integrations_header {
     margin: 10px 0;
     text-align: center;
     font-size: 1.4em;
     font-weight: normal;
     padding: 10px 0
-}
-
-#footer {
-    margin-top: 5em;
-    position: relative;
-    text-align: center;
-    font-size: 11px;
-    color: #777777;
-    clear: both;
 }
 
 a.rollover img {
@@ -176,7 +103,4 @@ label.required {
     margin-right: .5em;
 }
 
-/* Recreate font-monospace class from Bootstrap 5 */
-.font-monospace {
-    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
-}
+*/
