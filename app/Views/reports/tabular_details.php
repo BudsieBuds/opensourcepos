@@ -57,6 +57,7 @@
                 exportTypes: ['json', 'xml', 'csv', 'txt', 'sql', 'excel', 'pdf'],
                 data: <?= json_encode($summary_data) ?>,
                 iconSize: 'sm',
+                iconsPrefix: 'bi',
                 paginationVAlign: 'bottom',
                 detailView: true,
                 escape: true,

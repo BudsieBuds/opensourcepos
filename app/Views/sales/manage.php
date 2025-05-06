@@ -62,15 +62,15 @@
 
 <div id="title_bar" class="print_hide btn-toolbar">
     <button onclick="javascript:printdoc()" class="btn btn-info btn-sm pull-right">
-        <span class="glyphicon glyphicon-print">&nbsp;</span><?= lang('Common.print') ?>
+        <i class="bi-printer icon-spacing"></i><?= lang('Common.print') ?>
     </button>
-    <?= anchor("sales", '<span class="glyphicon glyphicon-shopping-cart">&nbsp;</span>' . lang('Sales.register'), ['class' => 'btn btn-info btn-sm pull-right', 'id' => 'show_sales_button']) ?>
+    <?= anchor("sales", '<i class="bi-cart2 icon-spacing"></i>' . lang('Sales.register'), ['class' => 'btn btn-info btn-sm pull-right', 'id' => 'show_sales_button']) ?>
 </div>
 
 <div id="toolbar">
     <div class="pull-left form-inline" role="toolbar">
         <button id="delete" class="btn btn-default btn-sm print_hide">
-            <span class="glyphicon glyphicon-trash">&nbsp;</span><?= lang('Common.delete') ?>
+            <i class="bi-trash icon-spacing"></i><?= lang('Common.delete') ?>
         </button>
 
         <?= form_input(['name' => 'daterangepicker', 'class' => 'form-control input-sm', 'id' => 'daterangepicker']) ?>
@@ -80,7 +80,9 @@
             'class'                     => 'selectpicker show-menu-arrow',
             'data-selected-text-format' => 'count > 1',
             'data-style'                => 'btn-default btn-sm',
-            'data-width'                => 'fit'
+            'data-width'                => 'fit',
+            'data-icon-base'            => 'bi',
+            'data-tick-icon'            => 'bi-check-lg'
         ]) ?>
     </div>
 </div>

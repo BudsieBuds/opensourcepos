@@ -56,6 +56,7 @@
                 showColumns: true,
                 data: <?= json_encode($data) ?>,
                 iconSize: 'sm',
+                iconsPrefix: 'bi',
                 paginationVAlign: 'bottom',
                 escape: true,
                 search: true

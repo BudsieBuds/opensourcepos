@@ -253,6 +253,7 @@
             },
             queryParamsType: 'limit',
             iconSize: 'sm',
+            iconsPrefix: 'bi',
             silentSort: true,
             paginationVAlign: 'bottom',
             escape: true

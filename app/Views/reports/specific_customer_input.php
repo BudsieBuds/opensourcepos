@@ -33,7 +33,7 @@ if (isset($error)) {
     <div class="form-group form-group-sm" id="report_specific_input_data">
         <?= form_label($specific_input_name, 'specific_input_name_label', ['class' => 'required control-label col-xs-2']) ?>
         <div class="col-xs-3">
-            <?= form_dropdown('specific_input_data', $specific_input_data, '', 'id="specific_input_data" class="form-control selectpicker" data-live-search="true"') ?>
+            <?= form_dropdown('specific_input_data', $specific_input_data, '', 'id="specific_input_data" class="form-control selectpicker" data-live-search="true" data-icon-base="bi" data-tick-icon="bi-check-lg"') ?>
         </div>
     </div>
 

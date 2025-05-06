@@ -57,7 +57,9 @@
                         'data-none-selected-text'   => lang('Common.none_selected_text'),
                         'data-selected-text-format' => 'count > 1',
                         'data-style'                => 'btn-default btn-sm',
-                        'data-width'                => 'fit'
+                        'data-width'                => 'fit',
+                        'data-icon-base'            => 'bi',
+                        'data-tick-icon'            => 'bi-check-lg'
                     ]) ?>
                 </div>
             </div>
@@ -83,7 +85,7 @@
                 <div class="input-group">
                     <?= form_input(['name' => 'definition_value', 'class' => 'form-control input-sm', 'id' => 'definition_value']) ?>
                     <span id="add_attribute_value" class="input-group-addon input-sm btn btn-default">
-                        <span class="glyphicon glyphicon-plus-sign"></span>
+                        <i class="bi-plus-circle"></i>
                     </span>
                 </div>
             </div>
@@ -192,7 +194,7 @@
                 }
             }
 
-            $('#definition_list_group').append('<li class="list-group-item">' + value + '<a href="javascript:void(0);"><span class="glyphicon glyphicon-trash pull-right"></span></a></li>')
+            $('#definition_list_group').append('<li class="list-group-item">' + value + '<a href="javascript:void(0);"><i class="bi-trash pull-right"></i></a></li>')
                 .find(':last-child a').click(remove_attribute_value);
             $('#definition_value').val('');
         };
