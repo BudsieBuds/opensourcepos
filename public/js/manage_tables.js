@@ -252,7 +252,7 @@
                 dialog_support.init("a.modal-dlg");
             },
             queryParamsType: 'limit',
-            iconSize: 'sm',
+            loadingFontSize: '1em',
             silentSort: true,
             paginationVAlign: 'bottom',
             escape: true

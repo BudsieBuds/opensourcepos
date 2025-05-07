@@ -55,7 +55,7 @@
                 pagination: true,
                 showColumns: true,
                 data: <?= json_encode($data) ?>,
-                iconSize: 'sm',
+                loadingFontSize: '1em',
                 paginationVAlign: 'bottom',
                 escape: true,
                 search: true

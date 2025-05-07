@@ -56,7 +56,7 @@
                 exportDataType: 'all',
                 exportTypes: ['json', 'xml', 'csv', 'txt', 'sql', 'excel', 'pdf'],
                 data: <?= json_encode($summary_data) ?>,
-                iconSize: 'sm',
+                loadingFontSize: '1em',
                 paginationVAlign: 'bottom',
                 detailView: true,
                 escape: true,

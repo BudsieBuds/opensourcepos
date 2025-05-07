@@ -36,6 +36,7 @@ if (isset($error_message)) {
                 $.get('<?= site_url() . "sales/sendPdf/$sale_id_num" ?>',
                     function(response) {
                         $.notify({
+                            icon: 'bi bi-bell-fill',
                             message: response.message
                         }, {
                             type: response.success ? 'success' : 'danger'

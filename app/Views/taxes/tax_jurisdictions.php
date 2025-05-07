@@ -108,6 +108,7 @@
                 $(form).ajaxSubmit({
                     success: function(response) {
                         $.notify({
+                            icon: 'bi bi-bell-fill',
                             message: response.message
                         }, {
                             type: response.success ? 'success' : 'danger'
