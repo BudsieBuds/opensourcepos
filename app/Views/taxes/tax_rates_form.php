@@ -13,7 +13,7 @@
  */
 ?>
 
-<ul id="error_message_box" class="error_message_box"></ul>
+<ul id="error_message_box" class="alert alert-warning d-none"></ul>
 
 <?= form_open("taxes/save/$tax_rate_id", ['id' => 'tax_code_form', 'class' => 'form-horizontal']) ?>
     <fieldset id="tax_rate_info">
