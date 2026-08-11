@@ -37,28 +37,38 @@
         };
 
         const add_tax_jurisdiction = function() {
-            let id = $(this).parent().find('input').attr('id');
-            id = id.replace(/.*?_(\d+)$/g, "$1");
+            var $row = $(this).closest('.row');
+            var id = $row.find('input').attr('id');
+            if (id) {
+                id = id.replace(/.*?_(\d+)$/g, "$1");
+            }
 
-            const previous_jurisdiction_name_id = 'jurisdiction_name_' + id;
-            const block = $(this).parent().clone(true);
-            const new_block = block.insertAfter($(this).parent());
+            var previous_jurisdiction_name_id = 'jurisdiction_name_' + id;
+            var block = $row.clone(true);
+            var new_block = block.insertAfter($row);
             ++tax_jurisdictions_count;
             const new_jurisdiction_name_id = 'jurisdiction_name_' + tax_jurisdictions_count;
 
-            $(new_block).find('label').html("<?= lang('Taxes.tax_jurisdiction') ?> " + tax_jurisdictions_count).attr('for', new_jurisdiction_name_id).attr('class', 'control-label col-xs-2'); // TODO-BS5 change classes from bs3 to bs5
-            $(new_block).find("input[name='jurisdiction_name[]']").attr('id', new_jurisdiction_name_id).removeAttr('disabled').attr('class', 'form-control required input-sm').val(''); // TODO-BS5 change classes from bs3 to bs5
-            $(new_block).find("input[name='tax_group[]']").removeAttr('disabled').attr('class', 'form-control required input-sm').val(''); // TODO-BS5 change classes from bs3 to bs5
-            $(new_block).find("select[name='tax_type[]']").removeAttr('disabled').attr('class', 'form-control required input-sm').val(''); // TODO-BS5 change classes from bs3 to bs5
-            $(new_block).find("input[name='reporting_authority[]']").removeAttr('disabled').attr('class', 'form-control input-sm').val(''); // TODO-BS5 change classes from bs3 to bs5
-            $(new_block).find("input[name='tax_group_sequence[]']").removeAttr('disabled').attr('class', 'form-control input-sm').val(''); // TODO-BS5 change classes from bs3 to bs5
-            $(new_block).find("input[name='cascade_sequence[]']").removeAttr('disabled').attr('class', 'form-control input-sm').val(''); // TODO-BS5 change classes from bs3 to bs5
+            $(new_block).find('label').html("<?= lang('Taxes.tax_jurisdiction') ?> " + tax_jurisdictions_count).attr('for', new_jurisdiction_name_id).attr('class', 'col-form-label col-form-label-sm col-md-2');
+            var $input = $(new_block).find("input[name='jurisdiction_name[]']").attr('id', new_jurisdiction_name_id).removeAttr('disabled').attr('class', 'form-control form-control-sm required').val('');
+            $(new_block).find("input[name='tax_group[]']").removeAttr('disabled').attr('class', 'form-control form-control-sm required').val('');
+            $(new_block).find("select[name='tax_type[]']").removeAttr('disabled').attr('class', 'form-select form-select-sm required').val('');
+            $(new_block).find("input[name='reporting_authority[]']").removeAttr('disabled').attr('class', 'form-control form-control-sm').val('');
+            $(new_block).find("input[name='tax_group_sequence[]']").removeAttr('disabled').attr('class', 'form-control form-control-sm').val('');
+            $(new_block).find("input[name='cascade_sequence[]']").removeAttr('disabled').attr('class', 'form-control form-control-sm').val('');
             $(new_block).find("input[name='jurisdiction_id[]']").val('-1');
+
+            $input.rules('add', {
+                requireTaxJurisdiction: true,
+                check4TaxJurisdictionDups: true,
+                validateTaxJurisdictionCharacters: true
+            });
+
             hide_show_remove_tax_jurisdiction();
         };
 
         const remove_tax_jurisdiction = function() {
-            $(this).parent().remove();
+            $(this).closest('.row').remove();
             hide_show_remove_tax_jurisdiction();
         };
 

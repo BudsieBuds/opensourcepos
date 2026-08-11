@@ -442,6 +442,9 @@ class Taxes extends Secure_Controller
 
         $array_save = [];    // TODO: the naming of this variable is not good.
         foreach ($tax_code_id as $key => $val) {
+            if (empty(trim($tax_code[$key] ?? ''))) {
+                continue;
+            }
             $array_save[] = [
                 'tax_code_id'   => $val,
                 'tax_code'      => $tax_code[$key],
@@ -479,6 +482,9 @@ class Taxes extends Secure_Controller
         $unique_tax_groups = [];
 
         foreach ($jurisdiction_id as $key => $val) {
+            if (empty(trim($jurisdiction_name[$key] ?? ''))) {
+                continue;
+            }
             $array_save[] = [
                 'jurisdiction_id'     => $val,
                 'jurisdiction_name'   => $jurisdiction_name[$key],
@@ -522,6 +528,9 @@ class Taxes extends Secure_Controller
         $array_save = [];
 
         foreach ($tax_category_id as $key => $val) {
+            if (empty(trim($tax_category[$key] ?? ''))) {
+                continue;
+            }
             $array_save[] = [
                 'tax_category_id'    => $val,
                 'tax_category'       => $tax_category[$key],
