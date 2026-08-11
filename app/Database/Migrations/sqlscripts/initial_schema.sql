@@ -84,7 +84,7 @@ INSERT INTO `ospos_app_config` (`key`, `value`) VALUES
     ('language', 'english'),
     ('language_code', 'en'),
     ('rtl_language', '0'),
-    ('color_mode', 'light'),
+    ('color_mode', 'system'),
     ('config_menu_position', 'start'),
     ('responsive_design', '1');
 
