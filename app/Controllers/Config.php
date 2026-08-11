@@ -197,23 +197,20 @@ class Config extends Secure_Controller
      * This function loads all the available themes in the dist/bootswatch directory
      * @return array
      */
-    private function _themes(): array    // TODO: Hungarian notation
+    private function _themes(): array
     {
-        $themes = [];
-
-        // Read all themes in the dist folder
-        $dir = new DirectoryIterator('resources/bootswatch');
-
-        foreach ($dir as $dirinfo) {    // TODO: $dirinfo doesn't follow naming convention
-            if ($dirinfo->isDir() && !$dirinfo->isDot() && $dirinfo->getFileName() != 'fonts') {
-                $file = $dirinfo->getFileName();
-                $themes[$file] = ucfirst($file);
-            }
-        }
-
-        asort($themes);
-
-        return $themes;
+        return [
+            'blue'   => 'Blue',
+            'indigo' => 'Indigo',
+            'purple' => 'Purple',
+            'pink'   => 'Pink',
+            'red'    => 'Red',
+            'orange' => 'Orange',
+            'yellow' => 'Yellow',
+            'green'  => 'Green',
+            'teal'   => 'Teal',
+            'cyan'   => 'Cyan'
+        ];
     }
 
     /**
@@ -442,7 +439,12 @@ class Config extends Secure_Controller
             'notify_vertical_position'   => $this->request->getPost('notify_vertical_position'),
             'color_mode'                 => $this->request->getPost('color_mode'),
             'config_menu_position'       => $this->request->getPost('config_menu_position'),
-            'responsive_design'          => $this->request->getPost('responsive_design') != null
+            'responsive_design'          => $this->request->getPost('responsive_design') != null ? '1' : '0',
+            'theme_rounded'              => $this->request->getPost('theme_rounded') != null ? '1' : '0',
+            'theme_shadows'              => $this->request->getPost('theme_shadows') != null ? '1' : '0',
+            'theme_gradients'            => $this->request->getPost('theme_gradients') != null ? '1' : '0',
+            'theme_compact_tables'       => $this->request->getPost('theme_compact_tables') != null ? '1' : '0',
+            'theme_compact_elements'     => $this->request->getPost('theme_compact_elements') != null ? '1' : '0'
         ];
 
         $success = $this->appconfig->batch_save($batch_save_data);

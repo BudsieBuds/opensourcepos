@@ -1,15 +1,23 @@
 /* Standard Desktop Styling */
 html {
-    height: -webkit-fill-available; /* Prevent mobile webkit browsers from dropping footer behind the navigation bar */
+    height: -webkit-fill-available;
+    /* Prevent mobile webkit browsers from dropping footer behind the navigation bar */
 }
 
 body {
     min-height: 100vh;
-    min-height: -webkit-fill-available; /* Prevent mobile webkit browsers from dropping footer behind the navigation bar */
+    min-height: -webkit-fill-available;
+    /* Prevent mobile webkit browsers from dropping footer behind the navigation bar */
 }
 
 @media (min-width: 1640px) {
-    .container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container {
+
+    .container-xxl,
+    .container-xl,
+    .container-lg,
+    .container-md,
+    .container-sm,
+    .container {
         max-width: 1560px;
     }
 }
@@ -68,4 +76,101 @@ section img {
 
 .mw-register {
     min-width: 1114px;
+}
+
+/* --- Theme Layout & Sizing Options (Pure Bootstrap CSS Variables) --- */
+
+/* 1. Disable Rounded Corners ($enable-rounded: false) */
+html[data-bs-rounded="false"] {
+    --bs-border-radius: 0;
+    --bs-border-radius-sm: 0;
+    --bs-border-radius-lg: 0;
+    --bs-border-radius-xl: 0;
+    --bs-border-radius-2xl: 0;
+    --bs-border-radius-pill: 0;
+}
+
+html[data-bs-rounded="false"] .btn,
+html[data-bs-rounded="false"] .form-control,
+html[data-bs-rounded="false"] .form-select,
+html[data-bs-rounded="false"] .input-group-text,
+html[data-bs-rounded="false"] .card,
+html[data-bs-rounded="false"] .modal-content,
+html[data-bs-rounded="false"] .dropdown-menu,
+html[data-bs-rounded="false"] .alert,
+html[data-bs-rounded="false"] .badge {
+    border-radius: 0 !important;
+}
+
+/* 2. Enable Box Shadows ($enable-shadows: true) */
+html[data-bs-shadows="true"] .btn,
+html[data-bs-shadows="true"] .card,
+html[data-bs-shadows="true"] .modal-content,
+html[data-bs-shadows="true"] .dropdown-menu,
+html[data-bs-shadows="true"] .navbar,
+html[data-bs-shadows="true"] .form-control,
+html[data-bs-shadows="true"] .form-select,
+html[data-bs-shadows="true"] .input-group,
+html[data-bs-shadows="true"] .alert {
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.15) !important;
+}
+
+/* 3. Enable Gradients ($enable-gradients: true) */
+html[data-bs-gradients="true"] .btn,
+html[data-bs-gradients="true"] .navbar,
+html[data-bs-gradients="true"] .badge,
+html[data-bs-gradients="true"] .alert {
+    background-image: var(--bs-gradient, linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0))) !important;
+}
+
+/* 4. Compact Tables (table-sm for ALL tables across all views) */
+html[data-bs-compact-tables="true"] table,
+html[data-bs-compact-tables="true"] .table,
+html[data-bs-compact-tables="true"] .fixed-table-container table {
+    --bs-table-cell-padding-y: 0.25rem !important;
+    --bs-table-cell-padding-x: 0.35rem !important;
+    font-size: 0.875rem !important;
+}
+
+html[data-bs-compact-tables="true"] table th,
+html[data-bs-compact-tables="true"] table td,
+html[data-bs-compact-tables="true"] .table> :not(caption)>*>* {
+    padding: 0.25rem 0.35rem !important;
+}
+
+/* 5. Small UI Elements (Enforces -sm variants for ALL Bootstrap 5 buttons, inputs, selects, input groups, pagination, nav links) */
+html[data-bs-compact-elements="true"] .btn:not(.btn-lg) {
+    padding: 0.25rem 0.5rem !important;
+    font-size: 0.875rem !important;
+    line-height: 1.5 !important;
+}
+
+html[data-bs-compact-elements="true"] .form-control:not(.form-control-lg),
+html[data-bs-compact-elements="true"] .form-select:not(.form-select-lg),
+html[data-bs-compact-elements="true"] .input-group-text,
+html[data-bs-compact-elements="true"] .input-group .btn {
+    padding: 0.25rem 0.5rem !important;
+    font-size: 0.875rem !important;
+    line-height: 1.5 !important;
+    min-height: calc(1.5em + 0.5rem + 2px) !important;
+}
+
+html[data-bs-compact-elements="true"] .form-floating>.form-control,
+html[data-bs-compact-elements="true"] .form-floating>.form-select {
+    height: calc(2.5rem + 2px) !important;
+    line-height: 1.25 !important;
+    padding-top: 1.25rem !important;
+    padding-bottom: 0.25rem !important;
+}
+
+html[data-bs-compact-elements="true"] .form-floating>label {
+    padding: 0.5rem 0.5rem !important;
+    font-size: 0.875rem !important;
+}
+
+html[data-bs-compact-elements="true"] .pagination .page-link,
+html[data-bs-compact-elements="true"] .nav-tabs .nav-link,
+html[data-bs-compact-elements="true"] .nav-pills .nav-link {
+    padding: 0.25rem 0.5rem !important;
+    font-size: 0.875rem !important;
 }
