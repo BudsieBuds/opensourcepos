@@ -47,9 +47,29 @@ $themeColor = $themeColors[$theme] ?? '#0d6efd';
 ?>
 
 <!doctype html>
-<html lang="<?= current_language_code() ?>" data-bs-theme="<?= $config['color_mode'] ?>" <?= $config['rtl_language'] == 1 ? 'dir="rtl"' : '' ?>>
+<html lang="<?= current_language_code() ?>" data-bs-theme="<?= esc($config['color_mode'] ?? 'light') ?>" data-bs-rounded="<?= ($config['theme_rounded'] ?? 1) == 1 ? 'true' : 'false' ?>" data-bs-shadows="<?= ($config['theme_shadows'] ?? 0) == 1 ? 'true' : 'false' ?>" data-bs-gradients="<?= ($config['theme_gradients'] ?? 0) == 1 ? 'true' : 'false' ?>" data-bs-compact-tables="<?= ($config['theme_compact_tables'] ?? 0) == 1 ? 'true' : 'false' ?>" data-bs-compact-elements="<?= ($config['theme_compact_elements'] ?? 0) == 1 ? 'true' : 'false' ?>" <?= ($config['rtl_language'] ?? 0) == 1 ? 'dir="rtl"' : '' ?>>
 
 <head>
+    <script>
+        (function() {
+            var colorMode = "<?= esc($config['color_mode'] ?? 'light') ?>";
+            var getPreferredTheme = function() {
+                if (colorMode === 'system') {
+                    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                }
+                return colorMode || 'light';
+            };
+            var setTheme = function(theme) {
+                document.documentElement.setAttribute('data-bs-theme', theme);
+            };
+            setTheme(getPreferredTheme());
+            if (colorMode === 'system') {
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function() {
+                    setTheme(getPreferredTheme());
+                });
+            }
+        })();
+    </script>
     <meta charset="utf-8">
     <base href="<?= base_url() ?>">
     <title><?= esc($config['company']) . ' | ' . lang('Common.powered_by') . ' OSPOS ' . esc(config('App')->application_version) ?></title>
