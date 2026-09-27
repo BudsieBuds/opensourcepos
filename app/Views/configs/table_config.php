@@ -49,26 +49,51 @@
         let table_count = <?= sizeof($dinner_tables) ?>;
 
         const hide_show_remove = function() {
-            if ($("input[name*='dinner_tables']:enabled").length > 1) {
-                $(".remove_dinner_tables").show();
+            if ($("input[name*='dinner_table']:enabled").length > 1) {
+                $(".remove_dinner_table").show();
             } else {
-                $(".remove_dinner_tables").hide();
+                $(".remove_dinner_table").hide();
             }
         };
 
         const add_dinner_table = function() {
-            let id = $(this).parent().find('input').attr('id');
-            id = id.replace(/.*?_(\d+)$/g, "$1");
-            const block = $(this).parent().clone(true);
-            const new_block = block.insertAfter($(this).parent());
-            const new_block_id = 'dinner_table_' + ++id;
-            $(new_block).find('label').html("<?= lang('Config.dinner_table') ?> " + ++table_count).attr('for', new_block_id).attr('class', 'control-label col-xs-2'); // TODO-BS5 change classes from bs3 to bs5
-            $(new_block).find('input').attr('id', new_block_id).removeAttr('disabled').attr('name', new_block_id).attr('class', 'form-control input-sm').val(''); // TODO-BS5 change classes from bs3 to bs5
+            var $rows = $('#dinner_tables_list .table-row');
+            var $new_block;
+            if ($rows.length > 0) {
+                $new_block = $rows.last().clone(true);
+            } else {
+                $new_block = $($('#dinner_table_template').html());
+                $new_block.find('.remove_dinner_table').click(remove_dinner_table);
+            }
+
+            // Calculate next available ID number
+            var max_id = 0;
+            $('#dinner_tables_list input.dinner_table').each(function() {
+                var attr_id = $(this).attr('id');
+                if (attr_id) {
+                    var match = attr_id.match(/dinner_table_(\d+)/);
+                    if (match) {
+                        var num = parseInt(match[1], 10);
+                        if (num > max_id) max_id = num;
+                    }
+                }
+            });
+            var new_id = max_id + 1;
+            ++table_count;
+
+            var new_block_id = 'dinner_table_' + new_id;
+
+            $new_block.removeClass('d-none').show();
+            $new_block.find('.table-label').html("<?= lang('Config.dinner_table') ?> " + table_count).attr('for', new_block_id);
+            $new_block.find('.table-number').text(new_id + '.');
+            $new_block.find('input').attr('id', new_block_id).removeAttr('disabled').attr('name', new_block_id).val('');
+
+            $('#dinner_tables_list').append($new_block);
             hide_show_remove();
         };
 
         const remove_dinner_table = function() {
-            $(this).parent().remove();
+            $(this).closest('.table-row').remove();
             hide_show_remove();
         };
 

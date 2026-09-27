@@ -50,30 +50,53 @@
         let table_count = <?= sizeof($customer_rewards) ?>;
 
         const hide_show_remove = function() {
-            if ($("input[name*='customer_rewards']:enabled").length > 1) {
-                $(".remove_customer_rewards").show();
+            if ($("input[name*='customer_reward']:enabled").length > 1) {
+                $(".remove_customer_reward").show();
             } else {
-                $(".remove_customer_rewards").hide();
+                $(".remove_customer_reward").hide();
             }
         };
 
         const add_customer_reward = function() {
-            let id = $(this).parent().find('input').attr('id');
-            id = id.replace(/.*?_(\d+)$/g, "$1");
-            const previous_id = 'customer_reward_' + id;
-            const previous_id_next = 'reward_points_' + id;
-            const block = $(this).parent().clone(true);
-            const new_block = block.insertAfter($(this).parent());
-            const new_block_id = 'customer_reward_' + ++id;
-            const new_block_id_next = 'reward_points_' + id;
-            $(new_block).find('label').html("<?= lang('Config.customer_reward') ?> " + ++table_count).attr('for', new_block_id).attr('class', 'control-label col-xs-2'); // TODO-BS5 change classes from bs3 to bs5
-            $(new_block).find("input[id='" + previous_id + "']").attr('id', new_block_id).removeAttr('disabled').attr('name', new_block_id).attr('class', 'form-control input-sm').val(''); // TODO-BS5 change classes from bs3 to bs5
-            $(new_block).find("input[id='" + previous_id_next + "']").attr('id', new_block_id_next).removeAttr('disabled').attr('name', new_block_id_next).attr('class', 'form-control input-sm').val(''); // TODO-BS5 change classes from bs3 to bs5
+            var $rows = $('#customer_rewards_list .reward-row');
+            var $new_block;
+            if ($rows.length > 0) {
+                $new_block = $rows.last().clone(true);
+            } else {
+                $new_block = $($('#customer_reward_template').html());
+                $new_block.find('.remove_customer_reward').click(remove_customer_reward);
+            }
+
+            // Calculate next reward ID number
+            var max_id = 0;
+            $('#customer_rewards_list input[name^="customer_reward_"]').each(function() {
+                var attr_id = $(this).attr('id');
+                if (attr_id) {
+                    var match = attr_id.match(/customer_reward_(\d+)/);
+                    if (match) {
+                        var num = parseInt(match[1], 10);
+                        if (num > max_id) max_id = num;
+                    }
+                }
+            });
+            var new_id = max_id + 1;
+            ++table_count;
+
+            var new_reward_id = 'customer_reward_' + new_id;
+            var new_points_id = 'reward_points_' + new_id;
+
+            $new_block.removeClass('d-none').show();
+            $new_block.find('.reward-label').html("<?= lang('Config.customer_reward') ?> " + table_count).attr('for', new_reward_id);
+            $new_block.find('.reward-number').text(new_id + '.');
+            $new_block.find('input').eq(0).attr('id', new_reward_id).removeAttr('disabled').attr('name', new_reward_id).val('');
+            $new_block.find('input').eq(1).attr('id', new_points_id).removeAttr('disabled').attr('name', new_points_id).val('');
+
+            $('#customer_rewards_list').append($new_block);
             hide_show_remove();
         };
 
         const remove_customer_reward = function() {
-            $(this).parent().remove();
+            $(this).closest('.reward-row').remove();
             hide_show_remove();
         };
 

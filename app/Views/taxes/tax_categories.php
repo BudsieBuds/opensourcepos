@@ -35,24 +35,34 @@
         };
 
         const add_tax_category = function() {
-            let id = $(this).parent().find('input').attr('id');
-            id = id.replace(/.*?_(\d+)$/g, "$1");
+            var $row = $(this).closest('.row');
+            var id = $row.find('input').attr('id');
+            if (id) {
+                id = id.replace(/.*?_(\d+)$/g, "$1");
+            }
 
-            const previous_tax_category_id = 'tax_category_' + id;
-            const block = $(this).parent().clone(true);
-            const new_block = block.insertAfter($(this).parent());
+            var previous_tax_category_id = 'tax_category_' + id;
+            var block = $row.clone(true);
+            var new_block = block.insertAfter($row);
             ++tax_categories_count;
             const new_tax_category_id = 'tax_category_' + tax_categories_count;
 
-            $(new_block).find('label').html("<?= lang('Taxes.tax_category') ?> " + tax_categories_count).attr('for', new_tax_category_id).attr('class', 'control-label col-xs-2'); // TODO-BS5 change classes from bs3 to bs5
-            $(new_block).find("input[name='tax_category[]']").attr('id', new_tax_category_id).removeAttr('disabled').attr('class', 'form-control input-sm required').val(''); // TODO-BS5 change classes from bs3 to bs5
-            $(new_block).find("input[name='tax_group_sequence[]']").removeAttr('disabled').attr('class', 'form-control input-sm').val(''); // TODO-BS5 change classes from bs3 to bs5
+            $(new_block).find('label').html("<?= lang('Taxes.tax_category') ?> " + tax_categories_count).attr('for', new_tax_category_id).attr('class', 'col-form-label col-form-label-sm col-md-2');
+            var $input = $(new_block).find("input[name='tax_category[]']").attr('id', new_tax_category_id).removeAttr('disabled').attr('class', 'form-control form-control-sm required').val('');
+            $(new_block).find("input[name='tax_group_sequence[]']").removeAttr('disabled').attr('class', 'form-control form-control-sm').val('');
             $(new_block).find("input[name='tax_category_id[]']").val('-1');
+
+            $input.rules('add', {
+                requireTaxCategory: true,
+                check4TaxCategoryDups: true,
+                validateTaxCategoryCharacters: true
+            });
+
             hide_show_remove_tax_category();
         };
 
         const remove_tax_category = function() {
-            $(this).parent().remove();
+            $(this).closest('.row').remove();
             hide_show_remove_tax_category();
         };
 

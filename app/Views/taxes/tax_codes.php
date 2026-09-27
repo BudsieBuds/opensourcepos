@@ -35,26 +35,34 @@
         };
 
         const add_tax_code = function() {
-            let id = $(this).parent().find("input[name='tax_code[]']").attr('id');
-            id = id.replace(/.*?_(\d+)$/g, "$1");
-            const previous_tax_code_id = 'tax_code_' + id;
-            const block = $(this).parent().clone(true);
-            const new_block = block.insertAfter($(this).parent());
+            var $row = $(this).closest('.row');
+            var id = $row.find("input[name='tax_code[]']").attr('id');
+            if (id) {
+                id = id.replace(/.*?_(\d+)$/g, "$1");
+            }
+            var block = $row.clone(true);
+            var new_block = block.insertAfter($row);
             ++tax_code_count;
             const new_tax_code_id = 'tax_code_' + tax_code_count;
 
-            $(new_block).find('label').html("<?= lang('Taxes.tax_code') ?> " + tax_code_count).attr('for', new_tax_code_id).attr('class', 'control-label col-xs-2'); // TODO-BS5 change classes from bs3 to bs5
-            $(new_block).find("input[name='tax_code[]']").attr('id', new_tax_code_id).removeAttr('disabled').attr('class', 'form-control text-uppercase required input-sm').val(''); // TODO-BS5 change classes from bs3 to bs5
-            $(new_block).find("input[name='tax_code_name[]']").removeAttr('disabled').attr('class', 'form-control required input-sm').val(''); // TODO-BS5 change classes from bs3 to bs5
-            $(new_block).find("input[name='city[]']").removeAttr('disabled').attr('class', 'form-control input-sm').val(''); // TODO-BS5 change classes from bs3 to bs5
-            $(new_block).find("input[name='state[]']").removeAttr('disabled').attr('class', 'form-control input-sm').val(''); // TODO-BS5 change classes from bs3 to bs5
+            $(new_block).find('label').html("<?= lang('Taxes.tax_code') ?> " + tax_code_count).attr('for', new_tax_code_id).attr('class', 'col-form-label col-form-label-sm col-md-2');
+            var $input = $(new_block).find("input[name='tax_code[]']").attr('id', new_tax_code_id).removeAttr('disabled').attr('class', 'form-control form-control-sm text-uppercase required').val('');
+            $(new_block).find("input[name='tax_code_name[]']").removeAttr('disabled').attr('class', 'form-control form-control-sm required').val('');
+            $(new_block).find("input[name='city[]']").removeAttr('disabled').attr('class', 'form-control form-control-sm').val('');
+            $(new_block).find("input[name='state[]']").removeAttr('disabled').attr('class', 'form-control form-control-sm').val('');
             $(new_block).find("input[name='tax_code_id[]']").val('-1');
+
+            $input.rules('add', {
+                requireTaxCode: true,
+                check4TaxCodeDups: true,
+                validateTaxCodeCharacters: true
+            });
 
             hide_show_remove_tax_code();
         };
 
         const remove_tax_code = function() {
-            $(this).parent().remove();
+            $(this).closest('.row').remove();
             hide_show_remove_tax_code();
         };
 
