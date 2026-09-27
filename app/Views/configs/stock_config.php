@@ -37,16 +37,28 @@
         };
 
         const add_stock_location = function() {
-            const block = $(this).parent().clone(true);
-            const new_block = block.insertAfter($(this).parent());
-            const new_block_id = 'stock_location[]';
-            $(new_block).find('label').html("<?= lang('Config.stock_location') ?> " + ++location_count).attr('for', new_block_id).attr('class', 'control-label col-xs-2'); // TODO-BS5 change classes from bs3 to bs5
-            $(new_block).find('input').attr('id', new_block_id).removeAttr('disabled').attr('name', new_block_id).attr('class', 'form-control input-sm').val(''); // TODO-BS5 change classes from bs3 to bs5
+            var $rows = $('#stock_locations_list .location-row');
+            var $new_block;
+            if ($rows.length > 0) {
+                $new_block = $rows.last().clone(true);
+            } else {
+                $new_block = $($('#stock_location_template').html());
+                $new_block.find('.remove_stock_location').click(remove_stock_location);
+            }
+            ++location_count;
+
+            var new_block_id = 'stock_location[]';
+            $new_block.removeClass('d-none').show();
+            $new_block.find('.location-label').html("<?= lang('Config.stock_location') ?> " + location_count).attr('for', new_block_id);
+            $new_block.find('.location-number').text(location_count + '.');
+            $new_block.find('input').attr('id', new_block_id).removeAttr('disabled').attr('name', new_block_id).val('');
+
+            $('#stock_locations_list').append($new_block);
             hide_show_remove();
         };
 
         const remove_stock_location = function() {
-            $(this).parent().remove();
+            $(this).closest('.location-row').remove();
             hide_show_remove();
         };
 
