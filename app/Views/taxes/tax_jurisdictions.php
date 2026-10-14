@@ -1,20 +1,20 @@
 <?php
 /**
- * @var array $tax_jurisdictions
+ * @var array  $tax_jurisdictions
  * @var string $tax_type_options
  */
 ?>
 
 <?= form_open('taxes/save_tax_jurisdictions/', ['id' => 'tax_jurisdictions_form']) ?>
 
-    <ul id="tax_jurisdictions_error_message_box" class="alert alert-warning d-none"></ul>
+    <ul id="tax_jurisdictions_error_message_box" class="alert theme-warning d-none"></ul>
 
     <div id="tax_jurisdictions">
         <?= view('partial/tax_jurisdictions') ?>
     </div>
 
     <div class="d-flex justify-content-end">
-        <button type="submit" class="btn btn-primary" name="submit_tax_jurisdictions"><?= lang('Common.submit'); ?></button>
+        <button type="submit" class="btn btn-solid theme-primary" name="submit_tax_jurisdictions"><?= lang('Common.submit'); ?></button>
     </div>
 
 <?= form_close() ?>
@@ -22,7 +22,7 @@
 <script type="text/javascript">
     // Validation and Submit Handling
     $(document).ready(function() {
-        let tax_jurisdictions_count = <?= sizeof($tax_jurisdictions) ?>;
+        let tax_jurisdictions_count = <?= count($tax_jurisdictions) ?>;
         if (tax_jurisdictions_count == 0) {
             tax_jurisdictions_count = 1;
         }
@@ -46,7 +46,7 @@
             ++tax_jurisdictions_count;
             const new_jurisdiction_name_id = 'jurisdiction_name_' + tax_jurisdictions_count;
 
-            $(new_block).find('label').html("<?= lang('Taxes.tax_jurisdiction') ?> " + tax_jurisdictions_count).attr('for', new_jurisdiction_name_id).attr('class', 'control-label col-xs-2'); // TODO-BS5 change classes from bs3 to bs5
+            $(new_block).find('label').html("<?= lang('Taxes.tax_jurisdiction') ?> " + tax_jurisdictions_count).attr('for', new_jurisdiction_name_id).attr('class', 'control-label col-2'); // TODO-BS5 change classes from bs3 to bs5
             $(new_block).find("input[name='jurisdiction_name[]']").attr('id', new_jurisdiction_name_id).removeAttr('disabled').attr('class', 'form-control required input-sm').val(''); // TODO-BS5 change classes from bs3 to bs5
             $(new_block).find("input[name='tax_group[]']").removeAttr('disabled').attr('class', 'form-control required input-sm').val(''); // TODO-BS5 change classes from bs3 to bs5
             $(new_block).find("select[name='tax_type[]']").removeAttr('disabled').attr('class', 'form-control required input-sm').val(''); // TODO-BS5 change classes from bs3 to bs5
@@ -99,7 +99,7 @@
                         }, {
                             type: response.success ? 'success' : 'danger'
                         });
-                        $("#tax_jurisdictions").load('<?= esc("taxes/ajax_tax_jurisdictions") ?>', init_add_remove_tax_jurisdiction);
+                        $("#tax_jurisdictions").load('<?= esc('taxes/ajax_tax_jurisdictions') ?>', init_add_remove_tax_jurisdiction);
                     },
                     dataType: 'json'
                 });
@@ -112,8 +112,9 @@
 
         <?php
         $i = 0;
-        foreach ($tax_jurisdictions as $tax_jurisdiction => $tax_jurisdiction_data) {
-        ?>
+
+foreach ($tax_jurisdictions as $tax_jurisdiction => $tax_jurisdiction_data) {
+    ?>
             $('<?= '#jurisdiction_name_' . ++$i ?>').rules("add", {
                 requireTaxJurisdiction: true,
                 check4TaxJurisdictionDups: true,

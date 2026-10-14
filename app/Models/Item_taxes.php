@@ -9,13 +9,13 @@ use CodeIgniter\Model;
  */
 class Item_taxes extends Model
 {
-    protected $table = 'item_taxes';
-    protected $primaryKey = 'item_id';
+    protected $table            = 'item_taxes';
+    protected $primaryKey       = 'item_id';
     protected $useAutoIncrement = false;
-    protected $useSoftDeletes = false;
-    protected $allowedFields = [
+    protected $useSoftDeletes   = false;
+    protected $allowedFields    = [
         'name',
-        'percent'
+        'percent',
     ];
 
     /**
@@ -43,6 +43,7 @@ class Item_taxes extends Model
         $builder->whereIn('item_id', $itemIds);
 
         $taxesByItemId = [];
+
         foreach ($builder->get()->getResultArray() as $tax) {
             $taxesByItemId[$tax['item_id']][] = $tax;
         }
@@ -99,6 +100,8 @@ class Item_taxes extends Model
 
     /**
      * Deletes taxes given an item
+     *
+     * @param mixed|null $item_id
      */
     public function delete($item_id = null, bool $purge = false): bool
     {

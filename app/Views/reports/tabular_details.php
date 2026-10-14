@@ -2,11 +2,11 @@
 /**
  * @var string $title
  * @var string $subtitle
- * @var array $overall_summary_data
- * @var array $details_data
- * @var array $headers
- * @var array $summary_data
- * @var array $config
+ * @var array  $overall_summary_data
+ * @var array  $details_data
+ * @var array  $headers
+ * @var array  $summary_data
+ * @var array  $config
  */
 ?>
 
@@ -21,8 +21,8 @@ echo view('configs/config_header', $title_info);
 
 <div id="toolbar">
     <div class="d-flex gap-2">
-        <button type="button" class="btn btn-secondary d-print-none" id="toggleCostProfitButton">
-            <i class="bi bi-toggles"></i><span class="d-none d-sm-inline ms-2"><?= lang('Reports.toggle_cost_and_profit') ?></span>
+        <button type="button" class="btn btn-solid theme-secondary print:d-none" id="toggleCostProfitButton">
+            <i class="bi bi-toggles"></i><span class="d-none sm:d-inline ms-2"><?= lang('Reports.toggle_cost_and_profit') ?></span>
         </button>
     </div>
 </div>
@@ -33,7 +33,7 @@ echo view('configs/config_header', $title_info);
 
 <div id="report_summary">
     <?php foreach ($overall_summary_data as $name => $value) { ?>
-        <div class="summary_row"><?= lang("Reports.$name") . ': ' . esc(to_currency($value)) ?></div>
+        <div class="summary_row"><?= lang("Reports.{$name}") . ': ' . esc(to_currency($value)) ?></div>
     <?php } ?>
 </div>
 
@@ -42,7 +42,7 @@ echo view('configs/config_header', $title_info);
         <?= view('partial/bootstrap_tables_locale') ?>
 
         const details_data = <?= json_encode(esc($details_data)) ?>;
-        <?php if ($config['customer_reward_enable'] && !empty($details_data_rewards)) { ?>
+        <?php if ($config['customer_reward_enable'] && ! empty($details_data_rewards)) { ?>
             const details_data_rewards = <?= json_encode(esc($details_data_rewards)) ?>;
         <?php } ?>
         <?= view('partial/visibility_js') ?>
@@ -84,7 +84,7 @@ echo view('configs/config_header', $title_info);
                             /(POS|RECV)\s*/g, '')]
                     });
 
-                    <?php if ($config['customer_reward_enable'] && !empty($details_data_rewards)) { ?>
+                    <?php if ($config['customer_reward_enable'] && ! empty($details_data_rewards)) { ?>
                         $detail.append('<table></table>').find("table").bootstrapTable({
                             columns: <?= transform_headers_readonly(esc($headers['details_rewards'])) ?>,
                             data: details_data_rewards[(!isNaN(row.id) && row.id) || $(row[0] || row.id).text().replace(

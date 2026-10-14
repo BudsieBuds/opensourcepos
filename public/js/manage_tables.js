@@ -28,8 +28,8 @@
     };
 
     const button_class = {
-        'submit' : 'btn-primary',
-        'delete' : 'btn-danger'
+        'submit' : 'btn-solid theme-primary',
+        'delete' : 'btn-solid theme-danger'
     };
 
     const init = function(selector) {
@@ -43,7 +43,7 @@
                     buttons.push({
                         id: btn_name,
                         label: value,
-                        cssClass: button_class[btn_name] || 'btn-secondary'
+                        cssClass: button_class[btn_name] || 'btn-solid theme-secondary'
                     });
                 }
             });
@@ -51,7 +51,7 @@
             !buttons.length && buttons.push({
                 id: 'close',
                 label: lang.line('common_close'),
-                cssClass: 'btn-secondary'
+                cssClass: 'btn-solid theme-secondary'
             });
             return buttons;
         };
@@ -62,74 +62,78 @@
                 let $link = $(event.target);
                 $link = !$link.is("a, button") ? $link.parents("a, button") : $link;
 
-                // Build modal HTML
-                var modalId = 'dynamicModal';
-                var $existing = $('#' + modalId);
+                // Build dialog HTML
+                const dialogId = 'dynamicDialog';
+                const $existing = $('#' + dialogId + ', #dynamicModal');
                 $existing.length && $existing.remove();
 
-                var btns = buttons.call(this, event);
-                var btnHtml = btns.map(function(b) {
+                const btns = buttons.call(this, event);
+                const btnHtml = btns.map(function(b) {
                     return '<button type="button" class="btn ' + b.cssClass + '" data-btn-id="' + b.id + '">' + b.label + '</button>';
                 }).join('');
 
-                // Determine modal size from class (e.g. modal-launch-lg → modal-lg)
-                var sizeClass = '';
+                // Determine dialog size from class (e.g. modal-launch-lg / dialog-launch-lg → dialog-lg)
+                let sizeClass = '';
                 $.each($link[0].classList || [], function(i, cls) {
-                    var m = cls.match(/^modal-launch-(.+)$/);
-                    if (m) sizeClass = 'modal-' + m[1];
+                    let m = cls.match(/^(?:modal|dialog)-launch-(.+)$/);
+                    if (m) sizeClass = 'dialog-' + m[1];
                 });
 
-                var $modal = $([
-                    '<div class="modal fade" id="' + modalId + '" tabindex="-1">',
-                    '  <div class="modal-dialog' + sizeClass + '">',
-                    '    <div class="modal-content">',
-                    '      <div class="modal-header">',
-                    '        <h1 class="modal-title fs-5">' + ($link.attr('title') || '') + '</h1>',
-                    '        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>',
-                    '      </div>',
-                    '      <div class="modal-body"></div>',
-                    '      <div class="modal-footer">' + btnHtml + '</div>',
-                    '    </div>',
+                const $dialog = $([
+                    '<dialog class="dialog ' + sizeClass + '" id="' + dialogId + '">',
+                    '  <div class="dialog-header">',
+                    '    <h1 class="dialog-title fs-lg">' + ($link.attr('title') || '') + '</h1>',
+                    '    <button type="button" class="btn-close" data-bs-dismiss="dialog" aria-label="Close"></button>',
                     '  </div>',
-                    '</div>'
+                    '  <div class="dialog-body"></div>',
+                    '  <div class="dialog-footer">' + btnHtml + '</div>',
+                    '</dialog>'
                 ].join(''));
 
-                $('body').append($modal);
+                $('body').append($dialog);
 
                 // Load remote content into body
                 $.get($link.attr('href') || $link.data('href'), function(data) {
-                    $modal.find('.modal-body').html(data);
-                    dialog_support.init("a.modal-launch");
+                    $dialog.find('.dialog-body').html(data);
+                    dialog_support.init("a.modal-launch, a.dialog-launch");
                 });
 
-                var modal = new bootstrap.Modal($modal[0]);
-                dialog_ref = modal;
+                const dialogInstance = window.bootstrap?.Dialog ? new bootstrap.Dialog($dialog[0]) : (window.bootstrap?.Modal ? new bootstrap.Modal($dialog[0]) : null);
+                dialog_ref = dialogInstance;
 
                 // Wire up footer buttons
-                $modal.on('click', '[data-btn-id]', function() {
-                    btn_id = $(this).data('btn-id');
+                $dialog.on('click', '[data-btn-id]', function() {
+                    const btn_id = $(this).data('btn-id');
                     if (btn_id === 'close') {
-                        modal.hide();
+                        if (dialogInstance) {
+                            dialogInstance.hide();
+                        } else if ($dialog[0].close) {
+                            $dialog[0].close();
+                        }
                     } else {
                         submit(btn_id)();
                     }
                 });
 
                 // Enter key support: find the "primary" button
-                $modal.on('keypress', function(e) {
+                $dialog.on('keypress', function(e) {
                     if (e.which === 13) {
-                        var has_new_btn = btns.some(function(b) { return b.id === 'new'; });
-                        var enter_btn = has_new_btn ? 'new' : 'submit';
-                        $modal.find('[data-btn-id="' + enter_btn + '"]').trigger('click');
+                        const has_new_btn = btns.some(function(b) { return b.id === 'new'; });
+                        const enter_btn = has_new_btn ? 'new' : 'submit';
+                        $dialog.find('[data-btn-id="' + enter_btn + '"]').trigger('click');
                     }
                 });
 
                 // Cleanup on close
-                $modal.on('hidden.bs.modal', function() {
-                    $modal.remove();
+                $dialog.on('hidden.bs.dialog hidden.bs.modal', function() {
+                    $dialog.remove();
                 });
 
-                modal.show();
+                if (dialogInstance) {
+                    dialogInstance.show();
+                } else if ($dialog[0].showModal) {
+                    $dialog[0].showModal();
+                }
                 return false;
             });
         });

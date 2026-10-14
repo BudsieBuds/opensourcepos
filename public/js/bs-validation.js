@@ -1,20 +1,17 @@
-// Bootstrap 5 - from https://getbootstrap.com/docs/5.3/forms/validation/#custom-styles
-// Example starter JavaScript for disabling form submissions if there are invalid fields
+// Bootstrap 6 - form validation
 (() => {
-    'use strict'
+    'use strict';
 
-    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    const forms = document.querySelectorAll('.needs-validation')
+    // Fetch all the forms with data-bs-validate
+    const forms = document.querySelectorAll('form[data-bs-validate]');
 
     // Loop over them and prevent submission
     Array.from(forms).forEach(form => {
-      form.addEventListener('submit', event => {
-        if (!form.checkValidity()) {
-          event.preventDefault()
-          event.stopPropagation()
-        }
-
-        form.classList.add('was-validated')
-      }, false)
-    })
-  })()
+        form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+        }, false);
+    });
+})();

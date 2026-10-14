@@ -2,7 +2,6 @@
 
 use App\Libraries\CI3SecretConverter;
 use CodeIgniter\Encryption\Encryption;
-use Config\Services;
 use Random\RandomException;
 
 /**
@@ -17,19 +16,19 @@ function lockEnvFile()
 {
     $lockPath = config('SecurityEnv')->lockPath;
 
-    $handle = @fopen($lockPath, 'c+');
+    $handle = @fopen($lockPath, 'c+b');
     if ($handle === false) {
         $reason = error_get_last()['message'] ?? 'unknown error';
-        log_message('critical', "Unable to open $lockPath: $reason");
+        log_message('critical', "Unable to open {$lockPath}: {$reason}");
 
         throw new RuntimeException(lang('Error.unable_to_open_lock_file', ['filePath' => $lockPath, 'reason' => $reason]));
     }
 
-    if (!flock($handle, LOCK_EX)) {
+    if (! flock($handle, LOCK_EX)) {
         fclose($handle);
 
         $reason = error_get_last()['message'] ?? 'unknown error';
-        log_message('critical', "Unable to lock $lockPath: $reason");
+        log_message('critical', "Unable to lock {$lockPath}: {$reason}");
 
         throw new RuntimeException(lang('Error.unable_to_lock_file', ['filePath' => $lockPath, 'reason' => $reason]));
     }
@@ -39,7 +38,6 @@ function lockEnvFile()
 
 /**
  * @param resource $handle
- * @return void
  */
 function unlockEnvFile($handle): void
 {
@@ -50,12 +48,11 @@ function unlockEnvFile($handle): void
 /**
  * Copies .env.example to .env (or creates a stub) if .env does not exist yet.
  *
- * @param string $configPath
  * @return bool true if $configPath exists (already did, or was just created)
  */
 function initializeEnvFile(string $configPath): bool
 {
-    if (!file_exists($configPath)) {
+    if (! file_exists($configPath)) {
         $examplePath = ROOTPATH . '.env.example';
         if (file_exists($examplePath)) {
             @copy($examplePath, $configPath);
@@ -71,15 +68,13 @@ function initializeEnvFile(string $configPath): bool
 /**
  * Replaces or inserts a single `key='value'` line in .env
  *
- * @param string $envKey
- * @param string $value
  * @return bool true on success, false if the write could not be completed
  */
 function writeEnvKey(string $envKey, string $value): bool
 {
     $configPath = config('SecurityEnv')->envPath;
 
-    if (!initializeEnvFile($configPath)) {
+    if (! initializeEnvFile($configPath)) {
         return false;
     }
 
@@ -104,42 +99,39 @@ function writeEnvKey(string $envKey, string $value): bool
 
 function applyEnvKeyReplacement(string $configFile, string $envKey, string $value): ?string
 {
-    $pattern = '/^\s*' . preg_quote($envKey, '/') . '\s*=.*/m';
+    $pattern      = '/^\s*' . preg_quote($envKey, '/') . '\s*=.*/m';
     $escapedValue = str_replace(['\\', '$'], ['\\\\', '\\$'], $value);
 
     if (preg_match($pattern, $configFile)) {
-        return preg_replace_callback($pattern, static fn () => "$envKey='$escapedValue'", $configFile, 1);
+        return preg_replace_callback($pattern, static fn () => "{$envKey}='{$escapedValue}'", $configFile, 1);
     }
 
     // New keys insert right after encryption.key so it stays first for easy backup/rotation.
     if (preg_match('/^encryption\.key\s*=.*$/m', $configFile, $matches, PREG_OFFSET_CAPTURE)) {
         $insertAt = (int) $matches[0][1] + strlen($matches[0][0]);
 
-        return substr_replace($configFile, "\n$envKey='$escapedValue'", $insertAt, 0);
+        return substr_replace($configFile, "\n{$envKey}='{$escapedValue}'", $insertAt, 0);
     }
 
-    return $configFile . "\n$envKey='$escapedValue'\n";
+    return $configFile . "\n{$envKey}='{$escapedValue}'\n";
 }
 
 /**
  * Writes $contents to a temp file in the same directory as $path, then
  * renames it onto $path so readers never observe a partially written file.
  *
- * @param string $path
- * @param string $contents
- * @return bool
  * @throws RandomException
  */
 function atomicWriteFile(string $path, string $contents): bool
 {
     $tmpPath = $path . '.tmp.' . bin2hex(random_bytes(8));
 
-    $handle = @fopen($tmpPath, 'x');
+    $handle = @fopen($tmpPath, 'xb');
     if ($handle === false) {
         return false;
     }
 
-    if (!@chmod($tmpPath, 0640)) {
+    if (! @chmod($tmpPath, 0640)) {
         fclose($handle);
         @unlink($tmpPath);
 
@@ -147,14 +139,14 @@ function atomicWriteFile(string $path, string $contents): bool
     }
 
     $written = fwrite($handle, $contents);
-    if ($written === false || $written !== strlen($contents) || !fflush($handle)) {
+    if ($written === false || $written !== strlen($contents) || ! fflush($handle)) {
         fclose($handle);
         @unlink($tmpPath);
 
         return false;
     }
 
-    if (function_exists('fsync') && !fsync($handle)) {
+    if (function_exists('fsync') && ! fsync($handle)) {
         fclose($handle);
         @unlink($tmpPath);
 
@@ -164,8 +156,8 @@ function atomicWriteFile(string $path, string $contents): bool
     fclose($handle);
 
     // On Windows rename() does not overwrite an existing destination. Fall back to unlink()+rename().
-    if (!@rename($tmpPath, $path)) {
-        if (PHP_OS_FAMILY !== 'Windows' || !@unlink($path) || !@rename($tmpPath, $path)) {
+    if (! @rename($tmpPath, $path)) {
+        if (PHP_OS_FAMILY !== 'Windows' || ! @unlink($path) || ! @rename($tmpPath, $path)) {
             @unlink($tmpPath);
 
             return false;
@@ -180,40 +172,31 @@ function atomicWriteFile(string $path, string $contents): bool
 /**
  * Copies $configPath to $backupPath, creating the backup folder if needed.
  *
- * @param string $configPath
- * @param string $backupPath
  * @return bool true when the backup exists and is readable, false otherwise
  */
 function backupEnvFile(string $configPath, string $backupPath): bool
 {
     $backupFolder = dirname($backupPath);
 
-    if (!file_exists($backupFolder) && !@mkdir($backupFolder, 0750, true)) {
+    if (! file_exists($backupFolder) && ! @mkdir($backupFolder, 0750, true)) {
         return false;
     }
 
-    if (!@copy($configPath, $backupPath)) {
+    if (! @copy($configPath, $backupPath)) {
         return false;
     }
 
-    if (!is_readable($backupPath)) {
+    if (! is_readable($backupPath)) {
         return false;
     }
 
-    if (@chmod($backupPath, 0640) !== true || @chmod($configPath, 0640) !== true) {
-        return false;
-    }
-
-    return true;
+    return ! (@chmod($backupPath, 0640) !== true || @chmod($configPath, 0640) !== true);
 }
 
 /**
  * Applies the new encryption.key to $configFile, preserving $oldKey as a
  * commented-out backup line immediately before it.
  *
- * @param string $configFile
- * @param string $key
- * @param string $oldKey
  * @return string|null updated file contents, or null if the replacement failed
  */
 function writeNewEncryptionKey(string $configFile, string $key, string $oldKey): ?string
@@ -223,8 +206,8 @@ function writeNewEncryptionKey(string $configFile, string $key, string $oldKey):
         return null;
     }
 
-    if (!empty($oldKey)) {
-        $oldLine = "# encryption.key='$oldKey' REMOVE IF UNNEEDED\r\n";
+    if (! empty($oldKey)) {
+        $oldLine = "# encryption.key='{$oldKey}' REMOVE IF UNNEEDED\r\n";
         if (preg_match('/^encryption\.key\s*=/m', $updated, $matches, PREG_OFFSET_CAPTURE)) {
             $updated = substr_replace($updated, $oldLine, $matches[0][1], 0);
         }
@@ -240,8 +223,6 @@ function writeNewEncryptionKey(string $configFile, string $key, string $oldKey):
  * the DIRECTORY, not on .env itself — a bind-mounted .env can be writable
  * while the dir (or a root-owned .env.lock) is not, so .env's own mode is not
  * a reliable signal.
- *
- * @return bool
  */
 function envFileIsWritable(): bool
 {
@@ -249,7 +230,7 @@ function envFileIsWritable(): bool
     $lockPath   = config('SecurityEnv')->lockPath;
     $dir        = dirname($configPath);
 
-    if (!is_writable($dir)) {
+    if (! is_writable($dir)) {
         return false;
     }
 
@@ -257,17 +238,13 @@ function envFileIsWritable(): bool
     // existing .env must itself be writable (POSIX rename() can, if the dir is).
     if (PHP_OS_FAMILY === 'Windows'
         && file_exists($configPath)
-        && !is_writable($configPath)
+        && ! is_writable($configPath)
     ) {
         return false;
     }
 
     // An existing mutex file (e.g. left by a prior root env:provision) must be writable.
-    if (file_exists($lockPath) && !is_writable($lockPath)) {
-        return false;
-    }
-
-    return true;
+    return ! (file_exists($lockPath) && ! is_writable($lockPath));
 }
 
 /**
@@ -290,7 +267,9 @@ function envFileIsWritable(): bool
  *                                           defaults to the real converter
  *                                           (tests may pass a fake to avoid
  *                                           hitting the database)
+ *
  * @return bool true when a valid key is available
+ *
  * @throws Throwable when .env is not writable or the CI3 -> CI4 conversion fails
  */
 function checkEncryption(?CI3SecretConverter $converter = null): bool
@@ -301,20 +280,21 @@ function checkEncryption(?CI3SecretConverter $converter = null): bool
         return true;
     }
 
-    if (!envFileIsWritable()) {
+    if (! envFileIsWritable()) {
         log_message('critical', 'Encryption key not provisioned and .env is not writable. Run `php spark env:provision` to generate one.');
 
         throw new RuntimeException(lang('Error.encryption_key_not_provisioned'));
     }
 
     if ($key !== '') {
-        $converter = $converter ?? new CI3SecretConverter();
+        $converter ??= new CI3SecretConverter();
 
         // Legacy plaintext is a DB read; safe outside the .env lock (the lock
         // only guards the .env file write, which the rotation performs).
         $plain = $converter->decryptAll($key);
 
         $nonEmpty = false;
+
         foreach ($plain as $value) {
             if ((string) $value !== '') {
                 $nonEmpty = true;
@@ -359,6 +339,7 @@ function checkEncryption(?CI3SecretConverter $converter = null): bool
  * Docker/Compose without writing a shared secret into .env.
  *
  * @return string the throttle key
+ *
  * @throws RuntimeException if the key cannot be provisioned
  */
 function checkThrottleEncryption(): string
@@ -374,7 +355,7 @@ function checkThrottleEncryption(): string
         return $key;
     }
 
-    if (!envFileIsWritable()) {
+    if (! envFileIsWritable()) {
         log_message('critical', 'Throttle key not provisioned and .env is not writable. Run `php spark env:provision` to generate one.');
 
         throw new RuntimeException(lang('Error.throttle_key_not_provisioned'));
@@ -399,7 +380,9 @@ function checkThrottleEncryption(): string
  * @param string|null $oldKey current key to rotate from; when non-empty it is
  *                            preserved as a commented backup line for the
  *                            CI3->CI4 re-encryption pass
+ *
  * @return string the newly generated key
+ *
  * @throws RuntimeException if the key could not be generated or persisted
  * @throws RandomException
  */
@@ -425,7 +408,9 @@ function rotateEncryptionKey(?string $oldKey = null): string
  * lock-free core through.
  *
  * @param string|null $oldKey current key to rotate from
+ *
  * @return string the newly generated key
+ *
  * @throws RuntimeException if the key could not be generated or persisted
  * @throws RandomException
  */
@@ -437,13 +422,13 @@ function rotateEncryptionKeyUnlock(?string $oldKey): string
     $configPath = config('SecurityEnv')->envPath;
     $backupPath = config('SecurityEnv')->backupPath;
 
-    if (!initializeEnvFile($configPath)) {
+    if (! initializeEnvFile($configPath)) {
         throw new RuntimeException(lang('Error.unable_to_create_env_file', ['filePath' => $configPath]));
     }
 
     if (file_exists($configPath)) {
-        if (!backupEnvFile($configPath, $backupPath)) {
-            log_message('critical', "Unable to back up $configPath to $backupPath before rotation; aborting.");
+        if (! backupEnvFile($configPath, $backupPath)) {
+            log_message('critical', "Unable to back up {$configPath} to {$backupPath} before rotation; aborting.");
 
             throw new RuntimeException(lang('Error.unable_to_persist_encryption_key', ['filePath' => $configPath]));
         }
@@ -451,7 +436,7 @@ function rotateEncryptionKeyUnlock(?string $oldKey): string
 
     $configFile = @file_get_contents($configPath);
     if ($configFile === false) {
-        log_message('critical', "Unable to read $configPath before rotation; aborting.");
+        log_message('critical', "Unable to read {$configPath} before rotation; aborting.");
 
         throw new RuntimeException(lang('Error.unable_to_read_env_file', ['filePath' => $configPath]));
     }
@@ -461,13 +446,13 @@ function rotateEncryptionKeyUnlock(?string $oldKey): string
         throw new RuntimeException(lang('Error.unable_to_persist_encryption_key', ['filePath' => $configPath]));
     }
 
-    if (!atomicWriteFile($configPath, $updated)) {
+    if (! atomicWriteFile($configPath, $updated)) {
         throw new RuntimeException(lang('Error.unable_to_persist_encryption_key', ['filePath' => $configPath]));
     }
 
     config('Encryption')->key = $key;
 
-    log_message('info', "Rotated encryption key in $configPath");
+    log_message('info', "Rotated encryption key in {$configPath}");
 
     return $key;
 }
@@ -488,15 +473,17 @@ function rotateEncryptionKeyUnlock(?string $oldKey): string
  * — the mutex is held across the backup, the key write, the re-encryption,
  * verification, and persistence.
  *
- * @param string|null $oldKey current key to rotate from
+ * @param string|null $oldKey     current key to rotate from
  * @param callable    $conversion callback(): void, called after the new key
  *                                has been persisted and applied to the running
  *                                config; expected to perform re-encryption,
  *                                verification, and persistence. Must throw on
  *                                failure; the pre-rotation backup is restored
  *                                before the exception propagates.
+ *
  * @return string the newly generated key
- * @throws Throwable from $conversion (the lock is released in `finally`)
+ *
+ * @throws Throwable        from $conversion (the lock is released in `finally`)
  * @throws RuntimeException
  * @throws RandomException
  */
@@ -541,13 +528,14 @@ function rotateEncryptionKeyTransaction(?string $oldKey, callable $conversion): 
  * to `.env` if it is missing. Idempotent: safe to call on every startup.
  *
  * @return string the throttle key
+ *
  * @throws RuntimeException if the key could not be created or persisted
  */
 function provisionThrottleKey(): string
 {
     $configPath = config('SecurityEnv')->envPath;
 
-    if (!initializeEnvFile($configPath)) {
+    if (! initializeEnvFile($configPath)) {
         throw new RuntimeException(lang('Error.unable_to_create_env_file', ['filePath' => $configPath]));
     }
 
@@ -556,7 +544,7 @@ function provisionThrottleKey(): string
     try {
         $configFile = @file_get_contents($configPath);
         if ($configFile === false) {
-            log_message('critical', "Unable to read $configPath while provisioning throttle key; aborting.");
+            log_message('critical', "Unable to read {$configPath} while provisioning throttle key; aborting.");
 
             throw new RuntimeException(lang('Error.unable_to_read_env_file', ['filePath' => $configPath]));
         }
@@ -574,15 +562,15 @@ function provisionThrottleKey(): string
         }
 
         $updated = applyEnvKeyReplacement($configFile, 'throttle.key', $key);
-        if ($updated === null || !atomicWriteFile($configPath, $updated)) {
+        if ($updated === null || ! atomicWriteFile($configPath, $updated)) {
             throw new RuntimeException(lang('Error.unable_to_persist_throttle_key', ['filePath' => $configPath]));
         }
     } finally {
         unlockEnvFile($lock);
     }
 
-    putenv("throttle.key=$key");
-    $_ENV['throttle.key'] = $key;
+    putenv("throttle.key={$key}");
+    $_ENV['throttle.key']    = $key;
     $_SERVER['throttle.key'] = $key;
 
     log_message('info', 'Provisioned throttle key in ' . config('SecurityEnv')->envPath);
@@ -590,22 +578,19 @@ function provisionThrottleKey(): string
     return $key;
 }
 
-/**
- * @return void
- */
 function abortEncryptionConversion(): void
 {
     $configPath = config('SecurityEnv')->envPath;
     $backupPath = config('SecurityEnv')->backupPath;
 
-    if (!file_exists($backupPath)) {
+    if (! file_exists($backupPath)) {
         return;
     }
 
     // A backup exists, so the restore must succeed or fail loudly; a silent
     // failure would leave .env holding the new key while the DB still holds the
     // old ciphertext, making the data undecryptable after the next restart.
-    if (!is_file($backupPath) || !is_readable($backupPath)) {
+    if (! is_file($backupPath) || ! is_readable($backupPath)) {
         throw new RuntimeException(lang('Error.unable_to_read_env_file', ['filePath' => $backupPath]));
     }
 
@@ -614,22 +599,19 @@ function abortEncryptionConversion(): void
         throw new RuntimeException(lang('Error.unable_to_read_env_file', ['filePath' => $backupPath]));
     }
 
-    if (!atomicWriteFile($configPath, $configFile)) {
+    if (! atomicWriteFile($configPath, $configFile)) {
         throw new RuntimeException(lang('Error.unable_to_persist_encryption_key', ['filePath' => $configPath]));
     }
 
-    log_message('info', "Restored $configPath from backup");
+    log_message('info', "Restored {$configPath} from backup");
 }
 
-/**
- * @return void
- */
 function removeBackup(): void
 {
     $backupPath = config('SecurityEnv')->backupPath;
-    if (!file_exists($backupPath)) {
+    if (! file_exists($backupPath)) {
         return;
     }
     @unlink($backupPath);
-    log_message('info', "Removed $backupPath");
+    log_message('info', "Removed {$backupPath}");
 }

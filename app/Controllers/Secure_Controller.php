@@ -6,7 +6,6 @@ use App\Models\Employee;
 use App\Models\Module;
 use CodeIgniter\HTTP\Exceptions\RedirectException;
 use CodeIgniter\HTTP\ResponseInterface;
-use CodeIgniter\Model;
 use CodeIgniter\Session\Session;
 use Config\OSPOS;
 use Config\Services;
@@ -15,11 +14,10 @@ use Config\Services;
  * Controllers that are considered secure extend Secure_Controller, optionally a $module_id can
  * be set to also check if a user can access a particular module in the system.
  *
- * @property employee employee
- * @property module module
  * @property array global_view_data
- * @property session session
- *
+ * @property Employee employee
+ * @property Module module
+ * @property Session session
  */
 class Secure_Controller extends BaseController
 {
@@ -28,39 +26,35 @@ class Secure_Controller extends BaseController
     protected Module $module;
     protected Session $session;
 
-    /**
-     * @param string $module_id
-     * @param string|null $submodule_id
-     * @param string|null $menu_group
-     */
     public function __construct(string $module_id = '', ?string $submodule_id = null, ?string $menu_group = null)
     {
         $this->employee = model(Employee::class);
-        $this->module = model(Module::class);
-        $config = config(OSPOS::class)->settings;
-        $validation = Services::validation();
+        $this->module   = model(Module::class);
+        $config         = config(OSPOS::class)->settings;
+        $validation     = Services::validation();
 
         $logged_in_employee_info = $this->employee->get_logged_in_employee_info();
         if (
-            !$this->employee->has_module_grant($module_id, $logged_in_employee_info->person_id)
-            || (isset($submodule_id) && !$this->employee->has_module_grant($submodule_id, $logged_in_employee_info->person_id))
+            ! $this->employee->has_module_grant($module_id, $logged_in_employee_info->person_id)
+            || (isset($submodule_id) && ! $this->employee->has_module_grant($submodule_id, $logged_in_employee_info->person_id))
         ) {
-            throw new RedirectException("no_access/$module_id/$submodule_id");
+            throw new RedirectException("no_access/{$module_id}/{$submodule_id}");
         }
 
         // Load up global global_view_data visible to all the loaded views
         $this->session = session();
-        if ($menu_group == null) {
+        if ($menu_group === null) {
             $menu_group = $this->session->get('menu_group');
         } else {
             $this->session->set('menu_group', $menu_group);
         }
 
-        $allowed_modules = $menu_group == 'home'
+        $allowed_modules = $menu_group === 'home'
             ? $this->module->get_allowed_home_modules($logged_in_employee_info->person_id)
             : $this->module->get_allowed_office_modules($logged_in_employee_info->person_id);
 
         $this->global_view_data = [];
+
         foreach ($allowed_modules->getResult() as $module) {
             $this->global_view_data['allowed_modules'][] = $module;
         }
@@ -68,7 +62,7 @@ class Secure_Controller extends BaseController
         $this->global_view_data += [
             'user_info'       => $logged_in_employee_info,
             'controller_name' => $module_id,
-            'config'          => $config
+            'config'          => $config,
         ];
         view('viewData', $this->global_view_data);
     }
@@ -81,6 +75,7 @@ class Secure_Controller extends BaseController
 
         // Flatten keys directly as array_merge() renumbers numeric string keys
         $validColumns = [];
+
         foreach ($headers as $header) {
             $validColumns[] = (string) array_key_first($header);
         }
@@ -91,14 +86,11 @@ class Secure_Controller extends BaseController
     /**
      * Validates the given rules and, on failure, returns a JSON error response.
      *
-     * @param array $rules
-     * @param array $messages
      * @param mixed $id
-     * @return ResponseInterface|null
      */
     protected function validateFields(array $rules, array $messages, $id = NEW_ENTRY): ?ResponseInterface
     {
-        if (!$this->validate($rules, $messages)) {
+        if (! $this->validate($rules, $messages)) {
             $errors = $this->validator->getErrors();
 
             return $this->response->setJSON(['success' => false, 'message' => reset($errors), 'id' => $id]);
@@ -109,7 +101,7 @@ class Secure_Controller extends BaseController
 
     /**
      * AJAX function used to confirm whether values sent in the request are numeric
-     * @return ResponseInterface
+     *
      * @noinspection PhpUnused
      */
     public function getCheckNumeric(): ResponseInterface
@@ -119,11 +111,11 @@ class Secure_Controller extends BaseController
                 return $this->response->setJSON('false');
             }
         }
+
         return $this->response->setJSON('true');
     }
 
     /**
-     * @param $key
      * @return mixed|void
      */
     public function getConfig($key)
@@ -158,7 +150,6 @@ class Secure_Controller extends BaseController
     }
 
     /**
-     * @param int $data_item_id
      * @return false
      */
     public function getView(int $data_item_id = -1)
@@ -166,11 +157,7 @@ class Secure_Controller extends BaseController
         return false;
     }
 
-    /**
-     * @param int $data_item_id
-     * @return ResponseInterface|false
-     */
-    public function postSave(int $data_item_id = -1): ResponseInterface|false
+    public function postSave(int $data_item_id = -1): false|ResponseInterface
     {
         return false;
     }

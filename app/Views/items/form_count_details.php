@@ -1,12 +1,13 @@
 <?php
 /**
  * @var object $item_info
- * @var array $stock_locations
- * @var array $item_quantities
+ * @var array  $stock_locations
+ * @var array  $item_quantities
  */
 
 use App\Models\Employee;
 use App\Models\Inventory;
+
 ?>
 
 <?= form_open('items', ['id' => 'item_form']) ?>
@@ -32,9 +33,9 @@ use App\Models\Inventory;
     <label for="stock_location" class="form-label"><?= lang('Items.stock_location'); ?></label>
     <div class="input-group mb-3">
         <span class="input-group-text"><i class="bi bi-boxes"></i></span>
-        <select class="form-select" name="stock_location" id="stock_location" onchange="display_stock(this.value)">
+        <select class="form-control" name="stock_location" id="stock_location" onchange="display_stock(this.value)">
             <?php foreach ($stock_locations as $value => $label): ?>
-                <option value="<?= $value ?>" <?= $value == current($stock_locations) ? 'selected' : '' ?>><?= $label ?></option>
+                <option value="<?= $value ?>" <?= $value === current($stock_locations) ? 'selected' : '' ?>><?= $label ?></option>
             <?php endforeach; ?>
         </select>
     </div>
@@ -64,16 +65,16 @@ use App\Models\Inventory;
             <?php
             // The tbody content of the table will be filled in by the javascript (see bottom of page)
             $employee = model(Employee::class);
-            $inventory = model(Inventory::class);
+$inventory            = model(Inventory::class);
 
-            $inventory_array = $inventory->get_inventory_data_for_item($item_info->item_id)->getResultArray();
-            $employee_name = [];
+$inventory_array = $inventory->get_inventory_data_for_item($item_info->item_id)->getResultArray();
+$employee_name   = [];
 
-            foreach ($inventory_array as $row) {
-                $employee_data = $employee->get_info($row['trans_user']);
-                $employee_name[] = $employee_data->first_name . ' ' . $employee_data->last_name;
-            }
-            ?>
+foreach ($inventory_array as $row) {
+    $employee_data   = $employee->get_info($row['trans_user']);
+    $employee_name[] = $employee_data->first_name . ' ' . $employee_data->last_name;
+}
+?>
         </tbody>
     </table>
 </div>

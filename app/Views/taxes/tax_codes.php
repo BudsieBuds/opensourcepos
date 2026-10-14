@@ -6,14 +6,14 @@
 
 <?= form_open('taxes/save_tax_codes/', ['id' => 'tax_codes_form']) ?>
 
-    <ul id="tax_codes_error_message_box" class="alert alert-warning d-none"></ul>
+    <ul id="tax_codes_error_message_box" class="alert theme-warning d-none"></ul>
 
     <div id="tax_codes">
         <?= view('partial/tax_codes', ['tax_codes' => $tax_codes]) ?>
     </div>
 
     <div class="d-flex justify-content-end">
-        <button type="submit" class="btn btn-primary" name="submit_tax_codes"><?= lang('Common.submit'); ?></button>
+        <button type="submit" class="btn btn-solid theme-primary" name="submit_tax_codes"><?= lang('Common.submit'); ?></button>
     </div>
 
 <?= form_close() ?>
@@ -21,7 +21,7 @@
 <script type="text/javascript">
     // Validation and Submit Handling
     $(document).ready(function() {
-        let tax_code_count = <?= sizeof($tax_codes) ?>;
+        let tax_code_count = <?= count($tax_codes) ?>;
         if (tax_code_count == 0) {
             tax_code_count = 1;
         }
@@ -43,7 +43,7 @@
             ++tax_code_count;
             const new_tax_code_id = 'tax_code_' + tax_code_count;
 
-            $(new_block).find('label').html("<?= lang('Taxes.tax_code') ?> " + tax_code_count).attr('for', new_tax_code_id).attr('class', 'control-label col-xs-2'); // TODO-BS5 change classes from bs3 to bs5
+            $(new_block).find('label').html("<?= lang('Taxes.tax_code') ?> " + tax_code_count).attr('for', new_tax_code_id).attr('class', 'control-label col-2'); // TODO-BS5 change classes from bs3 to bs5
             $(new_block).find("input[name='tax_code[]']").attr('id', new_tax_code_id).removeAttr('disabled').attr('class', 'form-control text-uppercase required input-sm').val(''); // TODO-BS5 change classes from bs3 to bs5
             $(new_block).find("input[name='tax_code_name[]']").removeAttr('disabled').attr('class', 'form-control required input-sm').val(''); // TODO-BS5 change classes from bs3 to bs5
             $(new_block).find("input[name='city[]']").removeAttr('disabled').attr('class', 'form-control input-sm').val(''); // TODO-BS5 change classes from bs3 to bs5
@@ -95,7 +95,7 @@
                         }, {
                             type: response.success ? 'success' : 'danger'
                         });
-                        $("#tax_codes").load('<?= "taxes/ajax_tax_codes" ?>', init_add_remove_tax_codes);
+                        $("#tax_codes").load('<?= 'taxes/ajax_tax_codes' ?>', init_add_remove_tax_codes);
                     },
                     dataType: 'json'
                 });
@@ -108,8 +108,9 @@
 
         <?php
         $i = 0;
-        foreach ($tax_codes as $tax_code => $tax_code_data) {
-        ?>
+
+foreach ($tax_codes as $tax_code => $tax_code_data) {
+    ?>
             $('<?= '#tax_code_' . ++$i ?>').rules("add", {
                 requireTaxCode: true,
                 check4TaxCodeDups: true,

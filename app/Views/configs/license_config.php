@@ -8,12 +8,13 @@
 
     <?php
     $title_info['config_title'] = lang('Config.license_configuration');
-    echo view('configs/config_header', $title_info);
-    ?>
+echo view('configs/config_header', $title_info);
+?>
 
     <?php
-    $license_i = 0;
-    foreach ($licenses as $license) {
+$license_i = 0;
+
+foreach ($licenses as $license) {
     ?>
 
         <div class="mb-3 mx-3 mx-lg-0">
@@ -23,6 +24,6 @@
 
     <?php
     $license_i++; // Increment counter
-    } ?>
+} ?>
 
 <?= form_close() ?>

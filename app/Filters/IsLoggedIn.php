@@ -14,7 +14,7 @@ class IsLoggedIn implements FilterInterface
     {
         $employee = model(Employee::class);
 
-        if (!$employee->is_logged_in()) {
+        if (! $employee->is_logged_in()) {
             if ($request->isAJAX()) {
                 return service('response')
                     ->setStatusCode(401)

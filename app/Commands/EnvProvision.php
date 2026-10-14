@@ -28,10 +28,8 @@ class EnvProvision extends BaseCommand
      */
     protected $group = 'Environment';
 
-    protected $name = 'env:provision';
-
-    protected $usage = 'env:provision';
-
+    protected $name        = 'env:provision';
+    protected $usage       = 'env:provision';
     protected $description = 'Ensures the encryption and throttle keys are provisioned and converts any legacy CI3-encrypted secrets.';
 
     public function run(array $params): void
@@ -42,7 +40,7 @@ class EnvProvision extends BaseCommand
         CLI::write('throttle.key       : ' . ($throttleKey !== '' ? 'present' : 'MISSING'), 'green');
 
         $encryptionConfig = config('Encryption');
-        $key = (string) ($encryptionConfig->key ?? '');
+        $key              = (string) ($encryptionConfig->key ?? '');
 
         if ($key !== '' && strlen($key) >= 64) {
             CLI::write('encryption.key     : CI4 key already present', 'green');

@@ -1,26 +1,25 @@
 <?php
 /**
  * @var string $dbVersion
- * @var array $config
+ * @var array  $config
  */
 
 use Config\OSPOS;
 
-
-$logs = WRITEPATH . 'logs/';
-$uploads = FCPATH . 'uploads/';
-$images = FCPATH . 'uploads/item_pics/';
-$importCustomers = WRITEPATH . '/uploads/importCustomers.csv';    //TODO: This variable does not follow naming conventions for the project.
-$bullet = '&raquo;' . '&nbsp;';
-$divider = ' &middot;' . '&nbsp;';
-$enabled = '<span class="text-success">&#10003; Enabled</span>';
-$disabled = '<span class="text-danger">&#10007; Disabled</span>';
-$writable = '<span class="text-success">&#10003; Writable</span>';
-$notwritable = '<span class="text-danger">&#10007; Not Writable</span>';
-$readable = '<span class="text-success">&#10003; Readable</span>';
-$notreadable = '<span class="text-danger">&#10007; Not Readable</span>';
-$permissions_check = '<span class="text-success">&#10003; Security Check Passed</span>';
-$permissions_fail = '<span class="text-danger">&#10007; Vulnerable or Incorrect Permissions</span>';
+$logs              = WRITEPATH . 'logs/';
+$uploads           = FCPATH . 'uploads/';
+$images            = FCPATH . 'uploads/item_pics/';
+$importCustomers   = WRITEPATH . '/uploads/importCustomers.csv';    // TODO: This variable does not follow naming conventions for the project.
+$bullet            = '&raquo;&nbsp;';
+$divider           = ' &middot;&nbsp;';
+$enabled           = '<span class="fg-success">&#10003; Enabled</span>';
+$disabled          = '<span class="fg-danger">&#10007; Disabled</span>';
+$writable          = '<span class="fg-success">&#10003; Writable</span>';
+$notwritable       = '<span class="fg-danger">&#10007; Not Writable</span>';
+$readable          = '<span class="fg-success">&#10003; Readable</span>';
+$notreadable       = '<span class="fg-danger">&#10007; Not Readable</span>';
+$permissions_check = '<span class="fg-success">&#10003; Security Check Passed</span>';
+$permissions_fail  = '<span class="fg-danger">&#10007; Vulnerable or Incorrect Permissions</span>';
 ?>
 
 <?php
@@ -33,43 +32,43 @@ echo view('configs/config_header', $title_info);
 <form id="copy-issue">
 
     <?php
-    if (!((substr(decoct(fileperms($logs)), -4) == 750)
-        && (substr(decoct(fileperms($uploads)), -4) == 750)
-        && (substr(decoct(fileperms($images)), -4) == 750)
-        && ((substr(decoct(fileperms($importCustomers)), -4) == 640)
-        || (substr(decoct(fileperms($importCustomers)), -4) == 660)))) {
-            echo '<div class="card border-danger-subtle mb-4">
+    if (! ((substr(decoct(fileperms($logs)), -4) === 750)
+        && (substr(decoct(fileperms($uploads)), -4) === 750)
+        && (substr(decoct(fileperms($images)), -4) === 750)
+        && ((substr(decoct(fileperms($importCustomers)), -4) === 640)
+        || (substr(decoct(fileperms($importCustomers)), -4) === 660)))) {
+        echo '<div class="card border-danger-subtle mb-4">
             <div class="card-header bg-danger-subtle border-danger-subtle fw-bold"><i class="bi bi-exclamation-circle"></i> ' . lang('Config.security_issue') . '</div>
                 <div class="card-body">
                     <p class="card-text">' . lang('Config.perm_risk') . '</p>
                     <ul class="list-unstyled mb-0">';
-        }
-        if (substr(decoct(fileperms($logs)), -4) != 750) {
-            echo '<li class="card-text">' . $bullet . '<code>writable/logs</code> ' . lang('Config.is_writable') . '</li>';
-        }
+    }
+if (substr(decoct(fileperms($logs)), -4) !== 750) {
+    echo '<li class="card-text">' . $bullet . '<code>writable/logs</code> ' . lang('Config.is_writable') . '</li>';
+}
 
-        if (substr(decoct(fileperms($uploads)), -4) != 750) {
-            echo '<li class="card-text">' . $bullet . '<code>public/uploads</code> ' . lang('Config.is_writable') . '</li>';
-        }
+if (substr(decoct(fileperms($uploads)), -4) !== 750) {
+    echo '<li class="card-text">' . $bullet . '<code>public/uploads</code> ' . lang('Config.is_writable') . '</li>';
+}
 
-        if (substr(decoct(fileperms($images)), -4) != 750) {
-            echo '<li class="card-text">' . $bullet . '<code>public/uploads/item_pics</code> ' . lang('Config.is_writable') . '</li>';
-        }
+if (substr(decoct(fileperms($images)), -4) !== 750) {
+    echo '<li class="card-text">' . $bullet . '<code>public/uploads/item_pics</code> ' . lang('Config.is_writable') . '</li>';
+}
 
-        if (!((substr(decoct(fileperms($importCustomers)), -4) == 640)
-            || (substr(decoct(fileperms($importCustomers)), -4) == 660))) {
-            echo '<li class="card-text">' . $bullet . '<code>importCustomers.csv</code> ' . lang('Config.is_readable') . '</li>';
-        }
-        echo '</div></div>';
-    ?>
+if (! ((substr(decoct(fileperms($importCustomers)), -4) === 640)
+    || (substr(decoct(fileperms($importCustomers)), -4) === 660))) {
+    echo '<li class="card-text">' . $bullet . '<code>importCustomers.csv</code> ' . lang('Config.is_readable') . '</li>';
+}
+echo '</div></div>';
+?>
 
     <div class="row mb-3">
-        <label for="general-info" class="col-12 col-lg-2 form-label fw-bold">General Info</label>
-        <div class="col-12 col-lg-10" id="general-info">
+        <label for="general-info" class="col-12 lg:col-2 form-label fw-bold">General Info</label>
+        <div class="col-12 lg:col-10" id="general-info">
             <?= lang('Config.ospos_info') . ':&nbsp;' . esc(config('App')->application_version) . '&nbsp;-&nbsp;' . esc(substr(config(OSPOS::class)->commit_sha1, 0, 6)); ?><br>
             <div>Language Code: <?= current_language_code(); ?></div><br>
             <div id="time-error" class="row mb-3 d-none">
-                <div class="col-12 text-danger"><?= lang('Config.timezone_error'); ?></div>
+                <div class="col-12 fg-danger"><?= lang('Config.timezone_error'); ?></div>
                 <div class="col-6">
                     <label for="timezone"><?= lang('Config.user_timezone'); ?></label>
                     <div id="timezone"></div>
@@ -93,39 +92,36 @@ echo view('configs/config_header', $title_info);
     </div>
 
     <div class="row mb-3">
-        <label for="user-setup" class="col-12 col-lg-2 form-label fw-bold">User Setup</label>
-        <div class="col-12 col-lg-10" id="user-setup">
+        <label for="user-setup" class="col-12 lg:col-2 form-label fw-bold">User Setup</label>
+        <div class="col-12 lg:col-10" id="user-setup">
             <ul class="list-unstyled">
             <?php
-                /**
-                 * @param string $userAgent
-                 * @return string
-                 */
-                function getBrowserNameAndVersion(string $userAgent): string
-                {
-                    $browser = match (true) {
-                        strpos($userAgent, 'Opera') !== false || strpos($userAgent, 'OPR/') !== false => 'Opera',
-                        strpos($userAgent, 'Edge') !== false => 'Edge',
-                        strpos($userAgent, 'Chrome') !== false => 'Chrome',
-                        strpos($userAgent, 'Safari') !== false => 'Safari',
-                        strpos($userAgent, 'Firefox') !== false => 'Firefox',
-                        strpos($userAgent, 'MSIE') !== false || strpos($userAgent, 'Trident/7') !== false => 'Internet Explorer',
-                        default => 'Other',
-                    };
 
-                    $version = match ($browser) {
-                        'Opera' => preg_match('/(Opera|OPR)\/([0-9.]+)/', $userAgent, $matches) ? $matches[2] : '',
-                        'Edge' => preg_match('/Edge\/([0-9.]+)/', $userAgent, $matches) ? $matches[1] : '',
-                        'Chrome' => preg_match('/Chrome\/([0-9.]+)/', $userAgent, $matches) ? $matches[1] : '',
-                        'Safari' => preg_match('/Version\/([0-9.]+)/', $userAgent, $matches) ? $matches[1] : '',
-                        'Firefox' => preg_match('/Firefox\/([0-9.]+)/', $userAgent, $matches) ? $matches[1] : '',
-                        'Internet Explorer' => preg_match('/(MSIE|rv:)([0-9.]+)/', $userAgent, $matches) ? $matches[2] : '',
-                        default => '',
-                    };
+            function getBrowserNameAndVersion(string $userAgent): string
+            {
+                $browser = match (true) {
+                    str_contains($userAgent, 'Opera') || str_contains($userAgent, 'OPR/')     => 'Opera',
+                    str_contains($userAgent, 'Edge')                                            => 'Edge',
+                    str_contains($userAgent, 'Chrome')                                          => 'Chrome',
+                    str_contains($userAgent, 'Safari')                                          => 'Safari',
+                    str_contains($userAgent, 'Firefox')                                         => 'Firefox',
+                    str_contains($userAgent, 'MSIE') || str_contains($userAgent, 'Trident/7') => 'Internet Explorer',
+                    default                                                                     => 'Other',
+                };
 
-                    return $browser . ($version ? ' ' . $version : '');
-                }
-            ?>
+                $version = match ($browser) {
+                    'Opera'             => preg_match('/(Opera|OPR)\/([0-9.]+)/', $userAgent, $matches) ? $matches[2] : '',
+                    'Edge'              => preg_match('/Edge\/([0-9.]+)/', $userAgent, $matches) ? $matches[1] : '',
+                    'Chrome'            => preg_match('/Chrome\/([0-9.]+)/', $userAgent, $matches) ? $matches[1] : '',
+                    'Safari'            => preg_match('/Version\/([0-9.]+)/', $userAgent, $matches) ? $matches[1] : '',
+                    'Firefox'           => preg_match('/Firefox\/([0-9.]+)/', $userAgent, $matches) ? $matches[1] : '',
+                    'Internet Explorer' => preg_match('/(MSIE|rv:)([0-9.]+)/', $userAgent, $matches) ? $matches[2] : '',
+                    default             => '',
+                };
+
+                return $browser . ($version ? ' ' . $version : '');
+            }
+?>
                 <li><?= $bullet . 'Browser: ' . esc(getBrowserNameAndVersion($_SERVER['HTTP_USER_AGENT'])); ?></li>
                 <li><?= $bullet . 'Server Software: ' . esc($_SERVER['SERVER_SOFTWARE']); ?></li>
                 <li><?= $bullet . 'PHP Version: ' . PHP_VERSION; ?></li>
@@ -137,105 +133,104 @@ echo view('configs/config_header', $title_info);
     </div>
 
     <div class="row mb-3">
-        <label for="permissions" class="col-12 col-lg-2 form-label fw-bold">Permissions</label>
-        <div class="col-12 col-lg-10" id="permissions">
+        <label for="permissions" class="col-12 lg:col-2 form-label fw-bold">Permissions</label>
+        <div class="col-12 lg:col-10" id="permissions">
             <ul class="list-unstyled">
                 <li>
                     <?= $bullet; ?><code>writable/logs</code>
                     <?php
-                    if (is_writable($logs)) {
-                        echo substr(sprintf("%o", fileperms($logs)), -4) . $divider . $writable;
-                    } else {
-                        echo substr(sprintf("%o", fileperms($logs)), -4) . $divider . $notwritable;
+        if (is_writable($logs)) {
+            echo substr(sprintf('%o', fileperms($logs)), -4) . $divider . $writable;
+        } else {
+            echo substr(sprintf('%o', fileperms($logs)), -4) . $divider . $notwritable;
+        }
+clearstatcache();
 
-                    }
-                    clearstatcache();
+echo $divider;
 
-                    echo $divider;
-
-                    if (is_writable($logs) && substr(decoct(fileperms($logs)), -4) != 750) {
-                        echo $permissions_fail;
-                    } else {
-                        echo $permissions_check;
-                    }
-                    clearstatcache();
-                    ?>
+if (is_writable($logs) && substr(decoct(fileperms($logs)), -4) !== 750) {
+    echo $permissions_fail;
+} else {
+    echo $permissions_check;
+}
+clearstatcache();
+?>
                 </li>
                 <li>
                     <?= $bullet; ?><code>public/uploads</code>
                     <?php
-                    if(is_writable($uploads)) {
-                        echo substr(sprintf("%o",fileperms($uploads)),-4) . $divider . $writable;
-                    } else {
-                        echo substr(sprintf("%o",fileperms($uploads)),-4) . $divider . $notwritable;
-                    }
-                    clearstatcache();
+if (is_writable($uploads)) {
+    echo substr(sprintf('%o', fileperms($uploads)), -4) . $divider . $writable;
+} else {
+    echo substr(sprintf('%o', fileperms($uploads)), -4) . $divider . $notwritable;
+}
+clearstatcache();
 
-                    echo $divider;
+echo $divider;
 
-                    if(is_writable($uploads) && substr(decoct(fileperms($uploads)), -4) != 750  ) {
-                        echo $permissions_fail;
-                    } else {
-                        echo $permissions_check;
-                    }
-                    clearstatcache();
-                    ?>
+if (is_writable($uploads) && substr(decoct(fileperms($uploads)), -4) !== 750) {
+    echo $permissions_fail;
+} else {
+    echo $permissions_check;
+}
+clearstatcache();
+?>
                 </li>
                 <li>
                     <?= $bullet; ?><code>public/uploads/item_pics</code>
                     <?php
-                    if (is_writable($images)) {
-                        echo substr(sprintf("%o", fileperms($images)), -4) . $divider . $writable;
-                    } else {
-                        echo substr(sprintf("%o", fileperms($images)), -4) . $divider . $notwritable;
-                    }
-                    clearstatcache();
+if (is_writable($images)) {
+    echo substr(sprintf('%o', fileperms($images)), -4) . $divider . $writable;
+} else {
+    echo substr(sprintf('%o', fileperms($images)), -4) . $divider . $notwritable;
+}
+clearstatcache();
 
-                    echo $divider;
+echo $divider;
 
-                    if (substr(decoct(fileperms($images)), -4) != 750) {
-                        echo $permissions_fail;
-                    } else {
-                        echo $permissions_check;
-                    }
-                    clearstatcache();
+if (substr(decoct(fileperms($images)), -4) !== 750) {
+    echo $permissions_fail;
+} else {
+    echo $permissions_check;
+}
+clearstatcache();
 
-                    ?>
+?>
                 </li>
                 <li>
                     <?= $bullet; ?><code>importCustomers.csv</code>
                     <?php
-                    if (is_readable($importCustomers)) {
-                        echo substr(sprintf("%o", fileperms($importCustomers)), -4) . $divider . $readable;
-                    } else {
-                        echo substr(sprintf("%o", fileperms($importCustomers)), -4) . $divider . $notreadable;
-                    }
-                    clearstatcache();
+if (is_readable($importCustomers)) {
+    echo substr(sprintf('%o', fileperms($importCustomers)), -4) . $divider . $readable;
+} else {
+    echo substr(sprintf('%o', fileperms($importCustomers)), -4) . $divider . $notreadable;
+}
+clearstatcache();
 
-                    echo $divider;
+echo $divider;
 
-                    if (!((substr(decoct(fileperms($importCustomers)), -4) == 640) || (substr(decoct(fileperms($importCustomers)), -4) == 660))) {
-                        echo $permissions_fail;
-                    } else {
-                        echo $permissions_check;
-                    }
-                    clearstatcache();
+if (! ((substr(decoct(fileperms($importCustomers)), -4) === 640) || (substr(decoct(fileperms($importCustomers)), -4) === 660))) {
+    echo $permissions_fail;
+} else {
+    echo $permissions_check;
+}
+clearstatcache();
 
-                    ?>
+?>
                 </li>
             </ul>
             <?php
-            if (((substr(decoct(fileperms($logs)), -4) == 750) && (substr(decoct(fileperms($uploads)), -4) == 750) && (substr(decoct(fileperms($images)), -4) == 750) && ((substr(decoct(fileperms($importCustomers)), -4) == 640) || (substr(decoct(fileperms($importCustomers)), -4) == 660)))) {
-                echo '<span class="text-success">' . lang('Config.no_risk') . '</span>';
+            if (((substr(decoct(fileperms($logs)), -4) === 750) && (substr(decoct(fileperms($uploads)), -4) === 750) && (substr(decoct(fileperms($images)), -4) === 750) && ((substr(decoct(fileperms($importCustomers)), -4) === 640) || (substr(decoct(fileperms($importCustomers)), -4) === 660)))) {
+                echo '<span class="fg-success">' . lang('Config.no_risk') . '</span>';
             }
-            ?>
+?>
         </div>
     </div>
 </form>
 
 <div class="d-flex justify-content-center gap-3">
-    <button type="button" class="copy btn btn-secondary" data-clipboard-target="#copy-issue"><i class="bi bi-clipboard-plus"></i> Copy Info</button> <!-- TODO-BS5 add to translations -->
-    <a class="btn btn-secondary" href="https://github.com/opensourcepos/opensourcepos/issues/new" target="_blank" rel="noopener"><i class="bi bi-flag"></i> <?= lang('Config.report_an_issue') ?></a>
+    <button type="button" class="copy btn btn-solid theme-secondary" data-clipboard-target="#copy-issue"><i class="bi bi-clipboard-plus"></i> Copy Info</button> <!-- TODO-BS5 add to translations -->
+    <a class="btn btn-solid theme-secondary" href="https://github.com/opensourcepos/opensourcepos/issues/new" target="_blank" rel="noopener"><i class="bi bi-flag"></i> <?= lang('Config.report_an_issue') ?></a>
 </div>
 
 <script type="text/javascript">

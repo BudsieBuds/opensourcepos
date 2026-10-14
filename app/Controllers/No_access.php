@@ -4,14 +4,13 @@ namespace App\Controllers;
 
 use App\Models\Employee;
 use App\Models\Module;
-use CodeIgniter\HTTP\ResponseInterface;
 use Config\OSPOS;
 
 /**
  * Part of the grants mechanism to restrict access to modules that the user doesn't have permission for.
  * Instantiated in the views.
  *
- * @property module module
+ * @property Module module
  */
 class No_access extends BaseController
 {
@@ -21,14 +20,9 @@ class No_access extends BaseController
     public function __construct()
     {
         $this->employee = model(Employee::class);
-        $this->module = model(Module::class);
+        $this->module   = model(Module::class);
     }
 
-    /**
-     * @param string $module_id
-     * @param string $permission_id
-     * @return string
-     */
     public function getIndex(string $module_id = '', string $permission_id = ''): string
     {
         $data['module_name']   = $this->module->get_module_name($module_id);
@@ -39,8 +33,8 @@ class No_access extends BaseController
             return view('no_access', $data);
         }
 
-        $menuGroup = session()->get('menu_group');
-        $allowedModules = $menuGroup == 'home'
+        $menuGroup      = session()->get('menu_group');
+        $allowedModules = $menuGroup === 'home'
             ? $this->module->get_allowed_home_modules($userInfo->person_id)
             : $this->module->get_allowed_office_modules($userInfo->person_id);
 

@@ -8,24 +8,24 @@
 
     <?php
     $title_info['config_title'] = lang('Config.receipt_configuration');
-    echo view('configs/config_header', $title_info);
-    ?>
+echo view('configs/config_header', $title_info);
+?>
 
-    <ul id="error_message_box" class="receipt_error_message_box alert alert-warning d-none"></ul>
+    <ul id="error_message_box" class="receipt_error_message_box alert theme-warning d-none"></ul>
 
     <div class="row">
-        <div class="col-12 col-lg-6">
+        <div class="col-12 lg:col-6">
             <label for="receipt_template" class="form-label"><?= lang('Config.receipt_template'); ?></label>
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-file-code"></i></span>
-                <select class="form-select" name="receipt_template">
-                    <option value="receipt_default" <?= $config['receipt_template'] == 'receipt_default' ? 'selected' : '' ?>><?= lang('Config.receipt_default') ?></option>
-                    <option value="receipt_short" <?= $config['receipt_template'] == 'receipt_short' ? 'selected' : '' ?>><?= lang('Config.receipt_short') ?></option>
+                <select class="form-control" name="receipt_template">
+                    <option value="receipt_default" <?= $config['receipt_template'] === 'receipt_default' ? 'selected' : '' ?>><?= lang('Config.receipt_default') ?></option>
+                    <option value="receipt_short" <?= $config['receipt_template'] === 'receipt_short' ? 'selected' : '' ?>><?= lang('Config.receipt_short') ?></option>
                 </select>
             </div>
         </div>
 
-        <div class="col-6 col-lg-3">
+        <div class="col-6 lg:col-3">
             <label for="receipt_font_size" class="form-label"><?= lang('Config.receipt_font_size'); ?></label>
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-arrows-angle-expand"></i></span>
@@ -34,7 +34,7 @@
             </div>
         </div>
 
-        <div class="col-6 col-lg-3">
+        <div class="col-6 lg:col-3">
             <label for="print_delay_autoreturn" class="form-label"><?= lang('Config.print_delay_autoreturn'); ?></label>
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-stopwatch"></i></span>
@@ -47,19 +47,19 @@
     <label for="email_receipt_check_behaviour" class="form-label"><?= lang('Config.email_receipt_check_behaviour'); ?></label>
     <div class="row mb-3">
         <div class="col-12">
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="email_receipt_check_behaviour" id="email_receipt_check_behaviour_always" value="always" <?= $config['email_receipt_check_behaviour'] == 'always' ? 'checked' : '' ?>>
-                <label class="form-check-label" for="email_receipt_check_behaviour_always"><?= lang('Config.email_receipt_check_behaviour_always') ?></label>
+            <div class="form-field d-inline-flex me-3">
+        <input class="radio" type="radio" name="email_receipt_check_behaviour" id="email_receipt_check_behaviour_always" value="always" <?= $config['email_receipt_check_behaviour'] === 'always' ? 'checked' : '' ?>>
+        <label for="email_receipt_check_behaviour_always"><?= lang('Config.email_receipt_check_behaviour_always') ?></label>
             </div>
 
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="email_receipt_check_behaviour" id="email_receipt_check_behaviour_never" value="never" <?= $config['email_receipt_check_behaviour'] == 'never' ? 'checked' : '' ?>>
-                <label class="form-check-label" for="email_receipt_check_behaviour_never"><?= lang('Config.email_receipt_check_behaviour_never') ?></label>
+            <div class="form-field d-inline-flex me-3">
+        <input class="radio" type="radio" name="email_receipt_check_behaviour" id="email_receipt_check_behaviour_never" value="never" <?= $config['email_receipt_check_behaviour'] === 'never' ? 'checked' : '' ?>>
+        <label for="email_receipt_check_behaviour_never"><?= lang('Config.email_receipt_check_behaviour_never') ?></label>
             </div>
 
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="email_receipt_check_behaviour" id="email_receipt_check_behaviour_last" value="last" <?= $config['email_receipt_check_behaviour'] == 'last' ? 'checked' : '' ?>>
-                <label class="form-check-label" for="email_receipt_check_behaviour_last"><?= lang('Config.email_receipt_check_behaviour_last') ?></label>
+            <div class="form-field d-inline-flex me-3">
+        <input class="radio" type="radio" name="email_receipt_check_behaviour" id="email_receipt_check_behaviour_last" value="last" <?= $config['email_receipt_check_behaviour'] === 'last' ? 'checked' : '' ?>>
+        <label for="email_receipt_check_behaviour_last"><?= lang('Config.email_receipt_check_behaviour_last') ?></label>
             </div>
         </div>
     </div>
@@ -67,96 +67,114 @@
     <label for="print_receipt_check_behaviour" class="form-label"><?= lang('Config.print_receipt_check_behaviour'); ?></label>
     <div class="row mb-3">
         <div class="col-12">
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="print_receipt_check_behaviour" id="print_receipt_check_behaviour_always" value="always" <?= $config['print_receipt_check_behaviour'] == 'always' ? 'checked' : '' ?>>
-                <label class="form-check-label" for="print_receipt_check_behaviour_always"><?= lang('Config.print_receipt_check_behaviour_always') ?></label>
+            <div class="form-field d-inline-flex me-3">
+        <input class="radio" type="radio" name="print_receipt_check_behaviour" id="print_receipt_check_behaviour_always" value="always" <?= $config['print_receipt_check_behaviour'] === 'always' ? 'checked' : '' ?>>
+        <label for="print_receipt_check_behaviour_always"><?= lang('Config.print_receipt_check_behaviour_always') ?></label>
             </div>
 
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="print_receipt_check_behaviour" id="print_receipt_check_behaviour_never" value="never" <?= $config['print_receipt_check_behaviour'] == 'never' ? 'checked' : '' ?>>
-                <label class="form-check-label" for="print_receipt_check_behaviour_never"><?= lang('Config.print_receipt_check_behaviour_never') ?></label>
+            <div class="form-field d-inline-flex me-3">
+        <input class="radio" type="radio" name="print_receipt_check_behaviour" id="print_receipt_check_behaviour_never" value="never" <?= $config['print_receipt_check_behaviour'] === 'never' ? 'checked' : '' ?>>
+        <label for="print_receipt_check_behaviour_never"><?= lang('Config.print_receipt_check_behaviour_never') ?></label>
             </div>
 
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="print_receipt_check_behaviour" id="print_receipt_check_behaviour_last" value="last" <?= $config['print_receipt_check_behaviour'] == 'last' ? 'checked' : '' ?>>
-                <label class="form-check-label" for="print_receipt_check_behaviour_last"><?= lang('Config.print_receipt_check_behaviour_last') ?></label>
+            <div class="form-field d-inline-flex me-3">
+        <input class="radio" type="radio" name="print_receipt_check_behaviour" id="print_receipt_check_behaviour_last" value="last" <?= $config['print_receipt_check_behaviour'] === 'last' ? 'checked' : '' ?>>
+        <label for="print_receipt_check_behaviour_last"><?= lang('Config.print_receipt_check_behaviour_last') ?></label>
             </div>
         </div>
     </div>
 
-    <div class="form-check form-switch mb-3">
-        <input class="form-check-input" type="checkbox" role="switch" id="receipt_show_company_name" name="receipt_show_company_name" value="receipt_show_company_name" <?= $config['receipt_show_company_name'] == 1 ? 'checked' : '' ?>>
-        <label class="form-check-label" for="receipt_show_company_name"><?= lang('Config.receipt_show_company_name'); ?></label>
+    <div class="form-field mb-3">
+        <div class="switch">
+            <input type="checkbox" role="switch" switch id="receipt_show_company_name" name="receipt_show_company_name" value="receipt_show_company_name" <?= $config['receipt_show_company_name'] === 1 ? 'checked' : '' ?>>
+        </div>
+        <label for="receipt_show_company_name"><?= lang('Config.receipt_show_company_name'); ?></label>
     </div>
 
-    <div class="form-check form-switch mb-3">
-        <input class="form-check-input" type="checkbox" role="switch" id="receipt_show_taxes" name="receipt_show_taxes" value="receipt_show_taxes" <?= $config['receipt_show_taxes'] == 1 ? 'checked' : '' ?>>
-        <label class="form-check-label" for="receipt_show_taxes"><?= lang('Config.receipt_show_taxes'); ?></label>
+    <div class="form-field mb-3">
+        <div class="switch">
+            <input type="checkbox" role="switch" switch id="receipt_show_taxes" name="receipt_show_taxes" value="receipt_show_taxes" <?= $config['receipt_show_taxes'] === 1 ? 'checked' : '' ?>>
+        </div>
+        <label for="receipt_show_taxes"><?= lang('Config.receipt_show_taxes'); ?></label>
     </div>
 
-    <div class="form-check form-switch mb-3">
-        <input class="form-check-input" type="checkbox" role="switch" id="receipt_show_tax_ind" name="receipt_show_tax_ind" value="receipt_show_tax_ind" <?= $config['receipt_show_tax_ind'] == 1 ? 'checked' : '' ?>>
-        <label class="form-check-label" for="receipt_show_tax_ind"><?= lang('Config.receipt_show_tax_ind'); ?></label>
+    <div class="form-field mb-3">
+        <div class="switch">
+            <input type="checkbox" role="switch" switch id="receipt_show_tax_ind" name="receipt_show_tax_ind" value="receipt_show_tax_ind" <?= $config['receipt_show_tax_ind'] === 1 ? 'checked' : '' ?>>
+        </div>
+        <label for="receipt_show_tax_ind"><?= lang('Config.receipt_show_tax_ind'); ?></label>
     </div>
 
-    <div class="form-check form-switch mb-3">
-        <input class="form-check-input" type="checkbox" role="switch" id="receipt_show_total_discount" name="receipt_show_total_discount" value="receipt_show_total_discount" <?= $config['receipt_show_total_discount'] == 1 ? 'checked' : '' ?>>
-        <label class="form-check-label" for="receipt_show_total_discount"><?= lang('Config.receipt_show_total_discount'); ?></label>
+    <div class="form-field mb-3">
+        <div class="switch">
+            <input type="checkbox" role="switch" switch id="receipt_show_total_discount" name="receipt_show_total_discount" value="receipt_show_total_discount" <?= $config['receipt_show_total_discount'] === 1 ? 'checked' : '' ?>>
+        </div>
+        <label for="receipt_show_total_discount"><?= lang('Config.receipt_show_total_discount'); ?></label>
     </div>
 
-    <div class="form-check form-switch mb-3">
-        <input class="form-check-input" type="checkbox" role="switch" id="receipt_show_description" name="receipt_show_description" value="receipt_show_description" <?= $config['receipt_show_description'] == 1 ? 'checked' : '' ?>>
-        <label class="form-check-label" for="receipt_show_description"><?= lang('Config.receipt_show_description'); ?></label>
+    <div class="form-field mb-3">
+        <div class="switch">
+            <input type="checkbox" role="switch" switch id="receipt_show_description" name="receipt_show_description" value="receipt_show_description" <?= $config['receipt_show_description'] === 1 ? 'checked' : '' ?>>
+        </div>
+        <label for="receipt_show_description"><?= lang('Config.receipt_show_description'); ?></label>
     </div>
 
-    <div class="form-check form-switch mb-3">
-        <input class="form-check-input" type="checkbox" role="switch" id="receipt_show_serialnumber" name="receipt_show_serialnumber" value="receipt_show_serialnumber" <?= $config['receipt_show_serialnumber'] == 1 ? 'checked' : '' ?>>
-        <label class="form-check-label" for="receipt_show_serialnumber"><?= lang('Config.receipt_show_serialnumber'); ?></label>
+    <div class="form-field mb-3">
+        <div class="switch">
+            <input type="checkbox" role="switch" switch id="receipt_show_serialnumber" name="receipt_show_serialnumber" value="receipt_show_serialnumber" <?= $config['receipt_show_serialnumber'] === 1 ? 'checked' : '' ?>>
+        </div>
+        <label for="receipt_show_serialnumber"><?= lang('Config.receipt_show_serialnumber'); ?></label>
     </div>
 
-    <div class="form-check form-switch mb-3">
-        <input class="form-check-input" type="checkbox" role="switch" id="print_silently" name="print_silently" value="print_silently" <?= $config['print_silently'] == 1 ? 'checked' : '' ?>>
-        <label class="form-check-label" for="print_silently"><?= lang('Config.print_silently'); ?></label>
+    <div class="form-field mb-3">
+        <div class="switch">
+            <input type="checkbox" role="switch" switch id="print_silently" name="print_silently" value="print_silently" <?= $config['print_silently'] === 1 ? 'checked' : '' ?>>
+        </div>
+        <label for="print_silently"><?= lang('Config.print_silently'); ?></label>
     </div>
 
-    <div class="form-check form-switch mb-3">
-        <input class="form-check-input" type="checkbox" role="switch" id="print_header" name="print_header" value="print_header" <?= $config['print_header'] == 1 ? 'checked' : '' ?>>
-        <label class="form-check-label" for="print_header"><?= lang('Config.print_header'); ?></label>
+    <div class="form-field mb-3">
+        <div class="switch">
+            <input type="checkbox" role="switch" switch id="print_header" name="print_header" value="print_header" <?= $config['print_header'] === 1 ? 'checked' : '' ?>>
+        </div>
+        <label for="print_header"><?= lang('Config.print_header'); ?></label>
     </div>
 
-    <div class="form-check form-switch mb-3">
-        <input class="form-check-input" type="checkbox" role="switch" id="print_footer" name="print_footer" value="print_footer" <?= $config['print_footer'] == 1 ? 'checked' : '' ?>>
-        <label class="form-check-label" for="print_footer"><?= lang('Config.print_footer'); ?></label>
+    <div class="form-field mb-3">
+        <div class="switch">
+            <input type="checkbox" role="switch" switch id="print_footer" name="print_footer" value="print_footer" <?= $config['print_footer'] === 1 ? 'checked' : '' ?>>
+        </div>
+        <label for="print_footer"><?= lang('Config.print_footer'); ?></label>
     </div>
 
     <div class="row">
-        <div class="col-12 col-lg-6">
+        <div class="col-12 lg:col-6">
             <label for="receipt_printer" class="form-label"><?= lang('Config.receipt_printer'); ?></label>
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-printer"></i></span>
-                <select class="form-select" name="receipt_printer" id="receipt_printer"></select>
+                <select class="form-control" name="receipt_printer" id="receipt_printer"></select>
             </div>
         </div>
 
-        <div class="col-12 col-lg-6">
+        <div class="col-12 lg:col-6">
             <label for="invoice_printer" class="form-label"><?= lang('Config.invoice_printer'); ?></label>
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-printer"></i></span>
-                <select class="form-select" name="invoice_printer" id="invoice_printer"></select>
+                <select class="form-control" name="invoice_printer" id="invoice_printer"></select>
             </div>
         </div>
 
-        <div class="col-12 col-lg-6">
+        <div class="col-12 lg:col-6">
             <label for="takings_printer" class="form-label"><?= lang('Config.takings_printer'); ?></label>
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-printer"></i></span>
-                <select class="form-select" name="takings_printer" id="takings_printer"></select>
+                <select class="form-control" name="takings_printer" id="takings_printer"></select>
             </div>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-6 col-lg-3">
+        <div class="col-6 lg:col-3">
             <label for="print_top_margin" class="form-label"><?= lang('Config.print_top_margin'); ?></label>
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-arrow-bar-down"></i></span>
@@ -165,7 +183,7 @@
             </div>
         </div>
 
-        <div class="col-6 col-lg-3">
+        <div class="col-6 lg:col-3">
             <label for="print_left_margin" class="form-label"><?= lang('Config.print_left_margin'); ?></label>
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-arrow-bar-right"></i></span>
@@ -174,7 +192,7 @@
             </div>
         </div>
 
-        <div class="col-6 col-lg-3">
+        <div class="col-6 lg:col-3">
             <label for="print_bottom_margin" class="form-label"><?= lang('Config.print_bottom_margin'); ?></label>
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-arrow-bar-up"></i></span>
@@ -183,7 +201,7 @@
             </div>
         </div>
 
-        <div class="col-6 col-lg-3">
+        <div class="col-6 lg:col-3">
             <label for="print_right_margin" class="form-label"><?= lang('Config.print_right_margin'); ?></label>
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-arrow-bar-left"></i></span>
@@ -194,7 +212,7 @@
     </div>
 
     <div class="d-flex justify-content-end">
-        <button type="submit" class="btn btn-primary" name="submit_receipt"><?= lang('Common.submit'); ?></button>
+        <button type="submit" class="btn btn-solid theme-primary" name="submit_receipt"><?= lang('Common.submit'); ?></button>
     </div>
 
 <?= form_close() ?>

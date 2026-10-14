@@ -1,8 +1,8 @@
 <?= form_open_multipart('customers/importCsvFile/', ['id' => 'csv_form']) ?>
 
-    <ul id="error_message_box" class="alert alert-warning d-none"></ul>
+    <ul id="error_message_box" class="alert theme-warning d-none"></ul>
 
-    <a type="button" class="btn btn-secondary mb-3" href="<?= esc('customers/csv') ?>"><?= lang('Common.download_import_template') ?></a>
+    <a type="button" class="btn btn-solid theme-secondary mb-3" href="<?= esc('customers/csv') ?>"><?= lang('Common.download_import_template') ?></a>
 
     <div class="fileinput fileinput-new input-group mb-3" data-provides="fileinput">
         <span class="input-group-text"><i class="bi bi-filetype-csv"></i></span>

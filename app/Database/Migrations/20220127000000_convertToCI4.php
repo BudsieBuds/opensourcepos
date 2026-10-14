@@ -27,7 +27,7 @@ class ConvertToCI4 extends Migration
     {
         helper('migration');
 
-        if (!executeScript(APPPATH . 'Database/Migrations/sqlscripts/3.4.0_CI4Conversion.sql')) {
+        if (! executeScript(APPPATH . 'Database/Migrations/sqlscripts/3.4.0_CI4Conversion.sql')) {
             throw new DatabaseException('Migration script 3.4.0_CI4Conversion.sql failed. Check logs for details.');
         }
 
@@ -43,7 +43,7 @@ class ConvertToCI4 extends Migration
         // Every branch below writes to .env. If the runtime user cannot write
         // it (e.g. Docker/Compose with a read-only .env mount), fail with an
         // actionable message instead of a raw fopen() error deep in the writer.
-        if (!envFileIsWritable()) {
+        if (! envFileIsWritable()) {
             log_message('critical', 'Encryption key not provisioned and .env is not writable. Run `php spark env:provision` to generate one.');
 
             throw new RuntimeException(lang('Error.encryption_key_not_provisioned'));
@@ -64,7 +64,9 @@ class ConvertToCI4 extends Migration
     /**
      * Revert a migration step.
      */
-    public function down(): void {}
+    public function down(): void
+    {
+    }
 
     /**
      * Decrypts legacy CI3-encrypted secrets with the old key, rotates to a
@@ -75,6 +77,7 @@ class ConvertToCI4 extends Migration
      * the docker startup command (env:provision) shares the same code path.
      *
      * @param string $oldKey the CI3-era key currently in .env
+     *
      * @throws RedirectException
      */
     private function convertCI3EncryptedData(string $oldKey): void

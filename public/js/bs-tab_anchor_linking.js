@@ -28,7 +28,10 @@
             });
 
             if (trigger) {
-                bootstrap.Tab.getOrCreateInstance(trigger).show();
+                const Tab = window.bootstrap?.Tab;
+                if (Tab) {
+                    Tab.getOrCreateInstance(trigger).show();
+                }
             }
         }
 

@@ -2,7 +2,7 @@
 /**
  * @var string $controller_name
  * @var string $table_headers
- * @var array $config
+ * @var array  $config
  */
 ?>
 
@@ -38,11 +38,11 @@ echo view('configs/config_header', $title_info);
 </script>
 
 <div class="d-flex gap-2 justify-content-end">
-    <button type="button" class="btn btn-primary modal-launch" data-btn-submit="<?= lang('Common.submit') ?>" data-href="<?= "$controller_name/view" ?>" title="<?= lang(ucfirst($controller_name) . '.new') ?>">
+    <button type="button" class="btn btn-solid theme-primary modal-launch" data-btn-submit="<?= lang('Common.submit') ?>" data-href="<?= "{$controller_name}/view" ?>" title="<?= lang(ucfirst($controller_name) . '.new') ?>">
         <i class="bi bi-person-add me-2"></i><?= lang(ucfirst($controller_name) . '.new') ?>
     </button>
-    <?php if ($controller_name == 'customers') { ?>
-    <button type="button" class="btn btn-primary modal-launch" data-btn-submit="<?= lang('Common.submit') ?>" data-href="<?= "$controller_name/csvImport" ?>" title="<?= lang(ucfirst($controller_name) . '.import_items_csv') ?>">
+    <?php if ($controller_name === 'customers') { ?>
+    <button type="button" class="btn btn-solid theme-primary modal-launch" data-btn-submit="<?= lang('Common.submit') ?>" data-href="<?= "{$controller_name}/csvImport" ?>" title="<?= lang(ucfirst($controller_name) . '.import_items_csv') ?>">
         <i class="bi bi-file-earmark-arrow-down me-2"></i><?= lang('Common.import_csv') ?>
     </button>
     <?php } ?>
@@ -50,11 +50,11 @@ echo view('configs/config_header', $title_info);
 
 <div id="toolbar">
     <div class="d-flex gap-2">
-        <button type="button" class="btn btn-secondary" id="delete">
-            <i class="bi bi-trash"></i><span class="d-none d-sm-inline ms-2"><?= lang('Common.delete') ?></span>
+        <button type="button" class="btn btn-solid theme-secondary" id="delete">
+            <i class="bi bi-trash"></i><span class="d-none sm:d-inline ms-2"><?= lang('Common.delete') ?></span>
         </button>
-        <button type="button" class="btn btn-secondary" id="email">
-            <i class="bi bi-envelope"></i><span class="d-none d-sm-inline ms-2"><?= lang('Common.email') ?></span>
+        <button type="button" class="btn btn-solid theme-secondary" id="email">
+            <i class="bi bi-envelope"></i><span class="d-none sm:d-inline ms-2"><?= lang('Common.email') ?></span>
         </button>
     </div>
 </div>

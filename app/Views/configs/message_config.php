@@ -1,7 +1,7 @@
 <?php
 /**
  * @var array $config
- * @var bool $msg_pwd_set
+ * @var bool  $msg_pwd_set
  */
 ?>
 
@@ -9,33 +9,33 @@
 
     <?php
     $title_info['config_title'] = lang('Config.message_configuration');
-    echo view('configs/config_header', $title_info);
-    ?>
+echo view('configs/config_header', $title_info);
+?>
 
-    <ul id="error_message_box" class="message_error_message_box alert alert-warning d-none"></ul>
+    <ul id="error_message_box" class="message_error_message_box alert theme-warning d-none"></ul>
 
     <div class="row">
-        <div class="col-12 col-lg-6 mb-3">
-            <label for="msg_uid" class="form-label"><?= lang('Config.msg_uid'); ?><sup><span class="badge text-primary"><i class="bi bi-asterisk"></i></span></sup></label>
+        <div class="col-12 lg:col-6 mb-3">
+            <label for="msg_uid" class="form-label"><?= lang('Config.msg_uid'); ?><sup><span class="badge fg-primary"><i class="bi bi-asterisk"></i></span></sup></label>
             <div class="input-group">
                 <span class="input-group-text" id="msg_uid-icon"><i class="bi bi-person"></i></span>
                 <input type="text" class="form-control" name="msg_uid" id="msg_uid" aria-describedby="msg_uid-icon" required value="<?= $config['msg_uid']; ?>">
             </div>
         </div>
 
-        <div class="col-12 col-lg-6 mb-3">
-            <label for="msg_pwd" class="form-label"><?= lang('Config.msg_pwd'); ?><sup><span class="badge text-primary"><i class="bi bi-asterisk"></i></span></sup></label>
+        <div class="col-12 lg:col-6 mb-3">
+            <label for="msg_pwd" class="form-label"><?= lang('Config.msg_pwd'); ?><sup><span class="badge fg-primary"><i class="bi bi-asterisk"></i></span></sup></label>
             <div class="input-group">
                 <span class="input-group-text" id="msg_pwd-icon"><i class="bi bi-lock"></i></span>
-                <input type="password" class="form-control" name="msg_pwd" id="msg_pwd" aria-describedby="msg_pwd-icon" required placeholder="<?= !empty($msg_pwd_set) ? lang('Config.msg_pwd_set') : esc(lang('Config.msg_pwd')) ?>" autocomplete="off">
+                <input type="password" class="form-control" name="msg_pwd" id="msg_pwd" aria-describedby="msg_pwd-icon" required placeholder="<?= ! empty($msg_pwd_set) ? lang('Config.msg_pwd_set') : esc(lang('Config.msg_pwd')) ?>" autocomplete="off">
             </div>
         </div>
 
-        <div class="col-12 col-lg-6 mb-3">
-            <label for="msg_src" class="form-label"><?= lang('Config.msg_src'); ?><sup><span class="badge text-primary"><i class="bi bi-asterisk"></i></span></sup></label>
+        <div class="col-12 lg:col-6 mb-3">
+            <label for="msg_src" class="form-label"><?= lang('Config.msg_src'); ?><sup><span class="badge fg-primary"><i class="bi bi-asterisk"></i></span></sup></label>
             <div class="input-group">
                 <span class="input-group-text" id="msg_src-icon"><i class="bi bi-megaphone"></i></span>
-                <input type="text" class="form-control" name="msg_src" id="msg_src" aria-describedby="msg_src-icon" required value="<?= $config['msg_src'] == null ? $config['company'] : $config['msg_src']; ?>">
+                <input type="text" class="form-control" name="msg_src" id="msg_src" aria-describedby="msg_src-icon" required value="<?= $config['msg_src'] === null ? $config['company'] : $config['msg_src']; ?>">
             </div>
         </div>
     </div>
@@ -47,7 +47,7 @@
     </div>
 
     <div class="d-flex justify-content-end">
-        <button type="submit" class="btn btn-primary" name="submit_message"><?= lang('Common.submit'); ?></button>
+        <button type="submit" class="btn btn-solid theme-primary" name="submit_message"><?= lang('Common.submit'); ?></button>
     </div>
 
 <?= form_close() ?>

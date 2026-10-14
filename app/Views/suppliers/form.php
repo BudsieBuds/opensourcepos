@@ -2,26 +2,26 @@
 /**
  * @var string $controller_name
  * @var object $person_info
- * @var array $categories
+ * @var array  $categories
  */
 ?>
 
-<?= form_open("$controller_name/save/$person_info->person_id", ['id' => 'supplier_form']) ?>
+<?= form_open("{$controller_name}/save/{$person_info->person_id}", ['id' => 'supplier_form']) ?>
 
-    <ul id="error_message_box" class="alert alert-warning d-none"></ul>
+    <ul id="error_message_box" class="alert theme-warning d-none"></ul>
 
-    <label for="company_name" class="form-label"><?= lang('Suppliers.company_name'); ?><sup><span class="badge text-primary"><i class="bi bi-asterisk"></i></span></sup></label>
+    <label for="company_name" class="form-label"><?= lang('Suppliers.company_name'); ?><sup><span class="badge fg-primary"><i class="bi bi-asterisk"></i></span></sup></label>
     <div class="input-group mb-3">
         <span class="input-group-text" id="company_name-icon"><i class="bi bi-building"></i></span>
         <input type="text" class="form-control" name="company_name" id="company_name" aria-describedby="company_name-icon" value="<?= html_entity_decode($person_info->company_name) ?>" required>
     </div>
 
-    <label for="category" class="form-label"><?= lang('Suppliers.category'); ?><sup><span class="badge text-primary"><i class="bi bi-asterisk"></i></span></sup></label>
+    <label for="category" class="form-label"><?= lang('Suppliers.category'); ?><sup><span class="badge fg-primary"><i class="bi bi-asterisk"></i></span></sup></label>
     <div class="input-group mb-3">
         <span class="input-group-text"><i class="bi bi-truck"></i></span>
-        <select class="form-select" name="category" id="category" required>
+        <select class="form-control" name="category" id="category" required>
             <?php foreach ($categories as $key => $label): ?>
-                <option value="<?= $key ?>" <?= $person_info->category == $key ? 'selected' : '' ?>><?= $label ?></option>
+                <option value="<?= $key ?>" <?= $person_info->category === $key ? 'selected' : '' ?>><?= $label ?></option>
             <?php endforeach; ?>
         </select>
     </div>

@@ -37,9 +37,6 @@ class CI3SecretConverter
         'smtp_pass',
     ];
 
-    /**
-     * @var Appconfig|null
-     */
     private ?Appconfig $model;
 
     public function __construct(?Appconfig $model = null)
@@ -52,6 +49,7 @@ class CI3SecretConverter
      * the supplied key. Empty/missing rows become ''.
      *
      * @param string $key the CI3-era encryption key
+     *
      * @return array<string,string>
      */
     public function decryptAll(string $key): array
@@ -60,8 +58,9 @@ class CI3SecretConverter
         $appConfig = $this->resolveModel();
 
         $result = [];
+
         foreach (self::LEGACY_KEYS as $col) {
-            $value = (string) $appConfig->get_value($col);
+            $value        = (string) $appConfig->get_value($col);
             $result[$col] = $value === '' ? '' : $encrypter->decrypt($value);
         }
 
@@ -72,6 +71,7 @@ class CI3SecretConverter
      * Encrypts plaintext values under the current CI4 cipher (no persistence).
      *
      * @param array<string,string> $plain
+     *
      * @return array<string,string>
      */
     public function encryptAll(array $plain): array
@@ -79,8 +79,9 @@ class CI3SecretConverter
         $encrypter = Services::encrypter();
 
         $result = [];
+
         foreach ($plain as $col => $value) {
-            $value = (string) $value;
+            $value        = (string) $value;
             $result[$col] = $value === '' ? '' : $encrypter->encrypt($value);
         }
 
@@ -92,6 +93,7 @@ class CI3SecretConverter
      * trip before persisting the converted result.
      *
      * @param array<string,string> $encrypted
+     *
      * @return array<string,string>
      */
     public function verifyAll(array $encrypted): array
@@ -99,8 +101,9 @@ class CI3SecretConverter
         $encrypter = Services::encrypter();
 
         $result = [];
+
         foreach ($encrypted as $col => $value) {
-            $value = (string) $value;
+            $value        = (string) $value;
             $result[$col] = $value === '' ? '' : $encrypter->decrypt($value);
         }
 
@@ -111,12 +114,12 @@ class CI3SecretConverter
      * Persists already-encrypted values to the ospos_app_config table.
      *
      * @param array<string,string> $encrypted
-     * @return bool
+     *
      * @throws RuntimeException
      */
     public function saveAll(array $encrypted): bool
     {
-        if (!$this->resolveModel()->batch_save($encrypted)) {
+        if (! $this->resolveModel()->batch_save($encrypted)) {
             throw new RuntimeException('Failed to save converted encryption data. Check logs for details.');
         }
 
@@ -141,27 +144,22 @@ class CI3SecretConverter
     /**
      * Build a Config\Encryption instance matching the CI3 cipher settings so
      * Services::encrypter() can construct a handler with AES-128-CBC.
-     *
-     * @return EncryptionConfig
      */
     private function ci3Config(string $key): EncryptionConfig
     {
-        $config        = new EncryptionConfig();
-        $config->driver = 'OpenSSL';
-        $config->digest = 'SHA512';
-        $config->key    = $key;
-        $config->cipher = 'AES-128-CBC';
-        $config->rawData = false;
+        $config                 = new EncryptionConfig();
+        $config->driver         = 'OpenSSL';
+        $config->digest         = 'SHA512';
+        $config->key            = $key;
+        $config->cipher         = 'AES-128-CBC';
+        $config->rawData        = false;
         $config->encryptKeyInfo = 'encryption';
-        $config->authKeyInfo = 'authentication';
-        $config->previousKeys = [];
+        $config->authKeyInfo    = 'authentication';
+        $config->previousKeys   = [];
 
         return $config;
     }
 
-    /**
-     * @return Appconfig
-     */
     private function resolveModel(): Appconfig
     {
         if ($this->model === null) {

@@ -1,11 +1,11 @@
 <?= view('partial/header') ?>
 
-<?= form_open("messages/send/", ['id' => 'send_sms_form', 'enctype' => 'multipart/form-data', 'method' => 'post']) ?>
+<?= form_open('messages/send/', ['id' => 'send_sms_form', 'enctype' => 'multipart/form-data', 'method' => 'post']) ?>
 
     <?php
     $title_info['config_title'] = lang('Messages.sms_send');
-    echo view('configs/config_header', $title_info);
-    ?>
+echo view('configs/config_header', $title_info);
+?>
 
     <div class="col mb-3">
         <label for="message-recipients" class="form-label"><?= lang('Messages.phone'); ?></label>
@@ -25,7 +25,7 @@
     </div>
 
     <div class="d-flex justify-content-end">
-        <button type="submit" class="btn btn-primary" id="submit_form" name="submit_form">Send</button>
+        <button type="submit" class="btn btn-solid theme-primary" id="submit_form" name="submit_form">Send</button>
     </div>
 
 <?= form_close() ?>

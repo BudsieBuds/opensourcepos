@@ -1,34 +1,34 @@
 <?php
 /**
  * @var object $person_info
- * @var array $config
+ * @var array  $config
  */
 ?>
 
-<label for="first_name" class="form-label"><?= lang('Common.first_name'); ?><sup><span class="badge text-primary"><i class="bi bi-asterisk"></i></span></sup></label>
+<label for="first_name" class="form-label"><?= lang('Common.first_name'); ?><sup><span class="badge fg-primary"><i class="bi bi-asterisk"></i></span></sup></label>
 <div class="input-group mb-3">
     <span class="input-group-text" id="first_name-icon"><i class="bi bi-person-square"></i></span>
     <input type="text" class="form-control" name="first_name" id="first_name" aria-describedby="first_name-icon" value="<?= $person_info->first_name; ?>" required>
 </div>
 
-<label for="last_name" class="form-label"><?= lang('Common.last_name'); ?><sup><span class="badge text-primary"><i class="bi bi-asterisk"></i></span></sup></label>
+<label for="last_name" class="form-label"><?= lang('Common.last_name'); ?><sup><span class="badge fg-primary"><i class="bi bi-asterisk"></i></span></sup></label>
 <div class="input-group mb-3">
     <span class="input-group-text" id="last_name-icon"><i class="bi bi-person-square"></i></span>
     <input type="text" class="form-control" name="last_name" id="last_name" aria-describedby="last_name-icon" value="<?= $person_info->last_name; ?>" required>
 </div>
 
-<label for="gender" class="form-label"><?= lang('Common.gender'); ?><?php if (!empty($basic_version)): ?><sup><span class="badge text-primary"><i class="bi bi-asterisk"></i></span></sup><?php endif ?></label>
+<label for="gender" class="form-label"><?= lang('Common.gender'); ?><?php if (! empty($basic_version)): ?><sup><span class="badge fg-primary"><i class="bi bi-asterisk"></i></span></sup><?php endif ?></label>
 <div class="row mb-3">
     <div class="col-12">
         <div class="input-group">
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="gender" id="gender_male" value="1" <?= $person_info->gender === '1' ? 'checked' : '' ?>>
-                <label class="form-check-label" for="gender_male"><i class="bi bi-gender-male me-1"></i><?= lang('Common.gender_male') ?></label>
+            <div class="form-field d-inline-flex me-3">
+        <input class="radio" type="radio" name="gender" id="gender_male" value="1" <?= $person_info->gender === '1' ? 'checked' : '' ?>>
+        <label for="gender_male"><i class="bi bi-gender-male me-1"></i><?= lang('Common.gender_male') ?></label>
             </div>
 
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="gender" id="gender_female" value="0" <?= $person_info->gender === '0' ? 'checked' : '' ?>>
-                <label class="form-check-label" for="gender_female"><i class="bi bi-gender-female me-1"></i><?= lang('Common.gender_female') ?></label>
+            <div class="form-field d-inline-flex me-3">
+        <input class="radio" type="radio" name="gender" id="gender_female" value="0" <?= $person_info->gender === '0' ? 'checked' : '' ?>>
+        <label for="gender_female"><i class="bi bi-gender-female me-1"></i><?= lang('Common.gender_female') ?></label>
             </div>
         </div>
     </div>

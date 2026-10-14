@@ -5,11 +5,11 @@
  */
 ?>
 
-<?= form_open("expenses_categories/save/$category_info->expense_category_id", ['id' => 'expense_category_edit_form']) ?>
+<?= form_open("expenses_categories/save/{$category_info->expense_category_id}", ['id' => 'expense_category_edit_form']) ?>
 
-    <ul id="error_message_box" class="alert alert-warning d-none"></ul>
+    <ul id="error_message_box" class="alert theme-warning d-none"></ul>
 
-    <label for="category_name" class="form-label"><?= lang('Expenses_categories.name'); ?><sup><span class="badge text-primary"><i class="bi bi-asterisk"></i></span></sup></label>
+    <label for="category_name" class="form-label"><?= lang('Expenses_categories.name'); ?><sup><span class="badge fg-primary"><i class="bi bi-asterisk"></i></span></sup></label>
     <div class="input-group mb-3">
         <span class="input-group-text" id="category_name-icon"><i class="bi bi-bookmark"></i></span>
         <input type="text" class="form-control" name="category_name" id="category_name" aria-describedby="category_name-icon" value="<?= $category_info->category_name; ?>" required>

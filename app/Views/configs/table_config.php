@@ -9,14 +9,16 @@
 
     <?php
     $title_info['config_title'] = lang('Config.table_configuration');
-    echo view('configs/config_header', $title_info);
-    ?>
+echo view('configs/config_header', $title_info);
+?>
 
-    <ul id="error_message_box" class="table_error_message_box alert alert-warning d-none"></ul>
+    <ul id="error_message_box" class="table_error_message_box alert theme-warning d-none"></ul>
 
-    <div class="form-check form-switch mb-3">
-        <input class="form-check-input" type="checkbox" role="switch" id="dinner_table_enable" name="dinner_table_enable" value="dinner_table_enable" <?= $config['dinner_table_enable'] == 1 ? 'checked' : '' ?>>
-        <label class="form-check-label" for="dinner_table_enable"><?= lang('Config.dinner_table_enable'); ?></label>
+    <div class="form-field mb-3">
+        <div class="switch">
+            <input type="checkbox" role="switch" switch id="dinner_table_enable" name="dinner_table_enable" value="dinner_table_enable" <?= $config['dinner_table_enable'] === 1 ? 'checked' : '' ?>>
+        </div>
+        <label for="dinner_table_enable"><?= lang('Config.dinner_table_enable'); ?></label>
     </div>
 
     <div class="row" id="dinner_tables">
@@ -24,7 +26,7 @@
     </div>
 
     <div class="d-flex justify-content-end">
-        <button type="submit" class="btn btn-primary" name="submit_table"><?= lang('Common.submit'); ?></button>
+        <button type="submit" class="btn btn-solid theme-primary" name="submit_table"><?= lang('Common.submit'); ?></button>
     </div>
 
 <?= form_close() ?>
@@ -46,7 +48,7 @@
 
         $("#dinner_table_enable").change(enable_disable_dinner_table_enable);
 
-        let table_count = <?= sizeof($dinner_tables) ?>;
+        let table_count = <?= count($dinner_tables) ?>;
 
         const hide_show_remove = function() {
             if ($("input[name*='dinner_tables']:enabled").length > 1) {
@@ -62,7 +64,7 @@
             const block = $(this).parent().clone(true);
             const new_block = block.insertAfter($(this).parent());
             const new_block_id = 'dinner_table_' + ++id;
-            $(new_block).find('label').html("<?= lang('Config.dinner_table') ?> " + ++table_count).attr('for', new_block_id).attr('class', 'control-label col-xs-2'); // TODO-BS5 change classes from bs3 to bs5
+            $(new_block).find('label').html("<?= lang('Config.dinner_table') ?> " + ++table_count).attr('for', new_block_id).attr('class', 'control-label col-2'); // TODO-BS5 change classes from bs3 to bs5
             $(new_block).find('input').attr('id', new_block_id).removeAttr('disabled').attr('name', new_block_id).attr('class', 'form-control input-sm').val(''); // TODO-BS5 change classes from bs3 to bs5
             hide_show_remove();
         };
@@ -109,7 +111,7 @@
                         }, {
                             type: response.success ? 'success' : 'danger'
                         });
-                        $("#dinner_tables").load('<?= "config/dinnerTables" ?>', init_add_remove_tables);
+                        $("#dinner_tables").load('<?= 'config/dinnerTables' ?>', init_add_remove_tables);
                     },
                     dataType: 'json'
                 });
@@ -119,10 +121,10 @@
 
             rules: {
                 <?php
-                $i = 0;
+            $i = 0;
 
-                foreach ($dinner_tables as $dinner_table => $table) {
-                ?>
+foreach ($dinner_tables as $dinner_table => $table) {
+    ?>
                     <?= 'dinner_table_' . ++$i ?>: {
                         required: true,
                         dinner_table: true,
@@ -133,10 +135,10 @@
 
             messages: {
                 <?php
-                $i = 0;
+    $i = 0;
 
-                foreach ($dinner_tables as $dinner_table => $table) {
-                ?>
+foreach ($dinner_tables as $dinner_table => $table) {
+    ?>
                     <?= 'dinner_table_' . ++$i ?>: "<?= lang('Config.dinner_table_required') ?>",
                 <?php } ?>
             }

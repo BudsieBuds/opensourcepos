@@ -42,7 +42,7 @@ class Migration_Initial_Schema extends Migration
         // long-lived test process, that cached list is stale (populated by a
         // prior test class's connection), so drops would be skipped and the
         // next up() would hit "Table ... already exists".
-        $db    = $this->db;
+        $db     = $this->db;
         $result = $db->query('SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = ?', [$db->database]);
 
         $tables = $result ? array_column($result->getResultArray(), 'TABLE_NAME') : [];
@@ -53,6 +53,7 @@ class Migration_Initial_Schema extends Migration
         $migrationsTable = $db->getPrefix() . 'migrations';
 
         $db->query('SET FOREIGN_KEY_CHECKS = 0');
+
         foreach ($tables as $table) {
             if ($table === $migrationsTable) {
                 continue;

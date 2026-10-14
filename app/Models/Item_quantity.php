@@ -11,42 +11,31 @@ use stdClass;
  */
 class Item_quantity extends Model
 {
-    protected $table = 'item_quantities';
-    protected $primaryKey = 'item_id';
+    protected $table            = 'item_quantities';
+    protected $primaryKey       = 'item_id';
     protected $useAutoIncrement = false;
-    protected $useSoftDeletes = false;
-    protected $allowedFields = [
-        'quantity'
+    protected $useSoftDeletes   = false;
+    protected $allowedFields    = [
+        'quantity',
     ];
-
     protected $item_id;
     protected $location_id;
     protected $quantity;
 
-    /**
-     * @param int $item_id
-     * @param int $location_id
-     * @return bool
-     */
     public function exists(int $item_id, int $location_id): bool
     {
         $builder = $this->db->table('item_quantities');
         $builder->where('item_id', $item_id);
         $builder->where('location_id', $location_id);
 
-        return ($builder->get()->getNumRows() == 1);    // TODO: ===
+        return $builder->get()->getNumRows() === 1;    // TODO: ===
     }
 
-    /**
-     * @param array $location_detail
-     * @param int $item_id
-     * @param int $location_id
-     * @return bool
-     */
     public function save_value(array $location_detail, int $item_id, int $location_id): bool
     {
-        if (!$this->exists($item_id, $location_id)) {
+        if (! $this->exists($item_id, $location_id)) {
             $builder = $this->db->table('item_quantities');
+
             return $builder->insert($location_detail);
         }
 
@@ -57,12 +46,7 @@ class Item_quantity extends Model
         return $builder->update($location_detail);
     }
 
-    /**
-     * @param int $item_id
-     * @param int $location_id
-     * @return array|Item_quantity|stdClass|null
-     */
-    public function get_item_quantity(int $item_id, int $location_id): array|Item_quantity|StdClass|null
+    public function get_item_quantity(int $item_id, int $location_id): array|Item_quantity|stdClass|null
     {
         $builder = $this->db->table('item_quantities');
         $builder->where('item_id', $item_id);
@@ -75,7 +59,7 @@ class Item_quantity extends Model
 
             // Get all the fields from items table (TODO: to be reviewed)
             foreach ($this->db->getFieldNames('item_quantities') as $field) {
-                $result->$field = '';
+                $result->{$field} = '';
             }
 
             $result->quantity = 0;

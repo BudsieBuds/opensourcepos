@@ -1,42 +1,42 @@
 <?php
 /**
- * @var string $controller_name
- * @var array $modes
- * @var array $mode
- * @var array $empty_tables
- * @var array $selected_table
- * @var array $stock_locations
- * @var array $stock_location
- * @var array $cart
- * @var bool $items_module_allowed
- * @var bool $change_price
- * @var int $customer_id
- * @var int $customer_discount_type
- * @var float $customer_discount
- * @var float $customer_total
- * @var string $customer_required
+ * @var string    $controller_name
+ * @var array     $modes
+ * @var array     $mode
+ * @var array     $empty_tables
+ * @var array     $selected_table
+ * @var array     $stock_locations
+ * @var array     $stock_location
+ * @var array     $cart
+ * @var bool      $items_module_allowed
+ * @var bool      $change_price
+ * @var int       $customer_id
+ * @var int       $customer_discount_type
+ * @var float     $customer_discount
+ * @var float     $customer_total
+ * @var string    $customer_required
  * @var float|int $item_count
  * @var float|int $total_units
- * @var float $subtotal
- * @var array $taxes
- * @var float $total
- * @var float $payments_total
- * @var float $amount_due
- * @var bool $payments_cover_total
- * @var array $payment_options
- * @var array $selected_payment_type
- * @var bool $pos_mode
- * @var array $payments
- * @var string $mode_label
- * @var string $comment
- * @var bool $print_after_sale
- * @var bool $email_receipt
- * @var bool $price_work_orders
- * @var string $invoice_number
- * @var int $cash_mode
- * @var float $non_cash_total
- * @var float $cash_amount_due
- * @var array $config
+ * @var float     $subtotal
+ * @var array     $taxes
+ * @var float     $total
+ * @var float     $payments_total
+ * @var float     $amount_due
+ * @var bool      $payments_cover_total
+ * @var array     $payment_options
+ * @var array     $selected_payment_type
+ * @var bool      $pos_mode
+ * @var array     $payments
+ * @var string    $mode_label
+ * @var string    $comment
+ * @var bool      $print_after_sale
+ * @var bool      $email_receipt
+ * @var bool      $price_work_orders
+ * @var string    $invoice_number
+ * @var int       $cash_mode
+ * @var float     $non_cash_total
+ * @var float     $cash_amount_due
+ * @var array     $config
  */
 
 use App\Models\Employee;
@@ -52,51 +52,51 @@ echo view('configs/config_header', $title_info);
 
 <?php
 if (isset($error)) {
-    echo '<div class="alert alert-dismissible alert-danger">' . esc($error) . '</div>';
+    echo '<div class="alert alert-dismissible theme-danger">' . esc($error) . '</div>';
 }
 
-if (!empty($warning)) {
-    echo '<div class="alert alert-dismissible alert-warning">' . esc($warning) . '</div>';
+if (! empty($warning)) {
+    echo '<div class="alert alert-dismissible theme-warning">' . esc($warning) . '</div>';
 }
 
 if (isset($success)) {
-    echo '<div class="alert alert-dismissible alert-success">' . esc($success) . '</div>';
+    echo '<div class="alert alert-dismissible theme-success">' . esc($success) . '</div>';
 }
 
 helper('url');
 ?>
 
 <div class="mw-register">
-    <?= form_open("$controller_name/changeMode", ['id' => 'mode_form', 'class' => 'mw-register card bg-secondary-subtle rounded-bottom-0']) ?>
+    <?= form_open("{$controller_name}/changeMode", ['id' => 'mode_form', 'class' => 'mw-register card bg-secondary-subtle rounded-bottom-0']) ?>
 
         <!-- Top register controls -->
         <div class="card-body">
             <div class="d-flex">
                 <div class="me-auto pe-2">
                     <div class="input-group">
-                        <span class="input-group-text" id="mode_select"><?= lang(ucfirst($controller_name) .'.mode') ?></span>
-                        <?= form_dropdown('mode', $modes, $mode, ['onchange' => "$('#mode_form').submit();", 'class' => 'form-select', 'aria-describedby' => 'mode_select']) ?>
+                        <span class="input-group-text" id="mode_select"><?= lang(ucfirst($controller_name) . '.mode') ?></span>
+                        <?= form_dropdown('mode', $modes, $mode, ['onchange' => "$('#mode_form').submit();", 'class' => 'form-control', 'aria-describedby' => 'mode_select']) ?>
                     <?php if ($config['dinner_table_enable']) { ?>
-                        <span class="input-group-text" id="dinner_table_select"><?= lang(ucfirst($controller_name) .'.table') ?></span>
-                        <?= form_dropdown('dinner_table', $empty_tables, $selected_table, ['onchange' => "$('#mode_form').submit();", 'class' => 'form-select', 'aria-describedby' => 'dinner_table_select']) ?>
+                        <span class="input-group-text" id="dinner_table_select"><?= lang(ucfirst($controller_name) . '.table') ?></span>
+                        <?= form_dropdown('dinner_table', $empty_tables, $selected_table, ['onchange' => "$('#mode_form').submit();", 'class' => 'form-control', 'aria-describedby' => 'dinner_table_select']) ?>
                     <?php } ?>
                     <?php if (count($stock_locations) > 1) { ?>
-                        <span class="input-group-text" id="stock_location_select"><?= lang(ucfirst($controller_name) .'.stock_location') ?></span>
-                        <?= form_dropdown('stock_location', $stock_locations, $stock_location, ['onchange' => "$('#mode_form').submit();", 'class' => 'form-select', 'aria-describedby' => 'stock_location_select']) ?>
+                        <span class="input-group-text" id="stock_location_select"><?= lang(ucfirst($controller_name) . '.stock_location') ?></span>
+                        <?= form_dropdown('stock_location', $stock_locations, $stock_location, ['onchange' => "$('#mode_form').submit();", 'class' => 'form-control', 'aria-describedby' => 'stock_location_select']) ?>
                     <?php } ?>
                     </div>
                 </div>
                 <div class="d-flex gap-2">
                     <?php
                     $employee = model(Employee::class);
-                    if ($employee->has_grant('reports_sales', session('person_id'))) {
-                    ?>
-                        <a type="button" class="btn btn-primary" id="sales_takings_button" href="<?= base_url("$controller_name/manage") ?>" title="<?= lang(ucfirst($controller_name) .'.takings') ?>">
-                            <i class="bi bi-receipt-cutoff me-2"></i><?= lang(ucfirst($controller_name) .'.takings') ?>
+if ($employee->has_grant('reports_sales', session('person_id'))) {
+    ?>
+                        <a type="button" class="btn btn-solid theme-primary" id="sales_takings_button" href="<?= base_url("{$controller_name}/manage") ?>" title="<?= lang(ucfirst($controller_name) . '.takings') ?>">
+                            <i class="bi bi-receipt-cutoff me-2"></i><?= lang(ucfirst($controller_name) . '.takings') ?>
                         </a>
                     <?php } ?>
-                    <button type="button" class="btn btn-primary modal-launch" id="show_suspended_sales_button" data-href="<?= esc("$controller_name/suspended") ?>" title="<?= lang(ucfirst($controller_name) .'.suspended_sales') ?>">
-                        <i class="bi bi-pause-circle me-2"></i><?= lang(ucfirst($controller_name) .'.suspended_sales') ?>
+                    <button type="button" class="btn btn-solid theme-primary modal-launch" id="show_suspended_sales_button" data-href="<?= esc("{$controller_name}/suspended") ?>" title="<?= lang(ucfirst($controller_name) . '.suspended_sales') ?>">
+                        <i class="bi bi-pause-circle me-2"></i><?= lang(ucfirst($controller_name) . '.suspended_sales') ?>
                     </button>
                 </div>
             </div>
@@ -109,16 +109,16 @@ helper('url');
         <div class="col-8">
             <div class="row">
                 <div class="col-12 pe-0">
-                    <?= form_open("$controller_name/add", ['id' => 'add_item_form', 'class' => 'card bg-primary-subtle border-top-0 border-bottom-0 rounded-0']) ?>
+                    <?= form_open("{$controller_name}/add", ['id' => 'add_item_form', 'class' => 'card bg-primary-subtle border-top-0 border-bottom-0 rounded-0']) ?>
                         <div class="card-body d-flex gap-2">
                             <div class="input-group">
-                                <span class="input-group-text text-primary border-primary-subtle" data-bs-toggle="tooltip" data-bs-placement="right" title="<?= lang(ucfirst($controller_name) .'.find_or_scan_item_or_receipt') ?>">
+                                <span class="input-group-text fg-primary border-primary-subtle" data-bs-toggle="tooltip" data-bs-placement="right" title="<?= lang(ucfirst($controller_name) . '.find_or_scan_item_or_receipt') ?>">
                                     <i class="bi bi-search"></i>
                                 </span>
                                 <input type="text" name="item" id="item" class="form-control border-primary-subtle" tabindex="<?= ++$tabindex ?>">
                             </div>
-                            <button type="button" class="btn btn-primary ms-auto text-nowrap modal-launch" id="new_item_button" data-btn-new="<?= lang('Common.new') ?>" data-btn-submit="<?= lang('Common.submit') ?>" data-href='<?= "items/view" ?>' title="<?= lang(ucfirst($controller_name) .".new_item") ?>">
-                                <i class="bi bi-tag me-2"></i><?= lang(ucfirst($controller_name) .".new_item") ?>
+                            <button type="button" class="btn btn-solid theme-primary ms-auto text-nowrap modal-launch" id="new_item_button" data-btn-new="<?= lang('Common.new') ?>" data-btn-submit="<?= lang('Common.submit') ?>" data-href='<?= 'items/view' ?>' title="<?= lang(ucfirst($controller_name) . '.new_item') ?>">
+                                <i class="bi bi-tag me-2"></i><?= lang(ucfirst($controller_name) . '.new_item') ?>
                             </button>
                         </div>
                     <?= form_close() ?>
@@ -126,38 +126,38 @@ helper('url');
                 <div class="col-12 pe-0">
                     <!-- Sale Items List -->
                     <div class="card table-responsive rounded-end-0 rounded-top-0" style="min-height: 250px;">
-                        <table class="table <?php if(count($cart) > 0) { ?>table-striped table-hover<?php } else { ?>table-borderless<?php } ?>">
+                        <table class="table <?php if (count($cart) > 0) { ?>table-striped table-hover<?php } else { ?>table-borderless<?php } ?>">
                             <thead>
                                 <tr>
                                     <th scope="col" style="width: 3%;"><i class="bi bi-trash"></i></th>
-                                    <th scope="col" style="width: 10%;"><?= lang(ucfirst($controller_name) .'.item_number') ?></th>
-                                    <th scope="col" style="width: 37%;"><?= lang(ucfirst($controller_name) .'.item_name') ?></th>
-                                    <th scope="col" style="width: 10%;"><?= lang(ucfirst($controller_name) .'.price') ?></th>
-                                    <th scope="col" style="width: 10%;"><?= lang(ucfirst($controller_name) .'.quantity') ?></th>
-                                    <th scope="col" style="width: 15%;"><?= lang(ucfirst($controller_name) .'.discount') ?></th>
-                                    <th scope="col" style="width: 10%;"><?= lang(ucfirst($controller_name) .'.total') ?></th>
-                                    <th scope="col" style="width: 5%;"><?= lang(ucfirst($controller_name) .'.update') ?></th>
+                                    <th scope="col" style="width: 10%;"><?= lang(ucfirst($controller_name) . '.item_number') ?></th>
+                                    <th scope="col" style="width: 37%;"><?= lang(ucfirst($controller_name) . '.item_name') ?></th>
+                                    <th scope="col" style="width: 10%;"><?= lang(ucfirst($controller_name) . '.price') ?></th>
+                                    <th scope="col" style="width: 10%;"><?= lang(ucfirst($controller_name) . '.quantity') ?></th>
+                                    <th scope="col" style="width: 15%;"><?= lang(ucfirst($controller_name) . '.discount') ?></th>
+                                    <th scope="col" style="width: 10%;"><?= lang(ucfirst($controller_name) . '.total') ?></th>
+                                    <th scope="col" style="width: 5%;"><?= lang(ucfirst($controller_name) . '.update') ?></th>
                                 </tr>
                             </thead>
 
                             <tbody id="cart_contents">
-                                <?php if (count($cart) == 0) { ?>
+                                <?php if (count($cart) === 0) { ?>
                                     <tr>
                                         <td colspan="8">
-                                            <div class="alert alert-primary m-0"><?= lang(ucfirst($controller_name) .'.no_items_in_cart') ?></div>
+                                            <div class="alert theme-primary m-0"><?= lang(ucfirst($controller_name) . '.no_items_in_cart') ?></div>
                                         </td>
                                     </tr>
-                                <?php } else { foreach (array_reverse($cart, true) as $line => $item) { ?>
-                                    <?= form_open("$controller_name/editItem/$line", ['class' => 'form-horizontal', 'id' => "cart_$line"]) ?>
+                                <?php } else {
+                                    foreach (array_reverse($cart, true) as $line => $item) { ?>
+                                    <?= form_open("{$controller_name}/editItem/{$line}", ['class' => 'form-horizontal', 'id' => "cart_{$line}"]) ?>
                                         <tr>
                                             <td>
-                                                <?php
-                                                echo anchor("$controller_name/deleteItem/$line", '<span class="link-danger"><i class="bi bi-trash"></i></span>');
-                                                echo form_hidden('location', (string)$item['item_location']);
-                                                echo form_input(['type' => 'hidden', 'name' => 'item_id', 'value' => $item['item_id']]);
-                                                ?>
+                                                <?= anchor("{$controller_name}/deleteItem/{$line}", '<span class="link-danger"><i class="bi bi-trash"></i></span>');
+                                        echo form_hidden('location', (string) $item['item_location']);
+                                        echo form_input(['type' => 'hidden', 'name' => 'item_id', 'value' => $item['item_id']]);
+                                        ?>
                                             </td>
-                                                <?php if ($item['item_type'] == ITEM_TEMP) { ?>
+                                                <?php if ($item['item_type'] === ITEM_TEMP) { ?>
                                                     <td><?= form_input(['name' => 'item_number', 'id' => 'item_number', 'class' => 'form-control input-sm', 'value' => $item['item_number'], 'tabindex' => ++$tabindex]) ?></td>
                                                     <td style="text-align: center;">
                                                         <?= form_input(['name' => 'name', 'id' => 'name', 'class' => 'form-control input-sm', 'value' => $item['name'], 'tabindex' => ++$tabindex]) ?>
@@ -167,7 +167,7 @@ helper('url');
                                                     <td style="text-align: center;">
                                                         <?= esc($item['name']) . ' ' . esc(implode(' ', [$item['attribute_values'], $item['attribute_dtvalues']])) ?>
                                                         <br>
-                                                        <?php if ($item['stock_type'] == '0'): echo '[' . to_quantity_decimals($item['in_stock']) . ' in ' . esc($item['stock_name']) . ']';
+                                                        <?php if ($item['stock_type'] === '0'): echo '[' . to_quantity_decimals($item['in_stock']) . ' in ' . esc($item['stock_name']) . ']';
                                                         endif; ?>
                                                     </td>
                                                 <?php } ?>
@@ -180,47 +180,47 @@ helper('url');
                                                         echo to_currency($item['price']);
                                                         echo form_hidden('price', to_currency_no_money($item['price']));
                                                     }
-                                                    ?>
+                                        ?>
                                                 </td>
 
                                                 <td>
                                                     <?php
-                                                    if ($item['is_serialized']) {
-                                                        echo to_quantity_decimals($item['quantity']);
-                                                        echo form_hidden('quantity', $item['quantity']);
-                                                    } else {
-                                                        echo form_input(['name' => 'quantity', 'class' => 'form-control input-sm', 'value' => to_quantity_decimals($item['quantity']), 'tabindex' => ++$tabindex, 'onClick' => 'this.select();']);
-                                                    }
-                                                    ?>
+                                        if ($item['is_serialized']) {
+                                            echo to_quantity_decimals($item['quantity']);
+                                            echo form_hidden('quantity', $item['quantity']);
+                                        } else {
+                                            echo form_input(['name' => 'quantity', 'class' => 'form-control input-sm', 'value' => to_quantity_decimals($item['quantity']), 'tabindex' => ++$tabindex, 'onClick' => 'this.select();']);
+                                        }
+                                        ?>
                                                 </td>
 
                                                 <td>
                                                     <div class="input-group">
                                                         <?= form_input(['name' => 'discount', 'class' => 'form-control input-sm', 'value' => $item['discount_type'] ? to_currency_no_money($item['discount']) : to_decimals($item['discount']), 'tabindex' => ++$tabindex, 'onClick' => 'this.select();']) ?>
                                                         <span class="input-group-btn">
-                                                            <?= form_checkbox(['id' => 'discount_toggle', 'name' => 'discount_toggle', 'value' => 1, 'data-toggle' => 'toggle', 'data-size' => 'small', 'data-onstyle' => 'success', 'data-on' => '<b>' . $config['currency_symbol'] . '</b>', 'data-off' => '<b>%</b>', 'data-line' => $line, 'checked' => $item['discount_type'] == 1]) ?>
+                                                            <?= form_checkbox(['id' => 'discount_toggle', 'name' => 'discount_toggle', 'value' => 1, 'data-toggle' => 'toggle', 'data-size' => 'small', 'data-onstyle' => 'success', 'data-on' => '<b>' . $config['currency_symbol'] . '</b>', 'data-off' => '<b>%</b>', 'data-line' => $line, 'checked' => $item['discount_type'] === 1]) ?>
                                                         </span>
                                                     </div>
                                                 </td>
 
                                                 <td>
                                                     <?php
-                                                    if ($item['item_type'] == ITEM_AMOUNT_ENTRY) {    // TODO: === ?
-                                                        echo form_input(['name' => 'discounted_total', 'class' => 'form-control input-sm', 'value' => to_currency_no_money($item['discounted_total']), 'tabindex' => ++$tabindex, 'onClick' => 'this.select();']);
-                                                    } else {
-                                                        echo to_currency($item['discounted_total']);
-                                                    }
-                                                    ?>
+                                        if ($item['item_type'] === ITEM_AMOUNT_ENTRY) {    // TODO: === ?
+                                            echo form_input(['name' => 'discounted_total', 'class' => 'form-control input-sm', 'value' => to_currency_no_money($item['discounted_total']), 'tabindex' => ++$tabindex, 'onClick' => 'this.select();']);
+                                        } else {
+                                            echo to_currency($item['discounted_total']);
+                                        }
+                                        ?>
                                                 </td>
 
                                                 <td>
-                                                    <a href="javascript:document.getElementById('<?= "cart_$line" ?>').submit();" title="<?= lang(ucfirst($controller_name) . '.update') ?>">
+                                                    <a href="javascript:document.getElementById('<?= "cart_{$line}" ?>').submit();" title="<?= lang(ucfirst($controller_name) . '.update') ?>">
                                                         <i class="bi bi-arrow-repeat"></i>
                                                     </a>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <?php if ($item['item_type'] == ITEM_TEMP) { ?>
+                                                <?php if ($item['item_type'] === ITEM_TEMP) { ?>
                                                     <td><?= form_input(['type' => 'hidden', 'name' => 'item_id', 'value' => $item['item_id']]) ?></td>
                                                     <td style="text-align: center;" colspan="6">
                                                         <?= form_input(['name' => 'item_description', 'id' => 'item_description', 'class' => 'form-control input-sm', 'value' => $item['description'], 'tabindex' => ++$tabindex]) ?>
@@ -234,35 +234,35 @@ helper('url');
 
                                                     <td colspan="2" style="text-align: left;">
                                                         <?php
-                                                        if ($item['allow_alt_description']) {
-                                                            echo form_input(['name' => 'description', 'class' => 'form-control input-sm', 'value' => $item['description'], 'onClick' => 'this.select();']);
-                                                        } else {
-                                                            if ($item['description'] != '') {
-                                                                echo esc($item['description']);
-                                                                echo form_hidden('description', $item['description']);
-                                                            } else {
-                                                                echo lang(ucfirst($controller_name) . '.no_description');
-                                                                echo form_hidden('description', '');
-                                                            }
-                                                        }
-                                                        ?>
+                                            if ($item['allow_alt_description']) {
+                                                echo form_input(['name' => 'description', 'class' => 'form-control input-sm', 'value' => $item['description'], 'onClick' => 'this.select();']);
+                                            } else {
+                                                if ($item['description'] !== '') {
+                                                    echo esc($item['description']);
+                                                    echo form_hidden('description', $item['description']);
+                                                } else {
+                                                    echo lang(ucfirst($controller_name) . '.no_description');
+                                                    echo form_hidden('description', '');
+                                                }
+                                            }
+                                                    ?>
                                                     </td>
                                                     <td>&nbsp;</td>
                                                     <td style="color: #2F4F4F;">
                                                         <?php
-                                                        if ($item['is_serialized']) {
-                                                            echo lang(ucfirst($controller_name) . '.serial');
-                                                        }
-                                                        ?>
+                                                    if ($item['is_serialized']) {
+                                                        echo lang(ucfirst($controller_name) . '.serial');
+                                                    }
+                                                    ?>
                                                     </td>
                                                     <td colspan="4" style="text-align: left;">
                                                         <?php
-                                                        if ($item['is_serialized']) {
-                                                            echo form_input(['name' => 'serialnumber', 'class' => 'form-control input-sm', 'value' => $item['serialnumber'], 'onClick' => 'this.select();']);
-                                                        } else {
-                                                            echo form_hidden('serialnumber', '');
-                                                        }
-                                                        ?>
+                                                    if ($item['is_serialized']) {
+                                                        echo form_input(['name' => 'serialnumber', 'class' => 'form-control input-sm', 'value' => $item['serialnumber'], 'onClick' => 'this.select();']);
+                                                    } else {
+                                                        echo form_hidden('serialnumber', '');
+                                                    }
+                                                    ?>
                                                     </td>
                                                 <?php } ?>
                                             </tr>
@@ -270,7 +270,7 @@ helper('url');
                                 <?php
                                     }
                                 }
-                                ?>
+?>
                             </tbody>
                         </table>
                     </div>
@@ -279,39 +279,39 @@ helper('url');
         </div>
         <div class="col-4 ps-0">
             <!-- Overall Sale -->
-            <?= form_open("$controller_name/selectCustomer", ['id' => 'select_customer_form', 'class' => 'card border-top-0 border-start-0 rounded-top-0 rounded-start-0', 'style' => 'min-height: 320px;']) ?>
+            <?= form_open("{$controller_name}/selectCustomer", ['id' => 'select_customer_form', 'class' => 'card border-top-0 border-start-0 rounded-top-0 rounded-start-0', 'style' => 'min-height: 320px;']) ?>
                 <div class="card-body" id="select_customer">
                     <div class="mb-3">
-                        <label id="customer_label" for="customer" class="form-label"><?= lang(ucfirst($controller_name) .'.select_customer') . '&nbsp;' . esc("$customer_required") ?></label>
+                        <label id="customer_label" for="customer" class="form-label"><?= lang(ucfirst($controller_name) . '.select_customer') . '&nbsp;' . esc("{$customer_required}") ?></label>
                         <input type="text" name="customer" id="customer" class="form-control" value="<?= lang(ucfirst($controller_name) . '.start_typing_customer_name') ?>">
                     </div>
                     <div class="d-flex gap-2 justify-content-center mb-3">
-                        <button type="button" class="btn btn-primary modal-launch" data-btn-submit="<?= lang('Common.submit') ?>" data-href="<?= esc("customers/view") ?>" title="<?= lang(ucfirst($controller_name) .'.new_customer') ?>">
-                            <i class="bi bi-person-add me-2"></i><?= lang(ucfirst($controller_name) .'.new_customer') ?>
+                        <button type="button" class="btn btn-solid theme-primary modal-launch" data-btn-submit="<?= lang('Common.submit') ?>" data-href="<?= esc('customers/view') ?>" title="<?= lang(ucfirst($controller_name) . '.new_customer') ?>">
+                            <i class="bi bi-person-add me-2"></i><?= lang(ucfirst($controller_name) . '.new_customer') ?>
                         </button>
-                        <button type="button" class="btn btn-secondary modal-launch" id="show_keyboard_help" data-href="<?= esc("$controller_name/salesKeyboardHelp") ?>" title="<?= lang(ucfirst($controller_name) .'.key_title') ?>">
-                            <i class="bi bi-shift me-2"></i><?= lang(ucfirst($controller_name) .'.key_help') ?>
+                        <button type="button" class="btn btn-solid theme-secondary modal-launch" id="show_keyboard_help" data-href="<?= esc("{$controller_name}/salesKeyboardHelp") ?>" title="<?= lang(ucfirst($controller_name) . '.key_title') ?>">
+                            <i class="bi bi-shift me-2"></i><?= lang(ucfirst($controller_name) . '.key_help') ?>
                         </button>
                     </div>
 
                     <table class="table table-borderless table-sm" id="sale_totals">
                         <tbody>
                             <tr>
-                                <td class="px-0"><?= lang(ucfirst($controller_name) .'.quantity_of_items', [$item_count]) ?></td>
+                                <td class="px-0"><?= lang(ucfirst($controller_name) . '.quantity_of_items', [$item_count]) ?></td>
                                 <td class="px-0 text-end"><?= $total_units ?></td>
                             </tr>
                             <tr>
-                                <td class="px-0"><?= lang(ucfirst($controller_name) .'.sub_total') ?></td>
+                                <td class="px-0"><?= lang(ucfirst($controller_name) . '.sub_total') ?></td>
                                 <td class="px-0 text-end"><?= to_currency($subtotal) ?></td>
                             </tr>
-                            <?php foreach ($taxes as $tax_group_index=>$tax) { ?>
+                            <?php foreach ($taxes as $tax_group_index => $tax) { ?>
                                 <tr>
-                                    <td class="px-0"><?= (float)$tax['tax_rate'] . '% ' . esc($tax['tax_group']) ?></td>
+                                    <td class="px-0"><?= (float) $tax['tax_rate'] . '% ' . esc($tax['tax_group']) ?></td>
                                     <td class="px-0 text-end"><?= to_currency_tax($tax['sale_tax_amount']) ?></td>
                                 </tr>
                             <?php } ?>
                             <tr>
-                                <td class="fs-5 fw-semibold px-0"><?= lang(ucfirst($controller_name) .'.total') ?></td>
+                                <td class="fs-5 fw-semibold px-0"><?= lang(ucfirst($controller_name) . '.total') ?></td>
                                 <td class="fs-5 fw-semibold px-0 text-end"><span id="sale_total"><?= to_currency($total) ?></span></td>
                             </tr>
                         </tbody>
@@ -407,7 +407,7 @@ helper('url');
         });
 
         $('#item').autocomplete({
-            source: "<?= esc("$controller_name/itemSearch") ?>",
+            source: "<?= esc("{$controller_name}/itemSearch") ?>",
             minChars: 0,
             autoFocus: false,
             delay: 500,
@@ -469,14 +469,14 @@ helper('url');
         });
 
         $('#comment').keyup(function() {
-            $.post("<?= esc(site_url("$controller_name/setComment")) ?>", {
+            $.post("<?= esc(site_url("{$controller_name}/setComment")) ?>", {
                 comment: $('#comment').val()
             });
         });
 
         <?php if ($config['invoice_enable']) { ?>
             $('#sales_invoice_number').keyup(function() {
-                $.post("<?= esc(site_url("$controller_name/setInvoiceNumber")) ?>", {
+                $.post("<?= esc(site_url("{$controller_name}/setInvoiceNumber")) ?>", {
                     sales_invoice_number: $('#sales_invoice_number').val()
                 });
             });
@@ -484,41 +484,41 @@ helper('url');
         <?php } ?>
 
         $('#sales_print_after_sale').change(function() {
-            $.post("<?= esc(site_url("$controller_name/setPrintAfterSale")) ?>", {
+            $.post("<?= esc(site_url("{$controller_name}/setPrintAfterSale")) ?>", {
                 sales_print_after_sale: $(this).is(':checked')
             });
         });
 
         $('#price_work_orders').change(function() {
-            $.post("<?= esc(site_url("$controller_name/setPriceWorkOrders")) ?>", {
+            $.post("<?= esc(site_url("{$controller_name}/setPriceWorkOrders")) ?>", {
                 price_work_orders: $(this).is(':checked')
             });
         });
 
         $('#email_receipt').change(function() {
-            $.post("<?= esc(site_url("$controller_name/setEmailReceipt")) ?>", {
+            $.post("<?= esc(site_url("{$controller_name}/setEmailReceipt")) ?>", {
                 email_receipt: $(this).is(':checked')
             });
         });
 
         $('#finish_sale_button').click(function() {
-            $('#buttons_form').attr('action', "<?= "$controller_name/complete" ?>");
+            $('#buttons_form').attr('action', "<?= "{$controller_name}/complete" ?>");
             $('#buttons_form').submit();
         });
 
         $('#finish_invoice_quote_button').click(function() {
-            $('#buttons_form').attr('action', "<?= "$controller_name/complete" ?>");
+            $('#buttons_form').attr('action', "<?= "{$controller_name}/complete" ?>");
             $('#buttons_form').submit();
         });
 
         $('#suspend_sale_button').click(function() {
-            $('#buttons_form').attr('action', "<?= site_url("$controller_name/suspend") ?>");
+            $('#buttons_form').attr('action', "<?= site_url("{$controller_name}/suspend") ?>");
             $('#buttons_form').submit();
         });
 
         $('#cancel_sale_button').click(function() {
             if (confirm("<?= lang(ucfirst($controller_name) . '.confirm_cancel_sale') ?>")) {
-                $('#buttons_form').attr('action', "<?= site_url("$controller_name/cancel") ?>");
+                $('#buttons_form').attr('action', "<?= site_url("{$controller_name}/cancel") ?>");
                 $('#buttons_form').submit();
             }
         });

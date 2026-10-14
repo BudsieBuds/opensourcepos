@@ -1,25 +1,23 @@
 <?php
-$email = $user_info->email;
-$size = 96;
-$default = 'https://ui-avatars.com/api/?name=' . $user_info->first_name . '+' . $user_info->last_name . '&format=svg&size=' . $size;
+$email    = $user_info->email;
+$size     = 96;
+$default  = 'https://ui-avatars.com/api/?name=' . $user_info->first_name . '+' . $user_info->last_name . '&format=svg&size=' . $size;
 $grav_url = 'https://www.gravatar.com/avatar/' . md5(strtolower(trim($email))) . '?d=' . urlencode($default) . '&s=' . $size;
 ?>
 
-<div class="modal fade" id="profile-modal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <ul class="nav nav-pills nav-justified w-100 me-1 gap-1">
-                    <li class="nav-item">
-                        <button type="button" id="modal-button-profile" onclick="modalSwitchProfile()" class="nav-link active">Profile</button>
-                    </li>
-                    <li class="nav-item" title="<?= lang('Employees.change_password'); ?>">
-                        <button type="button" id="modal-button-password" onclick="modalSwitchPassword()" class="nav-link"><?= lang('Employees.change_password'); ?></button>
-                    </li>
-                </ul>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body text-start">
+<dialog class="dialog" id="profile-modal" tabindex="-1" aria-hidden="true">
+    <div class="dialog-header">
+        <ul class="nav nav-pills nav-justified w-100 me-1 gap-1">
+            <li class="nav-item">
+                <button type="button" id="modal-button-profile" onclick="modalSwitchProfile()" class="nav-link active">Profile</button>
+            </li>
+            <li class="nav-item" title="<?= lang('Employees.change_password'); ?>">
+                <button type="button" id="modal-button-password" onclick="modalSwitchPassword()" class="nav-link"><?= lang('Employees.change_password'); ?></button>
+            </li>
+        </ul>
+        <button type="button" class="btn-close" data-bs-dismiss="dialog" aria-label="Close"></button>
+    </div>
+    <div class="dialog-body text-start">
                 <div id="modal-profile">
                     <div class="container">
                         <table>
@@ -86,7 +84,7 @@ $grav_url = 'https://www.gravatar.com/avatar/' . md5(strtolower(trim($email))) .
                     </div>
                 </div>
 
-                <div id="modal-password" class="d-none was-validated" novalidate>
+                <div id="modal-password" class="d-none" novalidate>
 
                     <div class="input-group mb-3">
                         <span class="input-group-text"><i class="bi bi-person"></i></span>
@@ -123,15 +121,13 @@ $grav_url = 'https://www.gravatar.com/avatar/' . md5(strtolower(trim($email))) .
 
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <a type="button" id="modal-button-logout" class="btn btn-danger" href="home/logout">
+            <div class="dialog-footer">
+                <button type="button" class="btn-solid theme-secondary" data-bs-dismiss="dialog">Cancel</button>
+                <a type="button" id="modal-button-logout" class="btn-solid theme-danger" href="home/logout">
                     <i class="bi bi-power me-2"></i><?= lang('Login.logout'); ?>
                 </a>
-                <button type="button" id="modal-button-save" class="btn btn-primary d-none">
+                <button type="button" id="modal-button-save" class="btn-solid theme-primary d-none">
                     <i class="bi bi-floppy me-2"></i>Save
                 </button>
             </div>
-        </div>
-    </div>
-</div>
+</dialog>

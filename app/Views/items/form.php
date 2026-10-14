@@ -1,33 +1,33 @@
 <?php
 /**
  * @var object $item_info
- * @var array $categories
- * @var int $selected_category
- * @var bool $standard_item_locked
- * @var bool $item_kit_disabled
- * @var int $allow_temp_item
- * @var array $suppliers
- * @var int $selected_supplier
- * @var bool $use_destination_based_tax
- * @var float $default_tax_1_rate
- * @var float $default_tax_2_rate
+ * @var array  $categories
+ * @var int    $selected_category
+ * @var bool   $standard_item_locked
+ * @var bool   $item_kit_disabled
+ * @var int    $allow_temp_item
+ * @var array  $suppliers
+ * @var int    $selected_supplier
+ * @var bool   $use_destination_based_tax
+ * @var float  $default_tax_1_rate
+ * @var float  $default_tax_2_rate
  * @var string $tax_category
- * @var int $tax_category_id
- * @var bool $include_hsn
+ * @var int    $tax_category_id
+ * @var bool   $include_hsn
  * @var string $hsn_code
- * @var array $stock_locations
- * @var bool $logo_exists
+ * @var array  $stock_locations
+ * @var bool   $logo_exists
  * @var string $image_path
  * @var string $selected_low_sell_item
- * @var int $selected_low_sell_item_id
+ * @var int    $selected_low_sell_item_id
  * @var string $controller_name
- * @var array $config
+ * @var array  $config
  */
 ?>
 
-<?= form_open("items/save/$item_info->item_id", ['id' => 'item_form', 'enctype' => 'multipart/form-data']) ?>
+<?= form_open("items/save/{$item_info->item_id}", ['id' => 'item_form', 'enctype' => 'multipart/form-data']) ?>
 
-    <ul id="error_message_box" class="alert alert-warning d-none"></ul>
+    <ul id="error_message_box" class="alert theme-warning d-none"></ul>
 
     <label for="item_number" class="form-label"><?= lang('Items.item_number'); ?></label>
     <div class="input-group mb-3">
@@ -41,13 +41,13 @@
         <input type="text" class="form-control" name="name" id="name" aria-describedby="name-icon" value="<?= $item_info->name ?>">
     </div>
 
-    <label for="category" class="form-label"><?= lang('Items.category'); ?><sup><span class="badge text-primary"><i class="bi bi-asterisk"></i></span></sup></label>
+    <label for="category" class="form-label"><?= lang('Items.category'); ?><sup><span class="badge fg-primary"><i class="bi bi-asterisk"></i></span></sup></label>
     <div class="input-group mb-3">
         <span class="input-group-text" id="category-icon"><i class="bi bi-bookmark"></i></span>
         <?php if ($config['category_dropdown']) { ?>
-            <select class="form-select" name="category" id="category" required>
+            <select class="form-control" name="category" id="category" required>
                 <?php foreach ($categories as $key => $value) { ?>
-                    <option value="<?= $key ?>" <?= $selected_category == $key ? 'selected' : '' ?>><?= $value ?></option>
+                    <option value="<?= $key ?>" <?= $selected_category === $key ? 'selected' : '' ?>><?= $value ?></option>
                 <?php } ?>
             </select>
         <?php } else { ?>
@@ -57,42 +57,42 @@
 
     <div id="attributes">
         <script type="text/javascript">
-            $('#attributes').load('<?= "items/attributes/$item_info->item_id" ?>');
+            $('#attributes').load('<?= "items/attributes/{$item_info->item_id}" ?>');
         </script>
     </div>
 
-    <label for="stock_type" class="form-label"><?= lang('Items.stock_type') ?><?= !empty($basic_version) ? '<sup><span class="badge text-primary"><i class="bi bi-asterisk"></i></span></sup>' : '' ?></label>
+    <label for="stock_type" class="form-label"><?= lang('Items.stock_type') ?><?= ! empty($basic_version) ? '<sup><span class="badge fg-primary"><i class="bi bi-asterisk"></i></span></sup>' : '' ?></label>
     <div class="mb-3">
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="stock_type" id="stock_type_stock" value="0" <?= $item_info->stock_type == HAS_STOCK ? 'checked' : '' ?> <?= !empty($basic_version) ? 'required' : '' ?>>
-            <label class="form-check-label" for="stock_type_stock"><?= lang('Items.stock') ?></label>
+        <div class="form-field d-inline-flex me-3">
+        <input class="radio" type="radio" name="stock_type" id="stock_type_stock" value="0" <?= $item_info->stock_type === HAS_STOCK ? 'checked' : '' ?> <?= ! empty($basic_version) ? 'required' : '' ?>>
+        <label for="stock_type_stock"><?= lang('Items.stock') ?></label>
         </div>
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="stock_type" id="stock_type_nonstock" value="1" <?= $item_info->stock_type == HAS_NO_STOCK ? 'checked' : '' ?> <?= !empty($basic_version) ? 'required' : '' ?>>
-            <label class="form-check-label" for="stock_type_nonstock"><?= lang('Items.nonstock') ?></label>
+        <div class="form-field d-inline-flex me-3">
+        <input class="radio" type="radio" name="stock_type" id="stock_type_nonstock" value="1" <?= $item_info->stock_type === HAS_NO_STOCK ? 'checked' : '' ?> <?= ! empty($basic_version) ? 'required' : '' ?>>
+        <label for="stock_type_nonstock"><?= lang('Items.nonstock') ?></label>
         </div>
     </div>
 
-    <label for="item_type" class="form-label"><?= lang('Items.type') ?><?= !empty($basic_version) ? '<sup><span class="badge text-primary"><i class="bi bi-asterisk"></i></span></sup>' : '' ?></label>
+    <label for="item_type" class="form-label"><?= lang('Items.type') ?><?= ! empty($basic_version) ? '<sup><span class="badge fg-primary"><i class="bi bi-asterisk"></i></span></sup>' : '' ?></label>
     <div class="mb-3">
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="item_type" id="item_type_standard" value="0" <?= $item_info->item_type == ITEM ? 'checked' : '' ?> <?= $standard_item_locked ? 'disabled readonly' : '' ?> <?= !empty($basic_version) ? 'required' : '' ?>>
-            <label class="form-check-label" for="item_type_standard"><?= lang('Items.standard') ?></label>
+        <div class="form-field d-inline-flex me-3">
+        <input class="radio" type="radio" name="item_type" id="item_type_standard" value="0" <?= $item_info->item_type === ITEM ? 'checked' : '' ?> <?= $standard_item_locked ? 'disabled readonly' : '' ?> <?= ! empty($basic_version) ? 'required' : '' ?>>
+        <label for="item_type_standard"><?= lang('Items.standard') ?></label>
         </div>
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="item_type" id="item_type_kit" value="1" <?= $item_info->item_type == ITEM_KIT ? 'checked' : '' ?> <?= $item_kit_disabled ? 'disabled readonly' : '' ?> <?= !empty($basic_version) ? 'required' : '' ?>>
-            <label class="form-check-label" for="item_type_kit"><?= lang('Items.kit') ?></label>
+        <div class="form-field d-inline-flex me-3">
+        <input class="radio" type="radio" name="item_type" id="item_type_kit" value="1" <?= $item_info->item_type === ITEM_KIT ? 'checked' : '' ?> <?= $item_kit_disabled ? 'disabled readonly' : '' ?> <?= ! empty($basic_version) ? 'required' : '' ?>>
+        <label for="item_type_kit"><?= lang('Items.kit') ?></label>
         </div>
-        <?php if ($config['derive_sale_quantity'] == '1') { ?>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="item_type" id="item_type_amount_entry" value="2" <?= $item_info->item_type == ITEM_AMOUNT_ENTRY ? 'checked' : '' ?> <?= !empty($basic_version) ? 'required' : '' ?>>
-                <label class="form-check-label" for="item_type_amount_entry"><?= lang('Items.amount_entry') ?></label>
+        <?php if ($config['derive_sale_quantity'] === '1') { ?>
+            <div class="form-field d-inline-flex me-3">
+        <input class="radio" type="radio" name="item_type" id="item_type_amount_entry" value="2" <?= $item_info->item_type === ITEM_AMOUNT_ENTRY ? 'checked' : '' ?> <?= ! empty($basic_version) ? 'required' : '' ?>>
+        <label for="item_type_amount_entry"><?= lang('Items.amount_entry') ?></label>
             </div>
         <?php } ?>
-        <?php if ($allow_temp_item == 1) { ?>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="item_type" id="item_type_temp" value="3" <?= $item_info->item_type == ITEM_TEMP ? 'checked' : '' ?> <?= !empty($basic_version) ? 'required' : '' ?>>
-                <label class="form-check-label" for="item_type_temp"><?= lang('Items.temp') ?></label>
+        <?php if ($allow_temp_item === 1) { ?>
+            <div class="form-field d-inline-flex me-3">
+        <input class="radio" type="radio" name="item_type" id="item_type_temp" value="3" <?= $item_info->item_type === ITEM_TEMP ? 'checked' : '' ?> <?= ! empty($basic_version) ? 'required' : '' ?>>
+        <label for="item_type_temp"><?= lang('Items.temp') ?></label>
             </div>
         <?php } ?>
     </div>
@@ -100,16 +100,16 @@
     <label for="supplier_id" class="form-label"><?= lang('Items.supplier'); ?></label>
     <div class="input-group mb-3">
         <span class="input-group-text"><i class="bi bi-truck"></i></span>
-        <select class="form-select" name="supplier_id" id="supplier_id">
+        <select class="form-control" name="supplier_id" id="supplier_id">
             <?php foreach ($suppliers as $key => $value) { ?>
-                <option value="<?= $key ?>" <?= $selected_supplier == $key ? 'selected' : '' ?>><?= $value ?></option>
+                <option value="<?= $key ?>" <?= $selected_supplier === $key ? 'selected' : '' ?>><?= $value ?></option>
             <?php } ?>
         </select>
     </div>
 
-    <label for="cost_price" class="form-label"><?= lang('Items.cost_price') ?><sup><span class="badge text-primary"><i class="bi bi-asterisk"></i></span></sup></label>
+    <label for="cost_price" class="form-label"><?= lang('Items.cost_price') ?><sup><span class="badge fg-primary"><i class="bi bi-asterisk"></i></span></sup></label>
     <div class="input-group mb-3">
-        <?php if (!is_right_side_currency_symbol()): ?>
+        <?php if (! is_right_side_currency_symbol()): ?>
             <span class="input-group-text" id="cost_price-icon"><?= esc($config['currency_symbol']) ?></span>
         <?php endif; ?>
         <input type="number" step="any" class="form-control" name="cost_price" id="cost_price" aria-describedby="cost_price-icon" value="<?= to_currency_no_money($item_info->cost_price) ?>" required>
@@ -118,9 +118,9 @@
         <?php endif; ?>
     </div>
 
-    <label for="unit_price" class="form-label"><?= lang('Items.unit_price') ?><sup><span class="badge text-primary"><i class="bi bi-asterisk"></i></span></sup></label>
+    <label for="unit_price" class="form-label"><?= lang('Items.unit_price') ?><sup><span class="badge fg-primary"><i class="bi bi-asterisk"></i></span></sup></label>
     <div class="input-group mb-3">
-        <?php if (!is_right_side_currency_symbol()): ?>
+        <?php if (! is_right_side_currency_symbol()): ?>
             <span class="input-group-text" id="unit_price-icon"><?= esc($config['currency_symbol']) ?></span>
         <?php endif; ?>
         <input type="number" step="any" class="form-control" name="unit_price" id="unit_price" aria-describedby="unit_price-icon" value="<?= to_currency_no_money($item_info->unit_price) ?>" required>
@@ -129,7 +129,7 @@
         <?php endif; ?>
     </div>
 
-    <?php if (!$use_destination_based_tax): ?>
+    <?php if (! $use_destination_based_tax): ?>
         <label for="tax_name_1" class="form-label"><?= lang('Items.tax_1') ?></label>
         <div class="input-group mb-3">
             <span class="input-group-text" id="tax_name_1-icon"><i class="bi bi-piggy-bank"></i></span>
@@ -165,7 +165,7 @@
     <?php endif; ?>
 
     <?php foreach ($stock_locations as $key => $location_detail): ?>
-        <label for="quantity_<?= $key ?>" class="form-label"><?= lang('Items.quantity') . ' ' . $location_detail['location_name'] ?><sup><span class="badge text-primary"><i class="bi bi-asterisk"></i></span></sup></label>
+        <label for="quantity_<?= $key ?>" class="form-label"><?= lang('Items.quantity') . ' ' . $location_detail['location_name'] ?><sup><span class="badge fg-primary"><i class="bi bi-asterisk"></i></span></sup></label>
         <div class="input-group mb-3">
             <span class="input-group-text" id="quantity_<?= $key ?>-icon"><i class="bi bi-boxes"></i></span>
             <input type="text" class="form-control" name="quantity_<?= $key ?>" id="quantity_<?= $key ?>" aria-describedby="quantity_<?= $key ?>-icon" value="<?= isset($item_info->item_id) ? to_quantity_decimals($location_detail['quantity']) : to_quantity_decimals(0) ?>" required>
@@ -199,27 +199,27 @@
                 <img class="mh-100 mw-100" data-src="holder.js/100%x100%" alt="<?= esc(lang('Config.company_logo')) ?>" src="<?= $image_path ?>">
             </div>
         </div>
-        <div type="button" class="btn btn-secondary btn-file me-2">
+        <div type="button" class="btn btn-solid theme-secondary btn-file me-2">
             <span class="fileinput-new"><i class="bi bi-hand-index me-2"></i><?= lang('Items.select_image') ?></span>
             <span class="fileinput-exists"><i class="bi bi-images me-2"></i><?= lang('Items.change_image') ?></span>
             <input type="file" name="items_image" accept="image/*">
         </div>
-        <a type="button" class="btn btn-outline-secondary fileinput-exists" data-dismiss="fileinput">
+        <a type="button" class="btn btn-outline theme-secondary fileinput-exists" data-dismiss="fileinput">
             <i class="bi bi-eraser me-2"></i><?= lang('Items.remove_image') ?>
         </a>
     </div>
 
-    <div class="form-check mb-3">
-        <input class="form-check-input" type="checkbox" name="allow_alt_description" id="allow_alt_description" value="1" <?= $item_info->allow_alt_description == 1 ? 'checked' : '' ?>>
-        <label class="form-check-label" for="allow_alt_description"><?= lang('Items.allow_alt_description') ?></label>
+    <div class="form-field mb-3">
+        <input class="check" type="checkbox" name="allow_alt_description" id="allow_alt_description" value="1" <?= $item_info->allow_alt_description === 1 ? 'checked' : '' ?>>
+        <label for="allow_alt_description"><?= lang('Items.allow_alt_description') ?></label>
     </div>
 
-    <div class="form-check mb-3">
-        <input class="form-check-input" type="checkbox" name="is_serialized" id="is_serialized" value="1" <?= $item_info->is_serialized == 1 ? 'checked' : '' ?>>
-        <label class="form-check-label" for="is_serialized"><?= lang('Items.is_serialized') ?></label>
+    <div class="form-field mb-3">
+        <input class="check" type="checkbox" name="is_serialized" id="is_serialized" value="1" <?= $item_info->is_serialized === 1 ? 'checked' : '' ?>>
+        <label for="is_serialized"><?= lang('Items.is_serialized') ?></label>
     </div>
 
-    <?php if ($config['multi_pack_enabled'] == '1'): ?>
+    <?php if ($config['multi_pack_enabled'] === '1'): ?>
         <label for="qty_per_pack" class="form-label"><?= lang('Items.qty_per_pack') ?></label>
         <div class="input-group mb-3">
             <span class="input-group-text" id="qty_per_pack-icon"><i class="bi bi-123"></i></span>
@@ -240,9 +240,9 @@
         </div>
     <?php endif; ?>
 
-    <div class="form-check mb-3">
-        <input class="form-check-input" type="checkbox" name="is_deleted" id="is_deleted" value="1" <?= $item_info->deleted == 1 ? 'checked' : '' ?>>
-        <label class="form-check-label text-danger" for="is_deleted"><?= lang('Items.is_deleted') ?></label>
+    <div class="form-field mb-3">
+        <input class="check" type="checkbox" name="is_deleted" id="is_deleted" value="1" <?= $item_info->deleted === 1 ? 'checked' : '' ?>>
+        <label class="fg-danger" for="is_deleted"><?= lang('Items.is_deleted') ?></label>
     </div>
 
 <?= form_close() ?>
@@ -274,7 +274,7 @@
             minChars: 0,
             delay: 15,
             cacheLength: 1,
-            appendTo: '.modal-content',
+            appendTo: '.dialog-body, .modal-content',
             select: fill_tax_category_value,
             focus: fill_tax_category_value
         });
@@ -290,7 +290,7 @@
             minChars: 0,
             delay: 15,
             cacheLength: 1,
-            appendTo: '.modal-content',
+            appendTo: '.dialog-body, .modal-content',
             select: fill_low_sell_value,
             focus: fill_low_sell_value
         });
@@ -298,13 +298,13 @@
         $('#category').autocomplete({
             source: "<?= 'items/suggestCategory' ?>",
             delay: 10,
-            appendTo: '.modal-content'
+            appendTo: '.dialog-body, .modal-content'
         });
 
         $('a.fileinput-exists').click(function() {
             $.ajax({
                 type: 'GET',
-                url: '<?= "$controller_name/removeLogo/$item_info->item_id" ?>',
+                url: '<?= "{$controller_name}/removeLogo/{$item_info->item_id}" ?>',
                 dataType: 'json'
             })
         });
@@ -345,7 +345,7 @@
                     item_number: {
                         required: false,
                         remote: {
-                            url: "<?= esc("$controller_name/checkItemNumber") ?>",
+                            url: "<?= esc("{$controller_name}/checkItemNumber") ?>",
                             type: 'POST',
                             data: {
                                 'item_id': "<?= $item_info->item_id ?>"
@@ -355,29 +355,29 @@
                     },
                     cost_price: {
                         required: true,
-                        remote: "<?= esc("$controller_name/checkNumeric") ?>"
+                        remote: "<?= esc("{$controller_name}/checkNumeric") ?>"
                     },
                     unit_price: {
                         required: true,
-                        remote: "<?= esc("$controller_name/checkNumeric") ?>"
+                        remote: "<?= esc("{$controller_name}/checkNumeric") ?>"
                     },
                     <?php foreach ($stock_locations as $key => $location_detail) { ?>
                         <?= 'quantity_' . $key ?>: {
                             required: true,
-                            remote: "<?= esc("$controller_name/checkNumeric") ?>"
+                            remote: "<?= esc("{$controller_name}/checkNumeric") ?>"
                         },
                     <?php } ?>
                     receiving_quantity: {
                         required: true,
-                        remote: "<?= esc("$controller_name/checkNumeric") ?>"
+                        remote: "<?= esc("{$controller_name}/checkNumeric") ?>"
                     },
                     reorder_level: {
                         required: true,
-                        remote: "<?= esc("$controller_name/checkNumeric") ?>"
+                        remote: "<?= esc("{$controller_name}/checkNumeric") ?>"
                     },
                     tax_percent: {
                         required: false,
-                        remote: "<?= esc("$controller_name/checkNumeric") ?>"
+                        remote: "<?= esc("{$controller_name}/checkNumeric") ?>"
                     }
                 },
 
@@ -394,7 +394,7 @@
                         number: "<?= lang('Items.unit_price_number') ?>"
                     },
                     <?php foreach ($stock_locations as $key => $location_detail) { ?>
-                        <?= esc("quantity_$key", 'js') ?>: {
+                        <?= esc("quantity_{$key}", 'js') ?>: {
                             required: "<?= lang('Items.quantity_required') ?>",
                             number: "<?= lang('Items.quantity_number') ?>"
                         },

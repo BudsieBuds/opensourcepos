@@ -4,7 +4,6 @@
  * @var array $keyboardShortcutOptions
  * @var array $keyboardShortcuts
  */
-
 $keyboardShortcuts ??= [];
 $keyboardShortcutOptions ??= [];
 $config ??= [];
@@ -19,7 +18,7 @@ $shortcutLabels = [
     'payment'   => lang('Sales.key_payment'),
     'complete'  => lang('Sales.key_finish_sale'),
     'finish'    => lang('Sales.key_finish_quote'),
-    'help'      => lang('Sales.key_help_modal')
+    'help'      => lang('Sales.key_help_modal'),
 ];
 ?>
 
@@ -27,26 +26,26 @@ $shortcutLabels = [
 
     <?php
     $title_info['config_title'] = lang('Config.shortcuts_configuration');
-    echo view('configs/config_header', $title_info);
-    ?>
+echo view('configs/config_header', $title_info);
+?>
 
-    <ul id="error_message_box" class="shortcuts_error_message_box alert alert-warning d-none"></ul>
+    <ul id="error_message_box" class="shortcuts_error_message_box alert theme-warning d-none"></ul>
 
     <div class="row">
         <?php foreach ($shortcutLabels as $name => $label): ?>
-            <div class="col-12 col-lg-6">
+            <div class="col-12 lg:col-6">
                 <?= form_label($label, 'key_' . $name, ['class' => 'form-label']) ?>
                 <div class="input-group mb-3">
                     <span class="input-group-text"><i class="bi bi-keyboard"></i></span>
                     <?php $keyboardShortcutSelectedValue = $keyboardShortcuts[$name]['value'] ?? ''; ?>
-                    <?= form_dropdown('key_' . $name, $keyboardShortcutOptions, $keyboardShortcutSelectedValue, 'class="form-select"') ?>
+                    <?= form_dropdown('key_' . $name, $keyboardShortcutOptions, $keyboardShortcutSelectedValue, 'class="form-control"') ?>
                 </div>
             </div>
         <?php endforeach; ?>
     </div>
 
     <div class="d-flex justify-content-end">
-        <button type="submit" class="btn btn-primary" name="submit_shortcuts"><?= lang('Common.submit'); ?></button>
+        <button type="submit" class="btn btn-solid theme-primary" name="submit_shortcuts"><?= lang('Common.submit'); ?></button>
     </div>
 
 <?= form_close() ?>

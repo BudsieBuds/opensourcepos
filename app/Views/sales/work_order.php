@@ -1,20 +1,20 @@
 <?php
 /**
- * @var int $sale_id_num
- * @var bool $print_after_sale
+ * @var int    $sale_id_num
+ * @var bool   $print_after_sale
  * @var string $sales_work_order
  * @var string $customer_info
  * @var string $company_info
  * @var string $work_order_number_label
  * @var string $work_order_number
  * @var string $transaction_date
- * @var bool $print_price_info
+ * @var bool   $print_price_info
  * @var string $total
- * @var array $cart
- * @var float $subtotal
- * @var array $taxes
- * @var array $payments
- * @var array $config
+ * @var array  $cart
+ * @var float  $subtotal
+ * @var array  $taxes
+ * @var array  $payments
+ * @var array  $config
  */
 ?>
 
@@ -22,16 +22,17 @@
 
 <?php
 if (isset($error_message)) {
-    echo '<div class="alert alert-dismissible alert-danger">' . $error_message . '</div>';
+    echo '<div class="alert alert-dismissible theme-danger">' . $error_message . '</div>';
+
     exit;
 }
 ?>
 
-<?php if (!empty($customer_email)): ?>
+<?php if (! empty($customer_email)): ?>
     <script type="text/javascript">
         $(document).ready(function() {
             const send_email = function() {
-                $.get('<?= esc("/sales/sendPdf/$sale_id_num/work_order") ?>',
+                $.get('<?= esc("/sales/sendPdf/{$sale_id_num}/work_order") ?>',
                     function(response) {
                         $.notify({
                             icon: 'bi bi-bell-fill',
@@ -45,7 +46,7 @@ if (isset($error_message)) {
 
             $("#show_email_button").click(send_email);
 
-            <?php if (!empty($email_receipt)): ?>
+            <?php if (! empty($email_receipt)): ?>
                 send_email();
             <?php endif; ?>
         });
@@ -56,20 +57,20 @@ if (isset($error_message)) {
 
 <div class="print_hide" id="control_buttons" style="text-align: right;">
     <a href="javascript:printdoc();">
-        <div class="btn btn-info btn-sm" id="show_print_button"><?= '<i class="bi bi-printer me-2"></i>' . lang('Common.print') ?></div>
+        <div class="btn btn-solid theme-info btn-sm" id="show_print_button"><?= '<i class="bi bi-printer me-2"></i>' . lang('Common.print') ?></div>
     </a>
     <?php
     /* This line will allow to print and go back to sales automatically.
-     * echo anchor('sales', '<i class="bi bi-printer me-2"></i>' . lang('Common.print'), ['class' => 'btn btn-info btn-sm', 'id' => 'show_print_button', 'onclick' => 'window.print();'));
+     * echo anchor('sales', '<i class="bi bi-printer me-2"></i>' . lang('Common.print'), ['class' => 'btn btn-solid theme-info btn-sm', 'id' => 'show_print_button', 'onclick' => 'window.print();'));
      */
-    ?>
-    <?php if (isset($customer_email) && !empty($customer_email)): ?>
+?>
+    <?php if (isset($customer_email) && ! empty($customer_email)): ?>
         <a href="javascript:void(0);">
-            <div class="btn btn-info btn-sm" id="show_email_button"><?= '<i class="bi bi-envelope me-2"></i>' . lang('Sales.send_work_order') ?></div>
+            <div class="btn btn-solid theme-info btn-sm" id="show_email_button"><?= '<i class="bi bi-envelope me-2"></i>' . lang('Sales.send_work_order') ?></div>
         </a>
     <?php endif; ?>
-    <?= anchor("sales", '<i class="bi bi-cart2 me-2"></i>' . lang('Sales.register'), ['class' => 'btn btn-info btn-sm', 'id' => 'show_sales_button']) ?>
-    <?= anchor("sales/discard_suspended_sale", '<i class="bi bi-x-circle me-2"></i>' . lang('Sales.discard'), ['class' => 'btn btn-danger btn-sm', 'id' => 'discard_work_order_button']) ?>
+    <?= anchor('sales', '<i class="bi bi-cart2 me-2"></i>' . lang('Sales.register'), ['class' => 'btn btn-solid theme-info btn-sm', 'id' => 'show_sales_button']) ?>
+    <?= anchor('sales/discard_suspended_sale', '<i class="bi bi-x-circle me-2"></i>' . lang('Sales.discard'), ['class' => 'btn btn-solid theme-danger btn-sm', 'id' => 'discard_work_order_button']) ?>
 </div>
 
 <div id="page-wrap">
@@ -82,7 +83,7 @@ if (isset($error_message)) {
         </div>
 
         <div id="logo">
-            <?php if ($config['company_logo'] != '') { ?>
+            <?php if ($config['company_logo'] !== '') { ?>
                 <img id="image" src="<?= base_url('uploads/' . esc($config['company_logo'], 'url')) ?>" alt="company_logo">
             <?php } ?>
             <div>&nbsp;</div>
@@ -122,19 +123,23 @@ if (isset($error_message)) {
             <th><?= lang('Sales.total') ?></th>
         </tr>
         <?php
-        foreach ($cart as $line => $item) {
-            if ($item['print_option'] == PRINT_YES) {
-        ?>
+    foreach ($cart as $line => $item) {
+        if ($item['print_option'] === PRINT_YES) {
+            ?>
                 <tr class="item-row">
                     <td><?= esc($item['item_number']) ?></td>
                     <td class="item-name"><?= esc($item['name']) ?></td>
                     <td style="text-align: center;"><?= to_quantity_decimals($item['quantity']) ?></td>
-                    <td><?php if ($print_price_info) echo to_currency($item['price']) ?></td>
-                    <td style="text-align: center;"><?= ($item['discount_type'] == FIXED) ? to_currency($item['discount']) : to_decimals($item['discount']) . '%' ?></td>
-                    <td style="border-right: solid 1px; text-align: right;"><?php if ($print_price_info) echo to_currency($item['discounted_total']) ?></td>
+                    <td><?php if ($print_price_info) {
+                        echo to_currency($item['price']);
+                    } ?></td>
+                    <td style="text-align: center;"><?= ($item['discount_type'] === FIXED) ? to_currency($item['discount']) : to_decimals($item['discount']) . '%' ?></td>
+                    <td style="border-right: solid 1px; text-align: right;"><?php if ($print_price_info) {
+                        echo to_currency($item['discounted_total']);
+                    } ?></td>
                 </tr>
 
-                <?php if ($item['is_serialized'] || $item['allow_alt_description'] && !empty($item['description'])) { ?>
+                <?php if ($item['is_serialized'] || $item['allow_alt_description'] && ! empty($item['description'])) { ?>
                     <tr class="item-row">
                         <td></td>
                         <td class="item-name" colspan="4"><?= esc($item['description']) ?></td>
@@ -142,11 +147,11 @@ if (isset($error_message)) {
                     </tr>
         <?php
                 }
-            }
         }
-        ?>
+    }
+?>
         <tr>
-            <td class="blank" colspan="6" style="text-align: center;"><?= '&nbsp;' //TODO: Why is PHP needed for an HTML `&nbsp;`? ?></td>
+            <td class="blank" colspan="6" style="text-align: center;"><?= '&nbsp;' // TODO: Why is PHP needed for an HTML `&nbsp;`??></td>
         </tr>
         <?php if ($print_price_info) { ?>
             <tr>
@@ -157,7 +162,7 @@ if (isset($error_message)) {
             <?php foreach ($taxes as $tax_group_index => $tax) { ?>
                 <tr>
                     <td colspan="3" class="blank"> </td>
-                    <td colspan="2" class="total-line"><?= (float)$tax['tax_rate'] . '% ' . esc($tax['tax_group']) ?></td>
+                    <td colspan="2" class="total-line"><?= (float) $tax['tax_rate'] . '% ' . esc($tax['tax_group']) ?></td>
                     <td class="total-value" id="taxes"><?= to_currency_tax($tax['sale_tax_amount']) ?></td>
                 </tr>
             <?php } ?>
@@ -168,13 +173,14 @@ if (isset($error_message)) {
             </tr>
         <?php } ?>
         <?php
-        $only_sale_check = false;
-        $show_giftcard_remainder = false;
-        foreach ($payments as $payment_id => $payment) {
-            $only_sale_check |= $payment['payment_type'] == lang('Sales.check');
-            $splitpayment = explode(':', $payment['payment_type']);    // TODO: $splitpayment does not match naming conventions for the project
-            $show_giftcard_remainder |= $splitpayment[0] == lang('Sales.giftcard');
-        ?>
+$only_sale_check         = false;
+$show_giftcard_remainder = false;
+
+foreach ($payments as $payment_id => $payment) {
+    $only_sale_check |= $payment['payment_type'] === lang('Sales.check');
+    $splitpayment = explode(':', $payment['payment_type']);    // TODO: $splitpayment does not match naming conventions for the project
+    $show_giftcard_remainder |= $splitpayment[0] === lang('Sales.giftcard');
+    ?>
             <tr>
                 <td colspan="3" class="blank"> </td>
                 <td colspan="2" class="total-line"><?= esc($splitpayment[0]) ?></td>
@@ -185,7 +191,7 @@ if (isset($error_message)) {
     <div id="terms">
         <div id="sale_return_policy">
             <h5>
-                <span style="padding: 4%;"><?= empty($comments) ? '' : lang('Sales.comments') . esc(": $comments") ?></span>
+                <span style="padding: 4%;"><?= empty($comments) ? '' : lang('Sales.comments') . esc(": {$comments}") ?></span>
             </h5>
         </div>
     </div>
@@ -195,14 +201,14 @@ if (isset($error_message)) {
     $(window).on("load", function() {
         // Install firefox addon in order to use this plugin
         if (window.jsPrintSetup) {
-            <?php if (!$config['print_header']) { ?>
+            <?php if (! $config['print_header']) { ?>
                 // Set page header
                 jsPrintSetup.setOption('headerStrLeft', '');
                 jsPrintSetup.setOption('headerStrCenter', '');
                 jsPrintSetup.setOption('headerStrRight', '');
             <?php } ?>
 
-            <?php if (!$config['print_footer']) { ?>
+            <?php if (! $config['print_footer']) { ?>
                 // Set empty page footer
                 jsPrintSetup.setOption('footerStrLeft', '');
                 jsPrintSetup.setOption('footerStrCenter', '');

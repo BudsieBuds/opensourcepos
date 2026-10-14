@@ -2,13 +2,13 @@
 /**
  * @var object $person_info
  * @var string $controller_name
- * @var array $config
+ * @var array  $config
  */
 ?>
 
-<?= form_open("messages/send_form/$person_info->person_id", ['id' => 'send_sms_form']) ?>
+<?= form_open("messages/send_form/{$person_info->person_id}", ['id' => 'send_sms_form']) ?>
 
-    <ul id="error_message_box" class="alert alert-warning d-none"></ul>
+    <ul id="error_message_box" class="alert theme-warning d-none"></ul>
 
     <label for="first_name" class="form-label"><?= lang('Messages.first_name'); ?></label>
     <div class="input-group mb-3">

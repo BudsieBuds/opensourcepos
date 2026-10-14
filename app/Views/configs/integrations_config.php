@@ -1,6 +1,6 @@
 <?php
 /**
- * @var array $mailchimp
+ * @var array  $mailchimp
  * @var string $controller_name
  */
 ?>
@@ -9,23 +9,23 @@
 
     <?php
     $title_info['config_title'] = lang('Config.integrations_configuration');
-    echo view('configs/config_header', $title_info);
-    ?>
+echo view('configs/config_header', $title_info);
+?>
 
     <legend class="fs-5"><?= lang('Config.mailchimp_configuration') ?></legend>
-    <ul id="error_message_box" class="mailchimp_error_message_box alert alert-warning d-none"></ul>
+    <ul id="error_message_box" class="mailchimp_error_message_box alert theme-warning d-none"></ul>
 
     <div class="row">
-        <div class="col-12 col-lg-6">
+        <div class="col-12 lg:col-6">
             <label for="mailchimp_api_key" class="form-label">
                 <?= lang('Config.mailchimp_api_key'); ?>
                 <!--<a href="https://eepurl.com/dyijVH" target="_blank" rel="noopener">
-                    <i class="bi bi-info-circle-fill text-secondary" data-bs-toggle="tooltip" title="<?= lang('Config.mailchimp_tooltip'); ?>"></i>
+                    <i class="bi bi-info-circle-fill fg-secondary" data-bs-toggle="tooltip" title="<?= lang('Config.mailchimp_tooltip'); ?>"></i>
                 </a>-->
             </label>
             <div class="input-group">
                 <span class="input-group-text" id="mailchimp-api-key-icon"><i class="bi bi-key"></i></span>
-                <?php $apiKeySet = !empty($mailchimp['api_key_set']) ?>
+                <?php $apiKeySet = ! empty($mailchimp['api_key_set']) ?>
                 <input type="password" class="form-control" name="mailchimp_api_key" id="mailchimp_api_key" aria-describedby="mailchimp-api-key-icon" placeholder="<?= $apiKeySet ? lang('Config.mailchimp_api_key_set') : esc(lang('Config.mailchimp_api_key')) ?>" autocomplete="off">
             </div>
             <div class="form-text mb-3">
@@ -35,14 +35,14 @@
             </div>
         </div>
 
-        <div class="col-12 col-lg-6">
+        <div class="col-12 lg:col-6">
             <label for="mailchimp_list_id" class="form-label"><?= lang('Config.mailchimp_lists'); ?></label>
             <div class="input-group mb-3">
                 <span class="input-group-text" id="mailchimp-lists-icon"><i class="bi bi-list-stars"></i></span>
-                <select class="form-select" id="mailchimp_list_id" aria-describedby="mailchimp-lists-icon" <?= $mailchimp['api_key'] == null ? 'disabled' : '' ?>>
+                <select class="form-control" id="mailchimp_list_id" aria-describedby="mailchimp-lists-icon" <?= $mailchimp['api_key'] === null ? 'disabled' : '' ?>>
                     <option>Choose...</option>
-                    <?php foreach($mailchimp['lists'] as $value => $display_text): ?>
-                        <option value="<?= $value; ?>" <?= $value == $mailchimp['list_id'] ? 'selected' : ''; ?>>
+                    <?php foreach ($mailchimp['lists'] as $value => $display_text): ?>
+                        <option value="<?= $value; ?>" <?= $value === $mailchimp['list_id'] ? 'selected' : ''; ?>>
                             <?= $display_text; ?>
                         </option>
                     <?php endforeach; ?>
@@ -52,7 +52,7 @@
     </div>
 
     <div class="d-flex justify-content-end">
-        <button type="submit" class="btn btn-primary" name="sumbit_mailchimp"><?= lang('Common.submit'); ?></button>
+        <button type="submit" class="btn btn-solid theme-primary" name="sumbit_mailchimp"><?= lang('Common.submit'); ?></button>
     </div>
 
 <?= form_close() ?>
@@ -61,7 +61,7 @@
     // Validation and submit handling
     $(document).ready(function() {
         $('#mailchimp_api_key').change(function() {
-            $.post("<?= "$controller_name/checkMailchimpApiKey" ?>", {
+            $.post("<?= "{$controller_name}/checkMailchimpApiKey" ?>", {
                     'mailchimp_api_key': $('#mailchimp_api_key').val()
                 },
                 function(response) {

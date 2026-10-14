@@ -6,14 +6,14 @@
 
 <?= form_open('taxes/save_tax_categories/', ['id' => 'tax_categories_form']) ?>
 
-    <ul id="tax_categories_error_message_box" class="alert alert-warning d-none"></ul>
+    <ul id="tax_categories_error_message_box" class="alert theme-warning d-none"></ul>
 
     <div id="tax_categories">
         <?= view('partial/tax_categories') ?>
     </div>
 
     <div class="d-flex justify-content-end">
-        <button type="submit" class="btn btn-primary" name="submit_tax_categories"><?= lang('Common.submit'); ?></button>
+        <button type="submit" class="btn btn-solid theme-primary" name="submit_tax_categories"><?= lang('Common.submit'); ?></button>
     </div>
 
 <?= form_close() ?>
@@ -21,7 +21,7 @@
 <script type="text/javascript">
     // Validation and Submit Handling
     $(document).ready(function() {
-        let tax_categories_count = <?= sizeof($tax_categories) ?>;
+        let tax_categories_count = <?= count($tax_categories) ?>;
         if (tax_categories_count == 0) {
             tax_categories_count = 1;
         }
@@ -44,7 +44,7 @@
             ++tax_categories_count;
             const new_tax_category_id = 'tax_category_' + tax_categories_count;
 
-            $(new_block).find('label').html("<?= lang('Taxes.tax_category') ?> " + tax_categories_count).attr('for', new_tax_category_id).attr('class', 'control-label col-xs-2'); // TODO-BS5 change classes from bs3 to bs5
+            $(new_block).find('label').html("<?= lang('Taxes.tax_category') ?> " + tax_categories_count).attr('for', new_tax_category_id).attr('class', 'control-label col-2'); // TODO-BS5 change classes from bs3 to bs5
             $(new_block).find("input[name='tax_category[]']").attr('id', new_tax_category_id).removeAttr('disabled').attr('class', 'form-control input-sm required').val(''); // TODO-BS5 change classes from bs3 to bs5
             $(new_block).find("input[name='tax_group_sequence[]']").removeAttr('disabled').attr('class', 'form-control input-sm').val(''); // TODO-BS5 change classes from bs3 to bs5
             $(new_block).find("input[name='tax_category_id[]']").val('-1');
@@ -95,7 +95,7 @@
                         }, {
                             type: response.success ? 'success' : 'danger'
                         });
-                        $("#tax_categories").load('<?= esc("taxes/ajax_tax_categories") ?>', init_add_remove_tax_categories);
+                        $("#tax_categories").load('<?= esc('taxes/ajax_tax_categories') ?>', init_add_remove_tax_categories);
                     },
                     dataType: 'json'
                 });
@@ -108,8 +108,9 @@
 
         <?php
             $i = 0;
-            foreach ($tax_categories as $tax_category => $tax_category_data) {
-        ?>
+
+foreach ($tax_categories as $tax_category => $tax_category_data) {
+    ?>
             $('<?= '#tax_category_' . ++$i ?>').rules("add", {
                 requireTaxCategory: true,
                 check4TaxCategoryDups: true,

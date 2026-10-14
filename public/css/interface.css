@@ -9,7 +9,7 @@ body {
 }
 
 @media (min-width: 1640px) {
-    .container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container {
+    .\32 xl\:container, .xl\:container, .lg\:container, .md\:container, .sm\:container, .container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container {
         max-width: 1560px;
     }
 }

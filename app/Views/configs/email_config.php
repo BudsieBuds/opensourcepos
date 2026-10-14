@@ -1,7 +1,7 @@
 <?php
 /**
  * @var array $config
- * @var bool $smtp_pass_set
+ * @var bool  $smtp_pass_set
  */
 ?>
 
@@ -9,21 +9,21 @@
 
     <?php
     $title_info['config_title'] = lang('Config.email_configuration');
-    echo view('configs/config_header', $title_info);
-    ?>
+echo view('configs/config_header', $title_info);
+?>
 
-    <ul id="error_message_box" class="email_error_message_box alert alert-warning d-none"></ul>
+    <ul id="error_message_box" class="email_error_message_box alert theme-warning d-none"></ul>
 
     <div class="row">
-        <div class="col-12 col-lg-6">
+        <div class="col-12 lg:col-6">
             <label for="protocol" class="form-label"><?= lang('Config.email_protocol'); ?></label>
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-mailbox"></i></span>
-                <?= form_dropdown('protocol', array('mail' => 'Mail', 'sendmail' => 'Sendmail', 'smtp' => 'SMTP'), $config['protocol'], array('class' => 'form-select', 'id' => 'protocol')); ?>
+                <?= form_dropdown('protocol', ['mail' => 'Mail', 'sendmail' => 'Sendmail', 'smtp' => 'SMTP'], $config['protocol'], ['class' => 'form-control', 'id' => 'protocol']); ?>
             </div>
         </div>
 
-        <div class="col-12 col-lg-6">
+        <div class="col-12 lg:col-6">
             <label for="mailpath" class="form-label"><?= lang('Config.email_mailpath'); ?></label>
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-braces"></i></span>
@@ -31,7 +31,7 @@
             </div>
         </div>
 
-        <div class="col-12 col-lg-6">
+        <div class="col-12 lg:col-6">
             <label for="smtp_host" class="form-label"><?= lang('Config.email_smtp_host'); ?></label>
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-database"></i></span>
@@ -39,7 +39,7 @@
             </div>
         </div>
 
-        <div class="col-12 col-lg-6">
+        <div class="col-12 lg:col-6">
             <label for="smtp_port" class="form-label"><?= lang('Config.email_smtp_port'); ?></label>
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-door-open"></i></span>
@@ -47,15 +47,15 @@
             </div>
         </div>
 
-        <div class="col-12 col-lg-6">
+        <div class="col-12 lg:col-6">
             <label for="smtp_crypto" class="form-label"><?= lang('Config.email_smtp_crypto'); ?></label>
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-shield-lock"></i></span>
-                <?= form_dropdown('smtp_crypto', array('' => 'None', 'tls' => 'TLS', 'ssl' => 'SSL'), $config['smtp_crypto'], array('class' => 'form-select', 'id' => 'smtp_crypto')); ?>
+                <?= form_dropdown('smtp_crypto', ['' => 'None', 'tls' => 'TLS', 'ssl' => 'SSL'], $config['smtp_crypto'], ['class' => 'form-control', 'id' => 'smtp_crypto']); ?>
             </div>
         </div>
 
-        <div class="col-12 col-lg-6">
+        <div class="col-12 lg:col-6">
             <label for="smtp_timeout" class="form-label"><?= lang('Config.email_smtp_timeout'); ?></label>
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-stopwatch"></i></span>
@@ -63,7 +63,7 @@
             </div>
         </div>
 
-        <div class="col-12 col-lg-6">
+        <div class="col-12 lg:col-6">
             <label for="smtp_user" class="form-label"><?= lang('Config.email_smtp_user'); ?></label>
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-person"></i></span>
@@ -71,17 +71,17 @@
             </div>
         </div>
 
-        <div class="col-12 col-lg-6">
+        <div class="col-12 lg:col-6">
             <label for="smtp_pass" class="form-label"><?= lang('Config.email_smtp_pass'); ?></label>
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                <input type="password" name="smtp_pass" class="form-control" id="smtp_pass" placeholder="<?= !empty($smtp_pass_set) ? lang('Config.email_smtp_pass_set') : esc(lang('Config.email_smtp_pass')) ?>" autocomplete="off">
+                <input type="password" name="smtp_pass" class="form-control" id="smtp_pass" placeholder="<?= ! empty($smtp_pass_set) ? lang('Config.email_smtp_pass_set') : esc(lang('Config.email_smtp_pass')) ?>" autocomplete="off">
             </div>
         </div>
     </div>
 
     <div class="d-flex justify-content-end">
-        <button type="submit" class="btn btn-primary" name="submit_email"><?= lang('Common.submit'); ?></button>
+        <button type="submit" class="btn btn-solid theme-primary" name="submit_email"><?= lang('Common.submit'); ?></button>
     </div>
 
 <?= form_close() ?>

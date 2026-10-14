@@ -1,17 +1,18 @@
 <?php
 /**
- * @var string $controller_name
- * @var string $table_headers
- * @var array $filters
- * @var array $stock_locations
- * @var int $stock_location
- * @var array $config
+ * @var string      $controller_name
+ * @var string      $table_headers
+ * @var array       $filters
+ * @var array       $stock_locations
+ * @var int         $stock_location
+ * @var array       $config
  * @var string|null $start_date
  * @var string|null $end_date
- * @var array $selected_filters
+ * @var array       $selected_filters
  */
 
 use App\Models\Employee;
+
 ?>
 
 <?= view('partial/header') ?>
@@ -60,10 +61,9 @@ echo view('configs/config_header', $title_info);
         end_date = "<?= esc($end_date) ?>";
         <?php endif; ?>
 
-        <?php
-        echo view('partial/bootstrap_tables_locale');
-        $employee = model(Employee::class);
-        ?>
+        <?= view('partial/bootstrap_tables_locale');
+$employee = model(Employee::class);
+?>
 
         table_support.init({
             employee_id: <?= $employee->get_logged_in_employee_info()->person_id ?>,
@@ -97,38 +97,38 @@ echo view('configs/config_header', $title_info);
 <?= view('partial/table_filter_persistence', ['additional_params' => ['stock_location']]) ?>
 
 <div class="d-flex gap-2 justify-content-end">
-    <button type="button" class="btn btn-primary modal-launch" data-btn-new="<?= lang('Common.new') ?>" data-btn-submit="<?= lang('Common.submit') ?>" data-href="<?= "$controller_name/view" ?>" title="<?= lang(ucfirst($controller_name) . '.new') ?>">
+    <button type="button" class="btn btn-solid theme-primary modal-launch" data-btn-new="<?= lang('Common.new') ?>" data-btn-submit="<?= lang('Common.submit') ?>" data-href="<?= "{$controller_name}/view" ?>" title="<?= lang(ucfirst($controller_name) . '.new') ?>">
         <i class="bi bi-tag me-2"></i><?= lang(ucfirst($controller_name) . '.new') ?>
     </button>
-    <button type="button" class="btn btn-primary modal-launch" data-btn-submit="<?= lang('Common.submit') ?>" data-href="<?= "$controller_name/csvImport" ?>" title="<?= lang('Items.import_items_csv') ?>">
+    <button type="button" class="btn btn-solid theme-primary modal-launch" data-btn-submit="<?= lang('Common.submit') ?>" data-href="<?= "{$controller_name}/csvImport" ?>" title="<?= lang('Items.import_items_csv') ?>">
         <i class="bi bi-file-earmark-arrow-down me-2"></i><?= lang('Common.import_csv') ?>
     </button>
 </div>
 
 <div id="toolbar">
     <div class="d-flex gap-2">
-        <button type="button" class="btn btn-secondary d-print-none" id="delete">
-            <i class="bi bi-trash"></i><span class="d-none d-md-inline ms-2"><?= lang('Common.delete') ?></span>
+        <button type="button" class="btn btn-solid theme-secondary print:d-none" id="delete">
+            <i class="bi bi-trash"></i><span class="d-none md:d-inline ms-2"><?= lang('Common.delete') ?></span>
         </button>
 
-        <button type="button" class="btn btn-secondary modal-launch d-print-none" id="bulk_edit" data-btn-submit="<?= lang('Common.submit') ?>" data-href="<?= "items/bulkEdit" ?>" title="<?= lang('Items.edit_multiple_items') ?>">
-            <i class="bi bi-pencil-square"></i><span class="d-none d-md-inline ms-2"><?= lang('Items.bulk_edit') ?></span>
+        <button type="button" class="btn btn-solid theme-secondary modal-launch print:d-none" id="bulk_edit" data-btn-submit="<?= lang('Common.submit') ?>" data-href="<?= 'items/bulkEdit' ?>" title="<?= lang('Items.edit_multiple_items') ?>">
+            <i class="bi bi-pencil-square"></i><span class="d-none md:d-inline ms-2"><?= lang('Items.bulk_edit') ?></span>
         </button>
 
-        <button type="button" class="btn btn-secondary d-print-none" id="generate_barcodes" data-href="<?= "$controller_name/generateBarcodes" ?>" title="<?= lang('Items.generate_barcodes') ?>">
-            <i class="bi bi-upc-scan"></i><span class="d-none d-md-inline ms-2"><?= lang('Items.generate_barcodes') ?></span>
+        <button type="button" class="btn btn-solid theme-secondary print:d-none" id="generate_barcodes" data-href="<?= "{$controller_name}/generateBarcodes" ?>" title="<?= lang('Items.generate_barcodes') ?>">
+            <i class="bi bi-upc-scan"></i><span class="d-none md:d-inline ms-2"><?= lang('Items.generate_barcodes') ?></span>
         </button>
 
         <div class="input-group w-auto">
             <span class="input-group-text" id="daterangepicker-icon"><i class="bi bi-calendar2-range"></i></span>
-            <input type="text" class="form-select" name="daterangepicker" id="daterangepicker" aria-describedby="daterangepicker-icon">
+            <input type="text" class="form-control" name="daterangepicker" id="daterangepicker" aria-describedby="daterangepicker-icon">
         </div>
 
         <div class="input-group w-auto">
             <span class="input-group-text" id="filters-icon"><i class="bi bi-funnel"></i></span>
-            <select class="form-select" name="filters[]" id="filters" aria-describedby="filters-icon" multiple>
+            <select class="form-control" name="filters[]" id="filters" aria-describedby="filters-icon" multiple>
                 <?php foreach ($filters as $key => $label): ?>
-                    <option value="<?= $key ?>" <?= in_array($key, $selected_filters ?? []) ? 'selected' : '' ?>>
+                    <option value="<?= $key ?>" <?= in_array($key, $selected_filters ?? [], true) ? 'selected' : '' ?>>
                         <?= esc($label) ?>
                     </option>
                 <?php endforeach; ?>
@@ -138,9 +138,9 @@ echo view('configs/config_header', $title_info);
         <?php if (count($stock_locations) > 1): ?>
             <div class="input-group w-auto">
                 <span class="input-group-text" id="stock_location-icon"><i class="bi bi-boxes"></i></span>
-                <select class="form-select" name="stock_location" id="stock_location" aria-describedby="stock_location-icon" multiple>
+                <select class="form-control" name="stock_location" id="stock_location" aria-describedby="stock_location-icon" multiple>
                     <?php foreach ($stock_locations as $value => $label): ?>
-                        <option value="<?= $value ?>" <?= $value == $stock_location ? 'selected' : '' ?>>
+                        <option value="<?= $value ?>" <?= $value === $stock_location ? 'selected' : '' ?>>
                             <?= $label ?>
                         </option>
                     <?php endforeach; ?>

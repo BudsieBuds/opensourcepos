@@ -29,10 +29,12 @@
     },
     "scripts": {
         "build": "gulp default",
-        "gulp": "gulp"
+        "gulp": "gulp",
+        "update-skills": "npx skills update -p"
     },
     "dependencies": {
-        "bootstrap": "^5.3.8",
+        "@floating-ui/dom": "^1.8.0",
+        "bootstrap": "6.0.0-alpha.1",
         "bootstrap-daterangepicker": "^3.1.0",
         "bootstrap-datetime-picker": "2.4.4",
         "bootstrap-icons": "^1.13.2",
@@ -61,10 +63,14 @@
         "jspdf": "^4.2.1",
         "jspdf-autotable": "^5.0.7",
         "tableexport.jquery.plugin": "^1.33.0",
-        "tom-select": "^2.6.2"
+        "tom-select": "^2.6.2",
+        "vanilla-calendar-pro": "^3.4.0"
     },
     "overrides": {
-        "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
+        "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
+        "bootstrap5-toggle": {
+            "bootstrap": "$bootstrap"
+        }
     },
     "devDependencies": {
         "gulp": "^5.0.1",

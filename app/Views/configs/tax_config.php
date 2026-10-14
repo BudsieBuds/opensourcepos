@@ -1,10 +1,10 @@
 <?php
 /**
- * @var array $tax_code_options
- * @var array $tax_category_options
- * @var array $tax_jurisdiction_options
+ * @var array  $tax_code_options
+ * @var array  $tax_category_options
+ * @var array  $tax_jurisdiction_options
  * @var string $controller_name
- * @var array $config
+ * @var array  $config
  */
 ?>
 
@@ -12,13 +12,13 @@
 
     <?php
     $title_info['config_title'] = lang('Config.tax_configuration');
-    echo view('configs/config_header', $title_info);
-    ?>
+echo view('configs/config_header', $title_info);
+?>
 
-    <ul id="error_message_box" class="tax_error_message_box alert alert-warning d-none"></ul>
+    <ul id="error_message_box" class="tax_error_message_box alert theme-warning d-none"></ul>
 
     <div class="row">
-        <div class="col-12 col-lg-6">
+        <div class="col-12 lg:col-6">
             <label for="tax_id" class="form-label"><?= lang('Config.tax_id'); ?></label>
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-bank"></i></span>
@@ -27,13 +27,15 @@
         </div>
     </div>
 
-    <div class="form-check form-switch mb-3">
-        <input class="form-check-input" type="checkbox" role="switch" id="tax_included" name="tax_included" <?= $config['tax_included'] == 1 ? 'checked' : '' ?>>
-        <label class="form-check-label" for="tax_included"><?= lang('Config.tax_included'); ?></label>
+    <div class="form-field mb-3">
+        <div class="switch">
+            <input type="checkbox" role="switch" switch id="tax_included" name="tax_included" <?= $config['tax_included'] === 1 ? 'checked' : '' ?>>
+        </div>
+        <label for="tax_included"><?= lang('Config.tax_included'); ?></label>
     </div>
 
     <div class="row">
-        <div class="col-12 col-lg-6">
+        <div class="col-12 lg:col-6">
             <label for="default_tax_1_rate" class="form-label"><?= lang('Config.default_tax_rate_1') ?></label>
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-1-square"></i></span>
@@ -43,7 +45,7 @@
             </div>
         </div>
 
-        <div class="col-12 col-lg-6">
+        <div class="col-12 lg:col-6">
             <label for="default_tax_2_rate" class="form-label"><?= lang('Config.default_tax_rate_2') ?></label>
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-2-square"></i></span>
@@ -54,43 +56,45 @@
         </div>
     </div>
 
-    <div class="form-check form-switch mb-3">
-        <input class="form-check-input" type="checkbox" role="switch" id="use_destination_based_tax" name="use_destination_based_tax" value="use_destination_based_tax" <?= $config['use_destination_based_tax'] == 1 ? 'checked' : '' ?>>
-        <label class="form-check-label" for="use_destination_based_tax"><?= lang('Config.use_destination_based_tax'); ?></label>
+    <div class="form-field mb-3">
+        <div class="switch">
+            <input type="checkbox" role="switch" switch id="use_destination_based_tax" name="use_destination_based_tax" value="use_destination_based_tax" <?= $config['use_destination_based_tax'] === 1 ? 'checked' : '' ?>>
+        </div>
+        <label for="use_destination_based_tax"><?= lang('Config.use_destination_based_tax'); ?></label>
     </div>
 
     <div class="row">
-        <div class="col-12 col-lg-6">
+        <div class="col-12 lg:col-6">
             <label for="default_tax_code" class="form-label"><?= lang('Config.default_tax_code'); ?></label>
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-code"></i></span>
-                <select class="form-select" name="default_tax_code" id="default_tax_code">
+                <select class="form-control" name="default_tax_code" id="default_tax_code">
                     <?php foreach ($tax_code_options as $key => $value): ?>
-                        <option value="<?= $key ?>" <?= $config['default_tax_code'] == $key ? 'selected' : '' ?>><?= $value ?></option>
+                        <option value="<?= $key ?>" <?= $config['default_tax_code'] === $key ? 'selected' : '' ?>><?= $value ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
         </div>
 
-        <div class="col-12 col-lg-6">
+        <div class="col-12 lg:col-6">
             <label for="default_tax_category" class="form-label"><?= lang('Config.default_tax_category'); ?></label>
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-bookmark"></i></span>
-                <select class="form-select" name="default_tax_category" id="default_tax_category">
+                <select class="form-control" name="default_tax_category" id="default_tax_category">
                     <?php foreach ($tax_category_options as $key => $value): ?>
-                        <option value="<?= $key ?>" <?= $config['default_tax_category'] == $key ? 'selected' : '' ?>><?= $value ?></option>
+                        <option value="<?= $key ?>" <?= $config['default_tax_category'] === $key ? 'selected' : '' ?>><?= $value ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
         </div>
 
-        <div class="col-12 col-lg-6">
+        <div class="col-12 lg:col-6">
             <label for="default_tax_jurisdiction" class="form-label"><?= lang('Config.default_tax_jurisdiction'); ?></label>
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-globe"></i></span>
-                <select class="form-select" name="default_tax_jurisdiction" id="default_tax_jurisdiction">
+                <select class="form-control" name="default_tax_jurisdiction" id="default_tax_jurisdiction">
                     <?php foreach ($tax_jurisdiction_options as $key => $value): ?>
-                        <option value="<?= $key ?>" <?= $config['default_tax_jurisdiction'] == $key ? 'selected' : '' ?>><?= $value ?></option>
+                        <option value="<?= $key ?>" <?= $config['default_tax_jurisdiction'] === $key ? 'selected' : '' ?>><?= $value ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -98,7 +102,7 @@
     </div>
 
     <div class="d-flex justify-content-end">
-        <button type="submit" class="btn btn-primary" name="submit_tax"><?= lang('Common.submit'); ?></button>
+        <button type="submit" class="btn btn-solid theme-primary" name="submit_tax"><?= lang('Common.submit'); ?></button>
     </div>
 
 <?= form_close() ?>
@@ -143,10 +147,10 @@
 
             rules: {
                 default_tax_1_rate: {
-                    remote: "<?= "$controller_name/checkNumeric" ?>"
+                    remote: "<?= "{$controller_name}/checkNumeric" ?>"
                 },
                 default_tax2_rate: {
-                    remote: "<?= "$controller_name/checkNumeric" ?>"
+                    remote: "<?= "{$controller_name}/checkNumeric" ?>"
                 },
             },
 

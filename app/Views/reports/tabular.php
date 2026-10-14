@@ -2,10 +2,10 @@
 /**
  * @var string $title
  * @var string $subtitle
- * @var array $summary_data
- * @var array $headers
- * @var array $data
- * @var array $config
+ * @var array  $summary_data
+ * @var array  $headers
+ * @var array  $data
+ * @var array  $config
  */
 ?>
 
@@ -20,8 +20,8 @@ echo view('configs/config_header', $title_info);
 
 <div id="toolbar">
     <div class="d-flex gap-2">
-        <button type="button" class="btn btn-secondary d-print-none" id="toggleCostProfitButton">
-            <i class="bi bi-toggles"></i><span class="d-none d-sm-inline ms-2"><?= lang('Reports.toggle_cost_and_profit') ?></span>
+        <button type="button" class="btn btn-solid theme-secondary print:d-none" id="toggleCostProfitButton">
+            <i class="bi bi-toggles"></i><span class="d-none sm:d-inline ms-2"><?= lang('Reports.toggle_cost_and_profit') ?></span>
         </button>
     </div>
 </div>
@@ -33,15 +33,15 @@ echo view('configs/config_header', $title_info);
 <div id="report_summary">
     <?php
     foreach ($summary_data as $name => $value) {
-        if ($name == "total_quantity") {
+        if ($name === 'total_quantity') {
             ?>
-            <div class="summary_row"><?= lang("Reports.$name") . ": " . esc($value) ?></div>
+            <div class="summary_row"><?= lang("Reports.{$name}") . ': ' . esc($value) ?></div>
         <?php } else { ?>
-            <div class="summary_row"><?= lang("Reports.$name") . ': ' . to_currency($value) ?></div>
+            <div class="summary_row"><?= lang("Reports.{$name}") . ': ' . to_currency($value) ?></div>
             <?php
         }
     }
-    ?>
+?>
 </div>
 
 <script type="text/javascript">

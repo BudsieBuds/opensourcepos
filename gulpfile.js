@@ -92,8 +92,7 @@ gulp.task('copy-js', function() {
 // Copy the bootstrap style into its own folder so OSPOS can select it from the collection
 gulp.task('copy-bootstrap', function() {
     return Promise.all([
-        pipeline(gulp.src('./node_modules/bootstrap/dist/css/bootstrap.min.css*'),gulp.dest('public/resources/bootswatch/bootstrap')),
-        pipeline(gulp.src('./node_modules/bootstrap/dist/css/bootstrap.rtl.min.css*'),gulp.dest('public/resources/bootswatch/bootstrap'))
+        pipeline(gulp.src('./node_modules/bootstrap/dist/css/bootstrap.min.css*'),gulp.dest('public/resources/bootswatch/bootstrap'))
     ]);
 });
 
@@ -140,14 +139,26 @@ gulp.task('debug-js', function() {
         './public/js/imgpreview.full.jquery.js',
         './public/js/manage_tables.js',
         './public/js/nominatim.autocomplete.js']).pipe(rev()).pipe(gulp.dest('public/resources/js'));
-    return gulp.src('./app/Views/partial/header.php').pipe(inject(debugjs,{addRootSlash: false, ignorePath: '/public/', starttag: '<!-- inject:debug:js -->'})).pipe(gulp.dest('./app/Views/partial'));
+    return gulp.src('./app/Views/partial/header.php').pipe(inject(debugjs,{
+        addRootSlash: false,
+        ignorePath: '/public/',
+        starttag: '<!-- inject:debug:js -->',
+        transform: function(filepath) {
+            if (filepath.indexOf('bootstrap') !== -1 && filepath.indexOf('.bundle.js') !== -1) {
+                return '<script type="module" src="' + filepath + '"></script>';
+            }
+            return '<script src="' + filepath + '"></script>';
+        }
+    })).pipe(gulp.dest('./app/Views/partial'));
 });
 
 gulp.task('prod-js', function() {
 
     const prod0js = gulp.src('./node_modules/jquery/dist/jquery.min.js').pipe(rev()).pipe(gulp.dest('public/resources'));
 
-    const opensourcepos1js = gulp.src(['./node_modules/bootstrap/dist/js/bootstrap.min.js',
+    const bootstrapJs = gulp.src('./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js').pipe(rev()).pipe(gulp.dest('public/resources'));
+
+    const opensourcepos1js = gulp.src([
         './node_modules/bootstrap-table/dist/bootstrap-table.min.js',
         './node_modules/moment/min/moment.min.js',
         './node_modules/jquery-ui-dist/jquery-ui.min.js',
@@ -189,7 +200,17 @@ gulp.task('prod-js', function() {
         .pipe(gulp.dest('./public/resources/'));
 
     return gulp.src('./app/Views/partial/header.php').pipe(inject(
-        series(prod0js, prod1js), {addRootSlash: false, ignorePath: '/public/', starttag: '<!-- inject:prod:js -->'})).pipe(gulp.dest('./app/Views/partial'));
+        series(prod0js, bootstrapJs, prod1js), {
+            addRootSlash: false,
+            ignorePath: '/public/',
+            starttag: '<!-- inject:prod:js -->',
+            transform: function(filepath) {
+                if (filepath.indexOf('bootstrap') !== -1) {
+                    return '<script type="module" src="' + filepath + '"></script>';
+                }
+                return '<script src="' + filepath + '"></script>';
+            }
+        })).pipe(gulp.dest('./app/Views/partial'));
 
 });
 

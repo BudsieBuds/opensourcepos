@@ -1,23 +1,23 @@
 <?php
 /**
- * @var bool $logo_exists
+ * @var bool   $logo_exists
  * @var string $controller_name
- * @var array $config
+ * @var array  $config
  */
 ?>
 
-<?= form_open('config/saveInfo/', ['id' => 'info_config_form', 'enctype' => 'multipart/form-data', 'class' => 'needs-validation']) ?> <!-- TODO-BS5 add is-invalid and invalid-feeback from BS5 to boxes -->
+<?= form_open('config/saveInfo/', ['id' => 'info_config_form', 'enctype' => 'multipart/form-data', 'data-bs-validate' => '']) ?> <!-- TODO-BS5 add is-invalid and invalid-feeback from BS5 to boxes -->
 
     <?php
     $title_info['config_title'] = lang('Config.info_configuration');
-    echo view('configs/config_header', $title_info);
-    ?>
+echo view('configs/config_header', $title_info);
+?>
 
-    <ul id="error_message_box" class="info_error_message_box alert alert-warning d-none"></ul>
+    <ul id="error_message_box" class="info_error_message_box alert theme-warning d-none"></ul>
 
     <div class="row">
-        <div class="col-12 col-lg-6">
-            <label for="info-company" class="form-label"><?= lang('Config.company'); ?><sup><span class="badge text-primary"><i class="bi bi-asterisk"></i></span></sup></label>
+        <div class="col-12 lg:col-6">
+            <label for="info-company" class="form-label"><?= lang('Config.company'); ?><sup><span class="badge fg-primary"><i class="bi bi-asterisk"></i></span></sup></label>
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-shop-window"></i></span>
                 <input type="text" class="form-control" name="company" id="info-company" value="<?= $config['company']; ?>" required> <!-- TODO-BS5 invalid-feedback makes input borders not rounded? -->
@@ -28,7 +28,7 @@
 
     <div class="row mb-3">
         <label for="info-company_logo" class="form-label"><?= lang('Config.company_logo'); ?></label>
-        <div class="col-12 col-lg-6">
+        <div class="col-12 lg:col-6">
             <div id="info-company_logo" class="w-100 fileinput <?= $logo_exists ? 'fileinput-exists' : 'fileinput-new'; ?>" data-provides="fileinput">
                 <div class="input-group mb-3" aria-describedby="company-logo-desc">
                     <span class="input-group-text"><i class="bi bi-image"></i></span>
@@ -37,17 +37,17 @@
                         <img class="mh-100 mw-100" data-src="holder.js/100%x100%" alt="<?= esc(lang('Config.company_logo')) ?>" src="<?= esc($logo_src, 'attr') ?>">
                     </div>
                 </div>
-                <div type="button" class="btn btn-secondary btn-file me-2">
+                <div type="button" class="btn btn-solid theme-secondary btn-file me-2">
                     <span class="fileinput-new"><i class="bi bi-hand-index me-2"></i><?= lang('Config.company_select_image') ?></span>
                     <span class="fileinput-exists"><i class="bi bi-images me-2"></i><?= lang('Config.company_change_image') ?></span>
                     <input type="file" name="company_logo">
                 </div>
-                <a type="button" class="btn btn-outline-secondary fileinput-exists" data-dismiss="fileinput">
+                <a type="button" class="btn btn-outline theme-secondary fileinput-exists" data-dismiss="fileinput">
                     <i class="bi bi-eraser me-2"></i><?= lang('Config.company_remove_image') ?>
                 </a>
             </div>
         </div>
-        <div class="col-12 col-lg-6 form-text d-none d-lg-block" id="company-logo-desc">
+        <div class="col-12 lg:col-6 form-text d-none lg:d-block" id="company-logo-desc">
             <ul class="list-unstyled">
                 <li>&raquo; Supported file formats; gif, png, jpg</li> <!-- TODO-BS5 add to translations -->
                 <li>&raquo; Max upload size of 100kb</li> <!-- TODO-BS5 add to translations -->
@@ -56,7 +56,7 @@
         </div>
     </div>
 
-    <label for="info-address" class="form-label"><?= lang('Config.address'); ?><sup><span class="badge text-primary"><i class="bi bi-asterisk"></i></span></sup></label>
+    <label for="info-address" class="form-label"><?= lang('Config.address'); ?><sup><span class="badge fg-primary"><i class="bi bi-asterisk"></i></span></sup></label>
     <div class="input-group mb-3">
         <span class="input-group-text"><i class="bi bi-house"></i></span>
         <textarea class="form-control" name="address" id="info-address" rows="10" required><?= $config['address']; ?></textarea>
@@ -64,7 +64,7 @@
     </div>
 
     <div class="row">
-        <div class="col-12 col-lg-6">
+        <div class="col-12 lg:col-6">
             <label for="info-website" class="form-label"><?= lang('Config.website'); ?></label>
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-globe"></i></span>
@@ -72,7 +72,7 @@
             </div>
         </div>
 
-        <div class="col-12 col-lg-6">
+        <div class="col-12 lg:col-6">
             <label for="info-email" class="form-label"><?= lang('Config.email'); ?></label>
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-at"></i></span>
@@ -81,8 +81,8 @@
             </div>
         </div>
 
-        <div class="col-12 col-lg-6">
-            <label for="info-phone" class="form-label"><?= lang('Config.phone'); ?><sup><span class="badge text-primary"><i class="bi bi-asterisk"></i></span></sup></label>
+        <div class="col-12 lg:col-6">
+            <label for="info-phone" class="form-label"><?= lang('Config.phone'); ?><sup><span class="badge fg-primary"><i class="bi bi-asterisk"></i></span></sup></label>
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-telephone"></i></span>
                 <input type="tel" class="form-control" name="phone" id="info-phone" value="<?= $config['phone']; ?>" required>
@@ -90,7 +90,7 @@
             </div>
         </div>
 
-        <div class="col-12 col-lg-6">
+        <div class="col-12 lg:col-6">
             <label for="info-fax" class="form-label"><?= lang('Config.fax'); ?></label>
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-printer"></i></span>
@@ -99,7 +99,7 @@
         </div>
     </div>
 
-    <label for="info-return_policy" class="form-label"><?= lang('Common.return_policy'); ?><sup><span class="badge text-primary"><i class="bi bi-asterisk"></i></span></sup></label>
+    <label for="info-return_policy" class="form-label"><?= lang('Common.return_policy'); ?><sup><span class="badge fg-primary"><i class="bi bi-asterisk"></i></span></sup></label>
     <div class="input-group mb-3">
         <span class="input-group-text"><i class="bi bi-box-arrow-in-down-left"></i></span>
         <textarea class="form-control" name="return_policy" id="info-return_policy" rows="10" required><?= $config['return_policy']; ?></textarea>
@@ -107,7 +107,7 @@
     </div>
 
     <div class="d-flex justify-content-end">
-        <button type="submit" class="btn btn-primary" name="submit_info"><?= lang('Common.submit'); ?></button>
+        <button type="submit" class="btn btn-solid theme-primary" name="submit_info"><?= lang('Common.submit'); ?></button>
     </div>
 
 <?= form_close() ?>
@@ -118,7 +118,7 @@
         $("a.fileinput-exists").click(function() {
             $.ajax({
                 type: 'POST',
-                url: '<?= "$controller_name/removeLogo"; ?>',
+                url: '<?= "{$controller_name}/removeLogo"; ?>',
                 dataType: 'json'
             })
         });

@@ -52,7 +52,7 @@ class Throttle implements FilterInterface
         $ipOk       = $throttler->check($ipKey, $capacity, $seconds);
         $usernameOk = $usernameKey === null || $throttler->check($usernameKey, $capacity, $seconds);
 
-        if (!$ipOk || !$usernameOk) {
+        if (! $ipOk || ! $usernameOk) {
             log_message('warning', 'Login throttled for IP {ip} (username: {username})', [
                 'ip'       => $request->getIPAddress(),
                 'username' => $username !== '' ? $username : '(none)',

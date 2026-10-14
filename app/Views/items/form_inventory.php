@@ -1,15 +1,15 @@
 <?php
 /**
  * @var object $item_info
- * @var array $stock_locations
- * @var array $item_quantities
+ * @var array  $stock_locations
+ * @var array  $item_quantities
  * @var string $controller_name
  */
 ?>
 
-<?= form_open("items/saveInventory/$item_info->item_id", ['id' => 'item_form']) ?>
+<?= form_open("items/saveInventory/{$item_info->item_id}", ['id' => 'item_form']) ?>
 
-    <ul id="error_message_box" class="alert alert-warning d-none"></ul>
+    <ul id="error_message_box" class="alert theme-warning d-none"></ul>
 
     <label for="item_number" class="form-label"><?= lang('Items.item_number'); ?></label>
     <div class="input-group mb-3">
@@ -32,9 +32,9 @@
     <label for="stock_location" class="form-label"><?= lang('Items.stock_location'); ?></label>
     <div class="input-group mb-3">
         <span class="input-group-text"><i class="bi bi-boxes"></i></span>
-        <select class="form-select" name="stock_location" id="stock_location" onchange="fill_quantity(this.value)">
+        <select class="form-control" name="stock_location" id="stock_location" onchange="fill_quantity(this.value)">
             <?php foreach ($stock_locations as $value => $label): ?>
-                <option value="<?= $value ?>" <?= $value == current($stock_locations) ? 'selected' : '' ?>><?= $label ?></option>
+                <option value="<?= $value ?>" <?= $value === current($stock_locations) ? 'selected' : '' ?>><?= $label ?></option>
             <?php endforeach; ?>
         </select>
     </div>

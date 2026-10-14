@@ -15,7 +15,7 @@ class Detailed_item_sales extends Report
     public function getDataColumns(): array
     {
         return [
-            ['sale_time'     => lang('Reports.date')],
+            ['sale_time' => lang('Reports.date')],
             ['sale_id'       => lang('Reports.sale_id')],
             ['customer_name' => lang('Reports.sold_to')],
             ['item_name'     => lang('Reports.item')],

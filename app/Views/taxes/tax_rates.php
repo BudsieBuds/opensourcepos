@@ -2,7 +2,7 @@
 /**
  * @var string $controller_name
  * @var string $tax_rate_table_headers
- * @var array $config
+ * @var array  $config
  */
 ?>
 
@@ -18,16 +18,16 @@
     });
 </script>
 
-<div class="d-flex gap-2 justify-content-end d-print-none">
-    <button type="button" class="btn btn-primary modal-launch" data-btn-submit="<?= lang('Common.submit') ?>" data-href="<?= esc("$controller_name/view") ?>" title="<?= lang(ucfirst($controller_name) . ".new") ?>">
-        <i class="bi bi-piggy-bank me-2"></i><?= lang(ucfirst($controller_name) . ".new") ?>
+<div class="d-flex gap-2 justify-content-end print:d-none">
+    <button type="button" class="btn btn-solid theme-primary modal-launch" data-btn-submit="<?= lang('Common.submit') ?>" data-href="<?= esc("{$controller_name}/view") ?>" title="<?= lang(ucfirst($controller_name) . '.new') ?>">
+        <i class="bi bi-piggy-bank me-2"></i><?= lang(ucfirst($controller_name) . '.new') ?>
     </button>
 </div>
 
 <div id="toolbar">
     <div class="d-flex gap-2">
-        <button type="button" class="btn btn-secondary d-print-none" id="delete">
-            <i class="bi bi-trash"></i><span class="d-none d-sm-inline ms-2"><?= lang('Common.delete') ?></span>
+        <button type="button" class="btn btn-solid theme-secondary print:d-none" id="delete">
+            <i class="bi bi-trash"></i><span class="d-none sm:d-inline ms-2"><?= lang('Common.delete') ?></span>
         </button>
     </div>
 </div>

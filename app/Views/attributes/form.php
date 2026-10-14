@@ -2,17 +2,17 @@
 /**
  * @var string $definition_id
  * @var object $definition_info
- * @var array $definition_group
- * @var array $definition_flags
- * @var array $selected_definition_flags
+ * @var array  $definition_group
+ * @var array  $definition_flags
+ * @var array  $selected_definition_flags
  * @var string $controller_name
- * @var array $definition_values
+ * @var array  $definition_values
  */
 ?>
 
-<?= form_open("attributes/saveDefinition/$definition_id", ['id' => 'attribute_form']) ?>
+<?= form_open("attributes/saveDefinition/{$definition_id}", ['id' => 'attribute_form']) ?>
 
-    <ul id="error_message_box" class="alert alert-warning d-none"></ul>
+    <ul id="error_message_box" class="alert theme-warning d-none"></ul>
 
     <label for="definition_name" class="form-label"><?= lang('Attributes.definition_name'); ?></label>
     <div class="input-group mb-3">
@@ -23,9 +23,9 @@
     <label for="definition_type" class="form-label"><?= lang('Attributes.definition_type'); ?></label>
     <div class="input-group mb-3">
         <span class="input-group-text" id="definition_type-icon"><i class="bi bi-list"></i></span>
-        <select class="form-select" name="definition_type" id="definition_type" aria-describedby="definition_type-icon">
+        <select class="form-control" name="definition_type" id="definition_type" aria-describedby="definition_type-icon">
             <?php foreach (DEFINITION_TYPES as $key => $label): ?>
-                <option value="<?= $key ?>" <?= ($key === array_search($definition_info->definition_type, DEFINITION_TYPES)) ? 'selected' : '' ?>>
+                <option value="<?= $key ?>" <?= ($key === array_search($definition_info->definition_type, DEFINITION_TYPES, true)) ? 'selected' : '' ?>>
                     <?= $label ?>
                 </option>
             <?php endforeach; ?>
@@ -35,9 +35,9 @@
     <label for="definition_group" class="form-label"><?= lang('Attributes.definition_group'); ?></label>
     <div class="input-group mb-3">
         <span class="input-group-text" id="definition_group-icon"><i class="bi bi-collection"></i></span>
-        <select class="form-select" name="definition_group" id="definition_group" aria-describedby="definition_group-icon" <?= empty($definition_group) ? 'disabled' : '' ?>>
+        <select class="form-control" name="definition_group" id="definition_group" aria-describedby="definition_group-icon" <?= empty($definition_group) ? 'disabled' : '' ?>>
             <?php foreach ($definition_group as $key => $label): ?>
-                <option value="<?= $key ?>" <?= ($key == $definition_info->definition_fk) ? 'selected' : '' ?>>
+                <option value="<?= $key ?>" <?= ($key === $definition_info->definition_fk) ? 'selected' : '' ?>>
                     <?= $label ?>
                 </option>
             <?php endforeach; ?>
@@ -48,9 +48,9 @@
         <label for="definition_flags" class="form-label"><?= lang('Attributes.definition_flags'); ?></label>
         <div class="input-group mb-3">
             <span class="input-group-text" id="definition_flags-icon"><i class="bi bi-eyeglasses"></i></span>
-            <select class="form-select" name="definition_flags[]" id="definition_flags" aria-describedby="definition_flags-icon" multiple>
+            <select class="form-control" name="definition_flags[]" id="definition_flags" aria-describedby="definition_flags-icon" multiple>
                 <?php foreach ($definition_flags as $key => $label): ?>
-                    <option value="<?= $key ?>" <?= in_array($key, array_keys($selected_definition_flags)) ? 'selected' : '' ?>>
+                    <option value="<?= $key ?>" <?= in_array($key, array_keys($selected_definition_flags), true) ? 'selected' : '' ?>>
                         <?= $label ?>
                     </option>
                 <?php endforeach; ?>
@@ -71,7 +71,7 @@
         <div class="input-group mb-3">
             <span class="input-group-text" id="definition_value-icon"><i class="bi bi-list"></i></span>
             <input type="text" class="form-control" name="definition_value" id="definition_value" aria-describedby="definition_value-icon">
-            <button type="button" class="btn btn-outline-secondary" id="add_attribute_value"><i class="bi bi-plus-circle"></i></button>
+            <button type="button" class="btn btn-outline theme-secondary" id="add_attribute_value"><i class="bi bi-plus-circle"></i></button>
         </div>
     </div>
 
@@ -144,7 +144,7 @@
             if (is_new) {
                 values.splice($.inArray(value, values), 1);
             } else {
-                $.post('<?= esc("$controller_name/DeleteDropdownAttributeValue/") ?>', {
+                $.post('<?= esc("{$controller_name}/DeleteDropdownAttributeValue/") ?>', {
                     definition_id: definition_id,
                     attribute_value: value
                 });
@@ -169,14 +169,14 @@
                 if (is_new) {
                     values.push(value);
                 } else {
-                    $.post('<?= "attributes/saveAttributeValue/" ?>', {
+                    $.post('<?= 'attributes/saveAttributeValue/' ?>', {
                         definition_id: definition_id,
                         attribute_value: value
                     });
                 }
             }
 
-            $('#definition_list_group').append('<li class="list-group-item list-group-item-action d-flex justify-content-between">' + DOMPurify.sanitize(value) + '<a href="javascript:void(0);"><span class="text-danger"><i class="bi bi-trash"></i></span></a></li>')
+            $('#definition_list_group').append('<li class="list-group-item list-group-item-action d-flex justify-content-between">' + DOMPurify.sanitize(value) + '<a href="javascript:void(0);"><span class="fg-danger"><i class="bi bi-trash"></i></span></a></li>')
                 .find(':last-child a').click(remove_attribute_value);
             $('#definition_value').val('');
         };

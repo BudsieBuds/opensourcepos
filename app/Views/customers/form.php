@@ -2,28 +2,28 @@
 /**
  * @var string $controller_name
  * @var object $person_info
- * @var array $packages
- * @var int $selected_package
- * @var bool $use_destination_based_tax
+ * @var array  $packages
+ * @var int    $selected_package
+ * @var bool   $use_destination_based_tax
  * @var string $sales_tax_code_label
  * @var string $employee
- * @var array $config
+ * @var array  $config
  */
 ?>
 
-<?= form_open("$controller_name/save/$person_info->person_id", ['id' => 'customer_form']) ?>
+<?= form_open("{$controller_name}/save/{$person_info->person_id}", ['id' => 'customer_form']) ?>
 
-    <?php if (!empty($stats) || (!empty($mailchimp_info) && !empty($mailchimp_activity))) { ?>
+    <?php if (! empty($stats) || (! empty($mailchimp_info) && ! empty($mailchimp_activity))) { ?>
         <ul class="nav nav-pills nav-justified mb-3" role="tablist">
             <li class="nav-item" role="presentation">
                 <button type="button" class="nav-link active" data-bs-toggle="pill" data-bs-target="#customer_basic_info" role="tab"><?= lang('Customers.basic_information') ?></button>
             </li>
-            <?php if (!empty($stats)) { ?>
+            <?php if (! empty($stats)) { ?>
                 <li class="nav-item" role="presentation">
                     <button type="button" class="nav-link" data-bs-toggle="pill" data-bs-target="#customer_stats_info" role="tab"><?= lang('Customers.stats_info') ?></button>
                 </li>
             <?php } ?>
-            <?php if (!empty($mailchimp_info) && !empty($mailchimp_activity)) { ?>
+            <?php if (! empty($mailchimp_info) && ! empty($mailchimp_activity)) { ?>
                 <li class="nav-item" role="presentation">
                     <button type="button" class="nav-link" data-bs-toggle="pill" data-bs-target="#customer_mailchimp_info" role="tab"><?= lang('Customers.mailchimp_info') ?></button>
                 </li>
@@ -31,26 +31,33 @@
         </ul>
     <?php } ?>
 
-    <ul id="error_message_box" class="alert alert-warning d-none"></ul>
+    <ul id="error_message_box" class="alert theme-warning d-none"></ul>
 
     <div class="tab-content">
         <div class="tab-pane show active" id="customer_basic_info" role="tabpanel" tabindex="0">
-            <div class="form-check mb-3">
-                <input class="form-check-input" type="checkbox" name="consent" id="consent" value="1" required <?php $checked = ($person_info->consent == '' ? !$config['enforce_privacy'] : (bool)$person_info->consent); if ($checked) { echo 'checked';} ?>>
-                <label class="form-check-label" for="consent"><?= lang('Customers.consent') ?><sup><span class="badge text-primary"><i class="bi bi-asterisk"></i></span></sup></label>
+            <div class="form-field mb-3">
+        <input class="check" type="checkbox" name="consent" id="consent" value="1" required <?php $checked = ($person_info->consent === '' ? ! $config['enforce_privacy'] : (bool) $person_info->consent);
+if ($checked) {
+    echo 'checked';
+} ?>>
+        <label for="consent"><?= lang('Customers.consent') ?><sup><span class="badge fg-primary"><i class="bi bi-asterisk"></i></span></sup></label>
             </div>
 
             <?= view('people/form_basic_info') ?>
 
             <label for="discount_type" class="form-label"><?= lang('Customers.discount_type') ?></label>
             <div class="mb-3">
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="discount_type" id="discount_type_percent" value="0" <?php if ($person_info->discount_type == PERCENT) echo 'checked'; ?>>
-                    <label class="form-check-label" for="discount_type_percent"><?= lang('Customers.discount_percent') ?></label>
+                <div class="form-field d-inline-flex me-3">
+        <input class="radio" type="radio" name="discount_type" id="discount_type_percent" value="0" <?php if ($person_info->discount_type === PERCENT) {
+            echo 'checked';
+        } ?>>
+        <label for="discount_type_percent"><?= lang('Customers.discount_percent') ?></label>
                 </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="discount_type" id="discount_type_fixed" value="1" <?php if ($person_info->discount_type == FIXED) echo 'checked'; ?>>
-                    <label class="form-check-label" for="discount_type_fixed"><?= lang('Customers.discount_fixed') ?></label>
+                <div class="form-field d-inline-flex me-3">
+        <input class="radio" type="radio" name="discount_type" id="discount_type_fixed" value="1" <?php if ($person_info->discount_type === FIXED) {
+            echo 'checked';
+        } ?>>
+        <label for="discount_type_fixed"><?= lang('Customers.discount_fixed') ?></label>
                 </div>
             </div>
 
@@ -82,9 +89,9 @@
                 <label for="rewards" class="form-label"><?= lang('Customers.rewards_package'); ?></label>
                 <div class="input-group mb-3">
                     <span class="input-group-text"><i class="bi bi-trophy"></i></span>
-                    <select class="form-select" name="package_id">
+                    <select class="form-control" name="package_id">
                         <?php foreach ($packages as $id => $label): ?>
-                            <option value="<?= $id ?>" <?= $id == $selected_package ? 'selected' : '' ?>><?= $label ?></option>
+                            <option value="<?= $id ?>" <?= $id === $selected_package ? 'selected' : '' ?>><?= $label ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -96,9 +103,11 @@
                 </div>
             <?php endif; ?>
 
-            <div class="form-check mb-3">
-                <input class="form-check-input" type="checkbox" name="taxable" id="taxable" value="1" <?php if ($person_info->taxable == 1) echo 'checked'; ?>>
-                <label class="form-check-label" for="taxable"><?= lang('Customers.taxable') ?></label>
+            <div class="form-field mb-3">
+        <input class="check" type="checkbox" name="taxable" id="taxable" value="1" <?php if ($person_info->taxable === 1) {
+            echo 'checked';
+        } ?>>
+        <label for="taxable"><?= lang('Customers.taxable') ?></label>
             </div>
 
             <?php if ($use_destination_based_tax): ?>
@@ -125,11 +134,11 @@
             </div>
         </div>
 
-        <?php if (!empty($stats)) { ?>
+        <?php if (! empty($stats)) { ?>
             <div class="tab-pane" id="customer_stats_info" role="tabpanel" tabindex="0">
                 <label for="total" class="form-label"><?= lang('Customers.total'); ?></label>
                 <div class="input-group mb-3">
-                    <?php if (!is_right_side_currency_symbol()): ?>
+                    <?php if (! is_right_side_currency_symbol()): ?>
                         <span class="input-group-text" id="total-icon"><?= esc($config['currency_symbol']) ?></span>
                     <?php endif; ?>
                     <input type="text" class="form-control" name="total" id="total" aria-describedby="total-icon" value="<?= to_currency_no_money($stats->total) ?>" disabled readonly>
@@ -140,7 +149,7 @@
 
                 <label for="max" class="form-label"><?= lang('Customers.max'); ?></label>
                 <div class="input-group mb-3">
-                    <?php if (!is_right_side_currency_symbol()): ?>
+                    <?php if (! is_right_side_currency_symbol()): ?>
                         <span class="input-group-text" id="max-icon"><?= esc($config['currency_symbol']) ?></span>
                     <?php endif; ?>
                     <input type="text" class="form-control" name="max" id="max" aria-describedby="max-icon" value="<?= to_currency_no_money($stats->max) ?>" disabled readonly>
@@ -151,7 +160,7 @@
 
                 <label for="min" class="form-label"><?= lang('Customers.min'); ?></label>
                 <div class="input-group mb-3">
-                    <?php if (!is_right_side_currency_symbol()): ?>
+                    <?php if (! is_right_side_currency_symbol()): ?>
                         <span class="input-group-text" id="min-icon"><?= esc($config['currency_symbol']) ?></span>
                     <?php endif; ?>
                     <input type="text" class="form-control" name="min" id="min" aria-describedby="min-icon" value="<?= to_currency_no_money($stats->min) ?>" disabled readonly>
@@ -162,7 +171,7 @@
 
                 <label for="average" class="form-label"><?= lang('Customers.average'); ?></label>
                 <div class="input-group mb-3">
-                    <?php if (!is_right_side_currency_symbol()): ?>
+                    <?php if (! is_right_side_currency_symbol()): ?>
                         <span class="input-group-text" id="average-icon"><?= esc($config['currency_symbol']) ?></span>
                     <?php endif; ?>
                     <input type="text" class="form-control" name="average" id="average" aria-describedby="average-icon" value="<?= to_currency_no_money($stats->average) ?>" disabled readonly>
@@ -185,12 +194,12 @@
             </div>
         <?php } ?>
 
-        <?php if (!empty($mailchimp_info) && !empty($mailchimp_activity)) { ?>
+        <?php if (! empty($mailchimp_info) && ! empty($mailchimp_activity)) { ?>
             <div class="tab-pane" id="customer_mailchimp_info" role="tabpanel" tabindex="0">
                 <label for="mailchimp_status" class="form-label"><?= lang('Customers.mailchimp_status'); ?></label>
                 <div class="input-group mb-3">
                     <span class="input-group-text"><i class="bi bi-envelope-check"></i></span>
-                    <select class="form-select" name="mailchimp_status" id="mailchimp_status">
+                    <select class="form-control" name="mailchimp_status" id="mailchimp_status">
                         <option value="subscribed" <?= $mailchimp_info['status'] === 'subscribed' ? 'selected' : '' ?>>Subscribed</option>
                         <option value="unsubscribed" <?= $mailchimp_info['status'] === 'unsubscribed' ? 'selected' : '' ?>>Unsubscribed</option>
                         <option value="cleaned" <?= $mailchimp_info['status'] === 'cleaned' ? 'selected' : '' ?>>Cleaned</option>
@@ -198,9 +207,9 @@
                     </select>
                 </div>
 
-                <div class="form-check mb-3">
-                    <input class="form-check-input" type="checkbox" name="mailchimp_vip" id="mailchimp_vip" value="1" <?= $mailchimp_info['vip'] == 1 ? 'checked' : '' ?>>
-                    <label class="form-check-label" for="mailchimp_vip"><?= lang('Customers.mailchimp_vip') ?></label>
+                <div class="form-field mb-3">
+        <input class="check" type="checkbox" name="mailchimp_vip" id="mailchimp_vip" value="1" <?= $mailchimp_info['vip'] === 1 ? 'checked' : '' ?>>
+        <label for="mailchimp_vip"><?= lang('Customers.mailchimp_vip') ?></label>
                 </div>
 
                 <label for="mailchimp_member_rating" class="form-label"><?= lang('Customers.mailchimp_member_rating'); ?></label>
@@ -270,7 +279,7 @@
             minChars: 0,
             delay: 15,
             cacheLength: 1,
-            appendTo: '.modal-content',
+            appendTo: '.dialog-body, .modal-content',
             select: fill_value,
             focus: fill_value
         });
@@ -294,7 +303,7 @@
                 consent: 'required',
                 email: {
                     remote: {
-                        url: "<?= "$controller_name/checkEmail" ?>",
+                        url: "<?= "{$controller_name}/checkEmail" ?>",
                         type: 'POST',
                         data: {
                             'person_id': "<?= $person_info->person_id ?>"
@@ -304,7 +313,7 @@
                 },
                 account_number: {
                     remote: {
-                        url: "<?= "$controller_name/checkAccountNumber" ?>",
+                        url: "<?= "{$controller_name}/checkAccountNumber" ?>",
                         type: 'POST',
                         data: {
                             'person_id': "<?= $person_info->person_id ?>"

@@ -10,30 +10,32 @@
 
     <?php
     $title_info['config_title'] = lang('Config.invoice_configuration');
-    echo view('configs/config_header', $title_info);
-    ?>
+echo view('configs/config_header', $title_info);
+?>
 
-    <ul id="error_message_box" class="invoice_error_message_box alert alert-warning d-none"></ul>
+    <ul id="error_message_box" class="invoice_error_message_box alert theme-warning d-none"></ul>
 
-    <div class="form-check form-switch mb-3">
-        <input class="form-check-input" type="checkbox" role="switch" id="invoice_enable" name="invoice_enable" value="invoice_enable" <?= $config['invoice_enable'] == 1 ? 'checked' : '' ?>>
-        <label class="form-check-label" for="invoice_enable"><?= lang('Config.invoice_enable'); ?></label>
+    <div class="form-field mb-3">
+        <div class="switch">
+            <input type="checkbox" role="switch" switch id="invoice_enable" name="invoice_enable" value="invoice_enable" <?= $config['invoice_enable'] === 1 ? 'checked' : '' ?>>
+        </div>
+        <label for="invoice_enable"><?= lang('Config.invoice_enable'); ?></label>
     </div>
 
     <div class="row">
-        <div class="col-12 col-lg-6">
+        <div class="col-12 lg:col-6">
             <label for="invoice_type" class="form-label"><?= lang('Config.invoice_type'); ?></label>
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-file-code"></i></span>
-                <select class="form-select" name="invoice_type">
+                <select class="form-control" name="invoice_type">
                     <?php foreach ($invoice_type_options as $key => $value): ?>
-                        <option value="<?= $key ?>" <?= $key == $config['invoice_type'] ? 'selected' : '' ?>><?= $value ?></option>
+                        <option value="<?= $key ?>" <?= $key === $config['invoice_type'] ? 'selected' : '' ?>><?= $value ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
         </div>
 
-        <div class="col-12 col-lg-6">
+        <div class="col-12 lg:col-6">
             <label for="recv_invoice_format" class="form-label"><?= lang('Config.recv_invoice_format'); ?></label>
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-braces"></i></span>
@@ -55,13 +57,13 @@
     </div>
 
     <div class="row">
-        <div class="col-12 col-lg-6">
+        <div class="col-12 lg:col-6">
             <label for="line_sequence" class="form-label"><?= lang('Config.line_sequence'); ?></label>
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-list-ol"></i></span>
-                <select class="form-select" name="line_sequence">
+                <select class="form-control" name="line_sequence">
                 <?php foreach ($line_sequence_options as $key => $value): ?>
-                    <option value="<?= $key ?>" <?= $key == $config['line_sequence'] ? 'selected' : '' ?>><?= $value ?></option>
+                    <option value="<?= $key ?>" <?= $key === $config['line_sequence'] ? 'selected' : '' ?>><?= $value ?></option>
                 <?php endforeach; ?>
             </select>
             </div>
@@ -69,7 +71,7 @@
     </div>
 
     <div class="row">
-        <div class="col-12 col-lg-6">
+        <div class="col-12 lg:col-6">
             <label for="sales_invoice_format" class="form-label"><?= lang('Config.sales_invoice_format'); ?></label>
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-braces"></i></span>
@@ -77,7 +79,7 @@
             </div>
         </div>
 
-        <div class="col-12 col-lg-6">
+        <div class="col-12 lg:col-6">
             <label for="last_used_invoice_number" class="form-label"><?= lang('Config.last_used_invoice_number'); ?></label>
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-123"></i></span>
@@ -85,7 +87,7 @@
             </div>
         </div>
 
-        <div class="col-12 col-lg-6">
+        <div class="col-12 lg:col-6">
             <label for="sales_quote_format" class="form-label"><?= lang('Config.sales_quote_format'); ?></label>
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-braces"></i></span>
@@ -93,7 +95,7 @@
             </div>
         </div>
 
-        <div class="col-12 col-lg-6">
+        <div class="col-12 lg:col-6">
             <label for="last_used_quote_number" class="form-label"><?= lang('Config.last_used_quote_number'); ?></label>
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-123"></i></span>
@@ -108,13 +110,15 @@
         <textarea class="form-control" name="quote_default_comments" id="quote_default_comments" rows="10" required><?= $config['quote_default_comments']; ?></textarea>
     </div>
 
-    <div class="form-check form-switch mb-3">
-        <input class="form-check-input" type="checkbox" role="switch" id="work_order_enable" name="work_order_enable" value="work_order_enable" <?= $config['work_order_enable'] == 1 ? 'checked' : '' ?>>
-        <label class="form-check-label" for="work_order_enable"><?= lang('Config.work_order_enable'); ?></label>
+    <div class="form-field mb-3">
+        <div class="switch">
+            <input type="checkbox" role="switch" switch id="work_order_enable" name="work_order_enable" value="work_order_enable" <?= $config['work_order_enable'] === 1 ? 'checked' : '' ?>>
+        </div>
+        <label for="work_order_enable"><?= lang('Config.work_order_enable'); ?></label>
     </div>
 
     <div class="row">
-        <div class="col-12 col-lg-6">
+        <div class="col-12 lg:col-6">
             <label for="work_order_format" class="form-label"><?= lang('Config.work_order_format'); ?></label>
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-braces"></i></span>
@@ -122,7 +126,7 @@
             </div>
         </div>
 
-        <div class="col-12 col-lg-6">
+        <div class="col-12 lg:col-6">
             <label for="last_used_work_order_number" class="form-label"><?= lang('Config.last_used_work_order_number'); ?></label>
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-123"></i></span>
@@ -132,7 +136,7 @@
     </div>
 
     <div class="d-flex justify-content-end">
-        <button type="submit" class="btn btn-primary" name="submit_invoice"><?= lang('Common.submit'); ?></button>
+        <button type="submit" class="btn btn-solid theme-primary" name="submit_invoice"><?= lang('Common.submit'); ?></button>
     </div>
 
 <?= form_close() ?>

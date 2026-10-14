@@ -8,17 +8,17 @@
 
     <?php
     $title_info['config_title'] = lang('Config.location_configuration');
-    echo view('configs/config_header', $title_info);
-    ?>
+echo view('configs/config_header', $title_info);
+?>
 
-    <ul id="error_message_box" class="stock_error_message_box alert alert-warning d-none"></ul>
+    <ul id="error_message_box" class="stock_error_message_box alert theme-warning d-none"></ul>
 
     <div id="stock_locations">
         <?= view('partial/stock_locations', ['stock_locations' => $stock_locations]) ?>
     </div>
 
     <div class="d-flex justify-content-end">
-        <button type="submit" class="btn btn-primary" name="submit_stock"><?= lang('Common.submit'); ?></button>
+        <button type="submit" class="btn btn-solid theme-primary" name="submit_stock"><?= lang('Common.submit'); ?></button>
     </div>
 
 <?= form_close() ?>
@@ -26,7 +26,7 @@
 <script type="text/javascript">
     // Validation and submit handling
     $(document).ready(function() {
-        let location_count = <?= sizeof($stock_locations) ?>;
+        let location_count = <?= count($stock_locations) ?>;
 
         const hide_show_remove = function() {
             if ($("input[name*='stock_location']:enabled").length > 1) {
@@ -40,7 +40,7 @@
             const block = $(this).parent().clone(true);
             const new_block = block.insertAfter($(this).parent());
             const new_block_id = 'stock_location[]';
-            $(new_block).find('label').html("<?= lang('Config.stock_location') ?> " + ++location_count).attr('for', new_block_id).attr('class', 'control-label col-xs-2'); // TODO-BS5 change classes from bs3 to bs5
+            $(new_block).find('label').html("<?= lang('Config.stock_location') ?> " + ++location_count).attr('for', new_block_id).attr('class', 'control-label col-2'); // TODO-BS5 change classes from bs3 to bs5
             $(new_block).find('input').attr('id', new_block_id).removeAttr('disabled').attr('name', new_block_id).attr('class', 'form-control input-sm').val(''); // TODO-BS5 change classes from bs3 to bs5
             hide_show_remove();
         };
@@ -81,7 +81,7 @@
                         }, {
                             type: response.success ? 'success' : 'danger'
                         });
-                        $("#stock_locations").load('<?= "config/stockLocations" ?>', init_add_remove_locations);
+                        $("#stock_locations").load('<?= 'config/stockLocations' ?>', init_add_remove_locations);
                     },
                     dataType: 'json'
                 });
@@ -91,10 +91,10 @@
 
             rules: {
                 <?php
-                $i = 0;
+            $i = 0;
 
-                foreach ($stock_locations as $location => $location_data) {
-                ?>
+foreach ($stock_locations as $location => $location_data) {
+    ?>
                     <?= 'stock_location_' . ++$i ?>: {
                         required: true,
                         stock_location: true,
@@ -105,10 +105,10 @@
 
             messages: {
                 <?php
-                $i = 0;
+    $i = 0;
 
-                foreach ($stock_locations as $location => $location_data) {
-                ?>
+foreach ($stock_locations as $location => $location_data) {
+    ?>
                     <?= 'stock_location_' . ++$i ?>: "<?= lang('Config.stock_location_required') ?>",
                 <?php } ?>
             }
