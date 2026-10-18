@@ -1,48 +1,24 @@
-# Jekyll
-_site
-.sass-cache
-.jekyll-cache
-.jekyll-metadata
-vendor
+.vscode
 
-# Dependency directories
-node_modules
+# build output
+dist/
 
-# Editors
-## SublimeText
-*.tmlanguage.cache
-*.tmPreferences.cache
-*.stTheme.cache
-*.sublime-workspace
+# generated types
+.astro/
 
-## VisualStudioCode
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
+# dependencies
+node_modules/
 
-## Vim
-*.sw[a-p]
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
-## WebStorm/IntelliJ
-/.idea
-modules.xml
-*.ipr
-*.iml
 
-# System files
-*.DS_Store
-Thumbs.db
-ehthumbs.db
-ehthumbs_vista.db
-Desktop.ini
-$RECYCLE.BIN/
-._*
-.DocumentRevisions-V100
-.fseventsd
-.Spotlight-V100
-.TemporaryItems
-.Trashes
-.VolumeIcon.icns
-.com.apple.timemachine.donotpresent
+# environment variables
+.env
+.env.production
+
+# macOS-specific files
+.DS_Store
