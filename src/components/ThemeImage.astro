@@ -1,0 +1,24 @@
+---
+interface Props {
+  light: string;
+  dark?: string;
+  alt: string;
+  caption?: string;
+  class?: string;
+}
+
+const { light, dark, alt, caption, class: className = '' } = Astro.props;
+---
+
+<figure class={`theme-image-wrapper ${className}`}>
+  {dark ? (
+    <>
+      <img src={light} alt={alt} class="screenshot light-only" loading="lazy" />
+      <img src={dark} alt={alt} class="screenshot dark-only" loading="lazy" />
+    </>
+  ) : (
+    <img src={light} alt={alt} class="screenshot" loading="lazy" />
+  )}
+  {caption && <figcaption class="theme-caption">{caption}</figcaption>}
+</figure>
+

@@ -1,0 +1,128 @@
+---
+title: Open Source Point of Sale
+description: The free, flexible, and open source web-based POS system for retail stores, restaurants, and small businesses.
+template: splash
+hero:
+  title: Open Source Point of Sale
+  tagline: The modern, free, and open-source web-based POS application for retail stores, hospitality, and businesses worldwide. Zero licensing fees, complete data ownership.
+  image:
+    file: ../../assets/logo.svg
+  actions:
+    - text: Documentation & Guides
+      link: /getting-started/overview/
+      icon: right-arrow
+      variant: primary
+    - text: Try Live Demo
+      link: https://demo.opensourcepos.org/
+      icon: external
+      variant: secondary
+      attrs:
+        target: _blank
+        rel: noopener noreferrer
+    - text: GitHub Repository
+      link: https://github.com/opensourcepos/opensourcepos
+      icon: external
+      variant: minimal
+      attrs:
+        target: _blank
+        rel: noopener noreferrer
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+:::tip[Experience the Live Demo Instantly]
+Test drive OSPOS right in your browser without installing anything:
+- **Public Demo**: [demo.opensourcepos.org](https://demo.opensourcepos.org/)
+- **Username**: `admin`
+- **Password**: `pointofsale`
+- **Development Demo**: [dev-demo.opensourcepos.org](https://dev-demo.opensourcepos.org/) *(Bleeding-edge master build)*
+:::
+
+---
+
+## Everything Your Business Needs
+
+<CardGrid stagger>
+  <Card title="⚡ Fast & Intuitive POS Register" icon="laptop">
+    Barcode scanner and touch-screen ready. Process sales, returns, quotation estimates, repair work orders, and restaurant table dining with split payments and gift cards.
+  </Card>
+  <Card title="📦 Multi-Location Inventory & Kits" icon="open-book">
+    Track real-time stock across multiple locations. Support for serialized products, composite item kits, custom attributes (sizes, colors, vintages), and automated reorder alerts.
+  </Card>
+  <Card title="👥 Customers, Loyalty & Store Credit" icon="star">
+    Track customer profiles, complete purchase histories, reward discount points, credit limits, and accounts receivable (Due tracking) with automated monthly statements.
+  </Card>
+  <Card title="🖨️ Hardware & Peripheral Integration" icon="setting">
+    Connect industry-standard hardware: ESC/POS thermal receipt printers (USB, Network/IP, Serial, WebUSB), cash drawers, 1D/2D barcode scanners, and weighing scales.
+  </Card>
+  <Card title="🧾 Global Taxes, Invoicing & GST" icon="document">
+    Support for sales tax, VAT, compound taxes, and full India GST (CGST/SGST/IGST + HSN codes). Generate customizable receipts, quotes, and UBL e-invoices.
+  </Card>
+  <Card title="🔒 100% Open Source & Self-Hosted" icon="puzzle">
+    Zero licensing fees and zero vendor lock-in. Built on PHP (CodeIgniter 4) and MariaDB/MySQL. Run on Docker, your own cloud server, Raspberry Pi, or local network.
+  </Card>
+  <Card title="🌐 Multilingual & Localized" icon="translate">
+    Translated into more than 40 languages thanks to the global Weblate community. Full support for localized currency symbols, formats, timezones, and alternate receipt currencies.
+  </Card>
+  <Card title="📊 Comprehensive Reports & Till Cashup" icon="information">
+    Reconcile daily registers with Cashup till balancing. Detailed business reports for sales, profit margins, inventory valuation, taxes, and operational expenses.
+  </Card>
+</CardGrid>
+
+---
+
+## Why Choose OSPOS vs Proprietary POS Systems?
+
+| Feature | Open Source Point of Sale | Typical Proprietary Cloud POS (Square, Clover, Lightspeed) |
+| :--- | :---: | :---: |
+| **Software Cost** | **$0 (Free & Open Source)** | $60 to $250+ / month *per register* |
+| **Payment Processor Lock-in** | **None** (Use any bank or card terminal) | Locked into high-fee proprietary processing |
+| **Data Privacy & Ownership** | **100% Your Data** on your server | Stored on third-party cloud servers |
+| **Offline / Local Network** | **Works on Local Network** (even without internet) | Degrades or fails when internet drops |
+| **Hardware Compatibility** | **Any standard ESC/POS printer, scanner, drawer** | Expensive proprietary hardware locked to vendor |
+| **Customizability** | **Full Source Code Access** (PHP / CodeIgniter 4) | Closed source, zero code modifications |
+| **Multi-Location Inventory** | **Built-in & Unlimited** | Often locked behind expensive enterprise tiers |
+
+---
+
+## Built for Every Industry
+
+- **🛒 Retail Boutiques & Apparel**: Size/color variants, barcode label generation, customer loyalty points, and seasonal promotions.
+- **☕ Cafes, Delis & Bakeries**: Fast item touch keys, table dining service, split bills, and weight-embedded scale barcodes for meats and cheeses.
+- **🔧 Repair & Service Shops**: Work orders, serial number tracking, technician labor hours, and itemized customer quotes.
+- **📚 Bookstores & Specialty Shops**: Rapid ISBN/EAN scanning, customer special orders, supplier purchase orders, and low-stock reorder alerts.
+- **🤝 Non-Profits & Community Co-ops**: Zero software subscription overhead, volunteer-friendly cashier screens, and itemized donation tracking.
+
+---
+
+## Quickstart in 60 Seconds with Docker
+
+Deploy OSPOS on any Linux, Windows, or macOS workstation with Docker Compose:
+
+```bash
+# 1. Download the production docker-compose file
+curl -O https://raw.githubusercontent.com/opensourcepos/opensourcepos/master/docker-compose.yml
+
+# 2. Create the configuration secret file
+touch .env
+
+# 3. Launch OSPOS and MariaDB
+docker compose up -d
+```
+
+Open your browser at `http://localhost` and log in with:
+- **Username**: `admin`
+- **Password**: `pointofsale`
+
+👉 Explore our [Getting Started Guides](/getting-started/overview/) for step-by-step installation instructions for Linux, Windows, and Raspberry Pi.
+
+---
+
+## Community & Sponsors
+
+Open Source Point of Sale is maintained with love by an international open-source community.
+
+- **Demo Hosting**: Hosted courtesy of [DigitalOcean](https://www.digitalocean.com/).
+- **Community Chat**: Join our active discussions on [Matrix (#opensourcepos_Lobby:gitter.im)](https://matrix.to/#/#opensourcepos_Lobby:gitter.im).
+- **Translations**: Help translate OSPOS into your language on [Weblate](https://translate.opensourcepos.org/engage/opensourcepos/).
+- **Contributions**: Pull requests, bug reports, and hardware testing are warmly welcomed on [GitHub](https://github.com/opensourcepos/opensourcepos).
