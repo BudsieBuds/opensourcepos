@@ -40,7 +40,7 @@ return [
     'return'                       => 'Teruggave',
     'select_supplier'              => 'Selecteer Leverancier (Optioneel)',
     'ship_pack'                    => 'Pakket',
-    'start_typing_supplier_name'   => 'Typ naam leverancier..',
+    'start_typing_supplier_name'   => 'Typ naam leverancier...',
     'stock'                        => 'Voorraad',
     'stock_destination'            => 'Stock bestemming',
     'stock_location'               => 'Stock locatie',
