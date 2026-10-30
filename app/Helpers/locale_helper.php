@@ -76,7 +76,6 @@ function get_languages(): array
         'id:indonesian'               => 'Indonesian',
         'it:italian'                  => 'Italian',
         'ka:georgian'                 => 'Georgian',
-        'ka:georgian'                 => 'Georgian',
         'km:centralkhmer'             => 'Khmer (Central)',
         'lo:lao'                      => 'Lao',
         'ml:malayalam'                => 'Malayalam',
