@@ -52,7 +52,7 @@ return [
     'logo_mark'                      => 'Mark',
     'logout'                         => 'Log Out',
     'manager'                        => '',
-    'migration_needed'               => 'A database migration to {0} will start after login',
+    'migration_needed'               => '',
     'new'                            => 'New',
     'no'                             => 'No',
     'no_persons_to_display'          => 'There are no people to display.',

@@ -22,7 +22,7 @@ return [
     'error_updating_admin'                  => '',
     'error_updating_demo_admin'             => 'Jij kan de demo gebruiker niet veranderen.',
     'language'                              => 'Taal',
-    'login_info'                            => 'Login',
+    'login_info'                            => '',
     'manager'                               => '',
     'new'                                   => 'N. Werknemer',
     'none_selected'                         => 'U hebt geen werknemers geselecteerd.',

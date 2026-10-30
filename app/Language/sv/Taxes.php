@@ -25,7 +25,7 @@ return [
     'rounding_code'                          => 'Avrundningskod',
     'sales_tax'                              => 'Moms',
     'sales_tax_by_invoice'                   => 'Moms per faktura',
-    'sequence'                               => 'Seq.',
+    'sequence'                               => '',
     'state'                                  => 'Län',
     'successful_deleted'                     => 'Du har tagit bort',
     'tax_categories'                         => 'Skattekategorier',

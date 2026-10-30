@@ -20,7 +20,7 @@ return [
     'item_number'               => '',
     'item_number_duplicate'     => '',
     'items'                     => 'สินค้า',
-    'kit'                       => 'Kit Id',
+    'kit'                       => '',
     'kit_and_components'        => 'ชุดและส่วนประกอบ',
     'kit_and_stock'             => 'ชุดและสต็อก',
     'kit_only'                  => 'ชุดอย่างเดี่ยว',

@@ -2,10 +2,10 @@
 
 return [
     'add_exception'                          => 'Ajouter une exception',
-    'cascade'                                => 'Cascade',
+    'cascade'                                => '',
     'cascade_sequence'                       => 'Séquence en cascade',
     'city'                                   => 'Ville',
-    'code'                                   => 'Code',
+    'code'                                   => '',
     'confirm_delete'                         => 'Êtes-vous sûr de vouloir supprimer ce Code Fiscal ? Cette action ne peut pas être annulée',
     'confirm_restore'                        => 'Êtes-vous sûr de vouloir restaurer le(s) Code(s) Fiscal(s) sélectionné(s) ?',
     'default_tax_category'                   => 'Catégorie Fiscal par Défaut',

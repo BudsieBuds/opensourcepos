@@ -24,7 +24,7 @@ return [
     'saturday'  => 'Sobota',
     'jan'       => 'Sty',
     'feb'       => 'Lut',
-    'mar'       => 'Mar',
+    'mar'       => '',
     'apr'       => 'Kwi',
     'may'       => 'Maj',
     'jun'       => 'Cze',

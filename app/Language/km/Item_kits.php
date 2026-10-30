@@ -11,7 +11,7 @@ return [
     'discount_fixed'            => '',
     'discount_percent'          => 'បញ្ចុះតំលៃជាភាគរយ',
     'discount_type'             => '',
-    'error_adding_updating'     => 'បន្ថែម​ ឬក៏ធ្វើបច្ចុប្បន្នភាព​ ក្រុមទំនិញមិនបានជោគជ័យ។',
+    'error_adding_updating'     => "បន្ថែម\u{200b} ឬក៏ធ្វើបច្ចុប្បន្នភាព\u{200b} ក្រុមទំនិញមិនបានជោគជ័យ។",
     'find_kit_item'             => 'មុខទំនេញ',
     'info'                      => 'ព៌ត័មានក្រុមទំនេញ',
     'item'                      => 'ទំនិញ',

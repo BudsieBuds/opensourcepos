@@ -20,7 +20,7 @@ return [
     'item_number'               => '',
     'item_number_duplicate'     => '',
     'items'                     => '產品',
-    'kit'                       => 'Kit Id',
+    'kit'                       => '',
     'kit_and_components'        => '套件和組件',
     'kit_and_stock'             => '套件和組件',
     'kit_only'                  => '僅套件',

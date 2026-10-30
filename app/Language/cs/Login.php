@@ -9,7 +9,7 @@ return [
     'invalid_gcaptcha'              => 'Špatné zadání.',
     'invalid_installation'          => 'Instalace není v pořádku, zkontrolujte soubor php.ini.',
     'invalid_username_and_password' => 'Neplatné jméno nebo heslo.',
-    'login'                         => 'Login',
+    'login'                         => '',
     'logout'                        => '',
     'migrating_database'            => 'Migrace databáze',
     'migration_auth_message'        => '',

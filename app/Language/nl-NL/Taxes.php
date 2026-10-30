@@ -5,7 +5,7 @@ return [
     'cascade'                                => 'Trapsgewijs',
     'cascade_sequence'                       => 'Trapsgewijze volgorde',
     'city'                                   => 'Stad',
-    'code'                                   => 'Code',
+    'code'                                   => '',
     'confirm_delete'                         => 'Weet u zeker dat u deze belastingcode verwijderen? Deze actie kan niet ongedaan worden gemaakt',
     'confirm_restore'                        => 'Weet u zeker dat u de geselecteerde belastingcode(s) wilt herstellen?',
     'default_tax_category'                   => 'Standaard belastingcategorie',

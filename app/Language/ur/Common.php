@@ -11,7 +11,7 @@ return [
     'comments'                       => '',
     'common'                         => '',
     'confirm_search'                 => '',
-    'copyrights'                     => '© 2010 - {0}',
+    'copyrights'                     => '',
     'correct_errors'                 => '',
     'country'                        => '',
     'dashboard'                      => '',

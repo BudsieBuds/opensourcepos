@@ -2,10 +2,10 @@
 
 return [
     'add_exception'                          => 'Voeg uitzondering toe',
-    'cascade'                                => 'Cascade',
+    'cascade'                                => '',
     'cascade_sequence'                       => 'Cascade Sequentie',
     'city'                                   => 'Stad',
-    'code'                                   => 'Code',
+    'code'                                   => '',
     'confirm_delete'                         => 'Bent u zeker dat u deze code wil verwijderen? Dit kan niet ongedaan gemaakt worden',
     'confirm_restore'                        => 'Weet u zeker dat u geselecteerde belastingcode(s) wilt terugzetten?',
     'default_tax_category'                   => 'Standaard BTW Categorie',
@@ -25,7 +25,7 @@ return [
     'rounding_code'                          => 'Afronding Code',
     'sales_tax'                              => 'Verkoopbelasting',
     'sales_tax_by_invoice'                   => 'Verkoopbelasting per factuur',
-    'sequence'                               => 'Seq.',
+    'sequence'                               => '',
     'state'                                  => 'Staat',
     'successful_deleted'                     => 'Je hebt succesvol verwijderd',
     'tax_categories'                         => 'BTW Categorieën',

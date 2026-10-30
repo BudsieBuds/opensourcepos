@@ -35,7 +35,7 @@ return [
     'permission_desc'                       => '勾選後授予使用該模組功能',
     'permission_info'                       => '員工權限',
     'repeat_password'                       => '確認密碼',
-    'subpermission_required'                => 'Add at least one grant for each module',
+    'subpermission_required'                => '',
     'successful_adding'                     => '新增員工資料成功',
     'successful_change_password'            => '',
     'successful_deleted'                    => '成功刪除員工資料',

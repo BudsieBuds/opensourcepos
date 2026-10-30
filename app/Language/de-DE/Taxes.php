@@ -13,7 +13,7 @@ return [
     'error_adding_updating'                  => 'Hinzufügen oder Ändern des Steuercodes fehlgeschlagen',
     'group_seq'                              => 'Gruppe Folge',
     'jurisdiction_name'                      => 'Name der Gerichtsbarkeit',
-    'name'                                   => 'Name',
+    'name'                                   => '',
     'new'                                    => 'Neue Steuer',
     'no_taxes'                               => '',
     'no_taxes_to_display'                    => 'Kein Steuercode verfügbar, der angezeigt werden kann',

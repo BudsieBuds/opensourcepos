@@ -20,7 +20,7 @@ return [
     'item_number'               => '',
     'item_number_duplicate'     => '',
     'items'                     => 'Articoli',
-    'kit'                       => 'Kit ID',
+    'kit'                       => '',
     'kit_and_components'        => 'Kit e Componenti',
     'kit_and_stock'             => 'Kit e Magazzino',
     'kit_only'                  => 'Solo Kit',

@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'apr'       => 'Apr',
+    'apr'       => '',
     'april'     => 'Aprel',
     'aug'       => 'Avq',
     'august'    => 'Avqust',
@@ -18,10 +18,10 @@ return [
     'july'      => 'İyul',
     'jun'       => 'İyn',
     'june'      => 'İyun',
-    'mar'       => 'Mar',
+    'mar'       => '',
     'march'     => 'Mart',
-    'may'       => 'May',
-    'mayl'      => 'May',
+    'may'       => '',
+    'mayl'      => '',
     'mo'        => 'B.e.',
     'mon'       => 'B.e.',
     'monday'    => 'Bazar ertəsi',
