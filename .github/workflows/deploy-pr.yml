@@ -1,14 +1,11 @@
-name: PR Deploy
+name: Deploy PR to Staging
 
 on:
   pull_request_review:
     types: [submitted]
 
-concurrency:
-  group: staging-deploy
-  cancel-in-progress: false
-
 permissions:
+  actions: read
   contents: read
   deployments: write
   pull-requests: write
@@ -17,36 +14,119 @@ jobs:
   prepare:
     name: Prepare deployment
     runs-on: ubuntu-latest
+    timeout-minutes: 40
+    environment:
+      name: staging
+      deployment: false
     if: >
+      github.repository == 'opensourcepos/opensourcepos' &&
       github.event.review.state == 'approved' &&
-      github.event.pull_request.head.repo.full_name == github.repository
+      github.event.review.commit_id == github.event.pull_request.head.sha &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.review.author_association)
     outputs:
       image_tag: ${{ steps.image.outputs.tag }}
-      sha: ${{ github.event.pull_request.head.sha }}
+      sha: ${{ steps.build_wait.outputs.build_sha || github.event.pull_request.head.sha }}
+      head_sha: ${{ github.event.pull_request.head.sha }}
       pr_number: ${{ github.event.pull_request.number }}
-    
+      enabled: ${{ steps.check.outputs.enabled }}
+
     steps:
-      - name: Checkout PR
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-      
+      - name: Check deployment configuration
+        id: check
+        env:
+          DEPLOY_WEBHOOK_URL: ${{ secrets.DEPLOY_WEBHOOK_URL }}
+        run: |
+          if [ -n "$DEPLOY_WEBHOOK_URL" ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::DEPLOY_WEBHOOK_URL secret is not configured; skipping PR staging deployment."
+          fi
+
+      - name: Wait for Docker build to complete
+        if: steps.check.outputs.enabled == 'true'
+        id: build_wait
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          REF_SHA: ${{ github.event.pull_request.head.sha }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: |
+          set -euo pipefail
+          echo "Checking build workflow status for commit $REF_SHA..."
+
+          # Find the build-release run for this commit (allow up to 125s for GitHub to register it)
+          RUN_ID=""
+          for i in {1..25}; do
+            RUN_ID=$(gh run list --workflow=build-release.yml --commit="$REF_SHA" --branch="$HEAD_REF" --event push --json databaseId --jq '.[0].databaseId // empty' 2>/dev/null || true)
+            if [ -n "$RUN_ID" ]; then
+              break
+            fi
+            echo "Waiting for build-release workflow to be scheduled (attempt $i/25)..."
+            sleep 5
+          done
+
+          # If commit only touched documentation or was skipped, fall back to the latest build run for this branch
+          BUILD_SHA="$REF_SHA"
+          if [ -z "$RUN_ID" ]; then
+            echo "No push build found matching exact commit $REF_SHA. Checking latest build run on branch $HEAD_REF..."
+            BRANCH_RUN=$(gh run list --workflow=build-release.yml --branch="$HEAD_REF" --event push --json databaseId,headSha --jq '.[0] // empty' 2>/dev/null || true)
+            if [ -n "$BRANCH_RUN" ]; then
+              CANDIDATE_RUN_ID=$(echo "$BRANCH_RUN" | jq -r '.databaseId // empty')
+              CANDIDATE_SHA=$(echo "$BRANCH_RUN" | jq -r '.headSha // empty')
+              # Verify candidate commit is an ancestor of the approved commit before deploying
+              COMPARE_STATUS=$(gh api "repos/$GH_REPO/compare/$CANDIDATE_SHA...$REF_SHA" --jq '.status' 2>/dev/null || true)
+              if [ "$COMPARE_STATUS" = "ahead" ] || [ "$COMPARE_STATUS" = "identical" ]; then
+                RUN_ID="$CANDIDATE_RUN_ID"
+                BUILD_SHA="$CANDIDATE_SHA"
+                echo "Found ancestor build run $RUN_ID on branch $HEAD_REF (commit $BUILD_SHA)."
+              else
+                echo "Found build run $CANDIDATE_RUN_ID (commit $CANDIDATE_SHA), but it is not an ancestor of reviewed commit $REF_SHA (status: $COMPARE_STATUS). Skipping fallback."
+              fi
+            fi
+          fi
+
+          if [ -n "$RUN_ID" ]; then
+            echo "Found build workflow run $RUN_ID. Watching for completion..."
+            gh run watch "$RUN_ID" --interval 10 --exit-status
+            echo "Build workflow completed successfully."
+            echo "build_sha=$BUILD_SHA" >> "$GITHUB_OUTPUT"
+          else
+            echo "::error::No build-release workflow run found for branch $HEAD_REF. Cannot deploy non-existent Docker image."
+            exit 1
+          fi
+
       - name: Get image tag
+        if: steps.check.outputs.enabled == 'true'
         id: image
         env:
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-          PR_SHA: ${{ github.event.pull_request.head.sha }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          PR_SHA: ${{ steps.build_wait.outputs.build_sha || github.event.pull_request.head.sha }}
         run: |
-          IMAGE_TAG="pr-${PR_NUMBER}-${PR_SHA:0:7}"
+          SHA="${PR_SHA:0:6}"
+          BRANCH="$(printf '%s' "$HEAD_REF" | LC_ALL=C tr -c 'A-Za-z0-9_.-' '_')"
+          BRANCH="${BRANCH:0:$((128 - ${#SHA} - 1))}"
+          [[ "$BRANCH" == [-.]* ]] && BRANCH="_${BRANCH:1}"
+          if [ "$HEAD_REF" = "master" ]; then
+            IMAGE_TAG="$SHA"
+          else
+            IMAGE_TAG="${BRANCH}-${SHA}"
+          fi
           echo "tag=$IMAGE_TAG" >> "$GITHUB_OUTPUT"
 
   deploy:
     name: Deploy to staging
     needs: prepare
+    if: needs.prepare.outputs.enabled == 'true'
+    concurrency:
+      group: deploy-staging
+      queue: max
     uses: ./.github/workflows/deploy-core.yml
     with:
       image_tag: ${{ needs.prepare.outputs.image_tag }}
       sha: ${{ needs.prepare.outputs.sha }}
+      head_sha: ${{ needs.prepare.outputs.head_sha }}
       description: Deploy PR #${{ needs.prepare.outputs.pr_number }} to staging
       pr_number: ${{ needs.prepare.outputs.pr_number }}
     secrets: inherit
@@ -54,26 +134,32 @@ jobs:
   comment:
     name: Comment deployment status
     needs: [prepare, deploy]
-    if: always() && needs.prepare.result == 'success'
+    if: always() && needs.prepare.outputs.enabled == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     env:
       GH_TOKEN: ${{ github.token }}
       IMAGE_TAG: ${{ needs.prepare.outputs.image_tag }}
-      PR_NUMBER: ${{ needs.prepare.outputs.pr_number }}
+      PR_NUMBER: ${{ github.event.pull_request.number }}
       REF_SHA: ${{ needs.prepare.outputs.sha }}
+      HEAD_SHA: ${{ needs.prepare.outputs.head_sha }}
       STATUS: ${{ needs.deploy.outputs.status }}
-    
+      DEPLOY_URL: ${{ needs.deploy.outputs.deploy_url || vars.DEPLOY_URL || 'https://dev.opensourcepos.org' }}
+
     steps:
       - name: Comment on PR
         run: |
-          if [ "$STATUS" = "success" ]; then
-            BODY=$(jq -nr --arg tag "$IMAGE_TAG" --arg sha "$REF_SHA" --arg url "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" \
-              '"✅ **Staging deployment completed**\n\n🔗 **URL**: https://dev.opensourcepos.org\n📦 **Image Tag**: `\($tag)`\n🔨 **Commit**: \($sha)\n\nView logs: \($url)"')
+          if [ "$STATUS" = "skipped" ]; then
+            BODY=$(jq -nr --arg sha "$HEAD_SHA" --arg url "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" \
+              '"⏭️ **Staging deployment skipped**\n\nThe PR head commit has changed since `\($sha)` was approved. A deployment for the newer commit will run once approved.\n\nView logs: \($url)"')
+          elif [ "$STATUS" = "success" ]; then
+            BODY=$(jq -nr --arg tag "$IMAGE_TAG" --arg sha "$REF_SHA" --arg url "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" --arg deploy_url "$DEPLOY_URL" \
+              '"✅ **Staging deployment completed**\n\n🔗 **URL**: \($deploy_url)\n📦 **Image Tag**: `\($tag)`\n🔨 **Commit**: \($sha)\n\nView logs: \($url)"')
           else
             BODY=$(jq -nr --arg url "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" \
               '"❌ **Staging deployment failed**\n\nCheck the [workflow logs](\($url)) for details."')
           fi
-          
+
           gh api "repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments" \
             -X POST \
             -f body="$BODY"
