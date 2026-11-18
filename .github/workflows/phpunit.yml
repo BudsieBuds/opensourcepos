@@ -2,25 +2,34 @@ name: PHPUnit Tests
 
 on:
   push:
+    branches:
+      - master
     paths:
       - '**.php'
       - 'spark'
       - 'tests/**'
-      - '.github/workflows/phpunit.yml'
-      - 'gulpfile.js'
+      - 'composer.json'
+      - 'composer.lock'
+      - 'phpunit.xml.dist'
       - 'app/Database/**'
+      - '.github/workflows/phpunit.yml'
   pull_request:
+    branches:
+      - master
     paths:
       - '**.php'
       - 'spark'
       - 'tests/**'
-      - '.github/workflows/phpunit.yml'
-      - 'gulpfile.js'
+      - 'composer.json'
+      - 'composer.lock'
+      - 'phpunit.xml.dist'
       - 'app/Database/**'
+      - '.github/workflows/phpunit.yml'
+  workflow_dispatch:
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
-  cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
 
 permissions:
   contents: read
@@ -29,6 +38,7 @@ jobs:
   test:
     name: PHP ${{ matrix.php-version }} / ${{ matrix.db-image }} Tests
     runs-on: ubuntu-latest
+    timeout-minutes: 60
 
     strategy:
       fail-fast: false
@@ -48,7 +58,9 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -87,19 +99,20 @@ jobs:
             --execute="GRANT CREATE, DROP ON ospos_test.* TO 'admin'@'%'; FLUSH PRIVILEGES;"
 
       - name: Get composer cache directory
-        run: echo "COMPOSER_CACHE_FILES_DIR=$(composer config cache-files-dir)" >> $GITHUB_ENV
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
-          path: ${{ env.COMPOSER_CACHE_FILES_DIR }}
-          key: ${{ runner.os }}-${{ matrix.php-version }}-${{ hashFiles('**/composer.lock') }}
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-php-${{ matrix.php-version }}-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ matrix.php-version }}-
+            ${{ runner.os }}-php-${{ matrix.php-version }}-
             ${{ runner.os }}-
 
       - name: Install dependencies
-        run: composer update --ansi --no-interaction
+        run: composer install --ansi --no-interaction --prefer-dist --no-progress
 
       - name: Create .env file
         run: cp .env.example .env
@@ -126,7 +139,7 @@ jobs:
         # before getenv() is ever consulted.
         run: |
           KEY=$(openssl rand -hex 32)
-          sed -i "s/^throttle\.key=''/throttle.key='$KEY'/" .env
+          sed -i -E "s/^[[:space:]]*throttle\.key[[:space:]]*=.*/throttle.key='$KEY'/" .env
           grep -Eq "^throttle\.key=.+" .env
 
       - name: Run PHPUnit tests
@@ -140,13 +153,16 @@ jobs:
         run: echo "DB_LABEL=$(echo '${{ matrix.db-image }}' | tr ':' '-')" >> $GITHUB_ENV
 
       - name: Upload test results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: test-results-php-${{ matrix.php-version }}-${{ env.DB_LABEL }}
-          path: test-results/
+          path: |
+            test-results/
+            build/logs/
           retention-days: 30
+          if-no-files-found: ignore
 
       - name: Stop database
         if: always()
-        run: docker stop mysql && docker rm mysql
+        run: docker rm -f mysql 2>/dev/null || true

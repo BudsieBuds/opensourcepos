@@ -1,10 +1,11 @@
-name: Deploy
+name: Deploy to Staging (Manual)
 
 on:
   workflow_dispatch:
     inputs:
       image_tag:
         description: 'Docker image tag to deploy (e.g., v3.4.0, latest)'
+        type: string
         required: true
         default: 'latest'
 
@@ -15,6 +16,10 @@ permissions:
 jobs:
   deploy:
     name: Deploy to staging
+    if: github.repository == 'opensourcepos/opensourcepos'
+    concurrency:
+      group: deploy-staging
+      queue: max
     uses: ./.github/workflows/deploy-core.yml
     with:
       image_tag: ${{ inputs.image_tag }}
