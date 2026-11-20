@@ -15,7 +15,7 @@ This document provides guidance for AI agents working on the Open Source Point o
 - Write PHP 8.2+ compatible code with proper type declarations
 - Always import classes, functions, and constants with a `use` statement at the top of the file instead of referencing them inline via fully-qualified name (e.g. `use Config\Database;` then `Database::connect()`, not `\Config\Database::connect()`)
 - No useless comments or docblocks: if the code speaks for itself, explanatory comments are unnecessary. Do not add comments or docblocks that merely restate what the code already makes clear (e.g. `@param array $items` next to `array $items`, or a comment repeating a method's name) — only comment on non-obvious rationale, constraints, or behavior
-- Views in `app/Views/errors/html/` are excluded from the fixer
+- Views in `app/Views/errors/html/` and catalogs in `app/Language/` are excluded from the fixer
 - Run fixer in dry-run mode first before committing (`vendor/bin/php-cs-fixer fix --dry-run --diff --config=.php-cs-fixer.no-header.php <file>`) to inspect proposed changes. Because `.php-cs-fixer.no-header.php` enables file-wide rules (including risky `strict_comparison` and `binary_operator_spaces` alignment) that reformat untouched legacy code, never apply whole-file reformatting blindly — preserve untouched lines and cast database, `app_config`, and POST values explicitly (`(int)`, `(float)`, `(bool)`) wherever `===` / `!==` is used on modified lines
 - **JavaScript**: use `const` for variables that are never reassigned, `let` for variables that are. Never use `var`.
 

@@ -115,6 +115,7 @@ apt-get install -y -qq \
     mariadb-server \
     mariadb-client \
     php${PHP_VERSION} \
+    libapache2-mod-php${PHP_VERSION} \
     php${PHP_VERSION}-mysql \
     php${PHP_VERSION}-gd \
     php${PHP_VERSION}-bcmath \
@@ -127,6 +128,10 @@ apt-get install -y -qq \
     curl \
     unzip \
     openssl
+
+if command -v update-alternatives >/dev/null 2>&1; then
+    update-alternatives --set php "/usr/bin/php${PHP_VERSION}" 2>/dev/null || true
+fi
 
 echo -e "${COLOR_GREEN}[3/9] Starting MariaDB...${COLOR_RESET}"
 systemctl start mariadb
@@ -361,6 +366,8 @@ cat > /etc/apache2/sites-available/ospos.conf <<EOF
 </VirtualHost>
 EOF
 
+a2dismod 'php*' 2>/dev/null || true
+a2enmod "php${PHP_VERSION}" 2>/dev/null || true
 a2enmod rewrite
 a2dissite 000-default.conf
 a2ensite ospos.conf

@@ -2,7 +2,7 @@
 
 This document describes the CI/CD workflows for OSPOS.
 
-## Build and Release Workflow (`.github/workflows/build-release.yml`)
+## Build Docker & Release Assets Workflow (`.github/workflows/build-release.yml`)
 
 ### Build Process
 - Setup PHP 8.2 with required extensions
@@ -12,18 +12,20 @@ This document describes the CI/CD workflows for OSPOS.
 - Build frontend assets with Gulp
 
 ### Docker Images
-- Build and push `opensourcepos` Docker image for multiple architectures (linux/amd64, linux/arm64)
-- On `master`: tagged `master` and `<sha>`
-- On other branches: tagged `<branch>-<sha>`
-- On a semver tag (e.g. `3.4.2`): tagged `<version>` and `latest`
+- Build and push `opensourcepos` Docker image to Docker Hub
+- On `master`: tagged `master` and `<sha>` (fast `linux/amd64` build)
+- On other branches: tagged `<branch>-<sha>` (fast `linux/amd64` build)
+- On a semver tag (e.g. `3.4.2`): tagged `<version>` and `latest` (multi-arch `linux/amd64`, `linux/arm64`)
 - The version number is never stamped onto `master`/branch builds — it only appears on tag releases
-- Pushed to Docker Hub
 
 ### Releases
-- Create distribution archives (tar.gz, zip)
+- Create distribution archive (zip)
 - Create/update GitHub "unstable" release on master branch only
 
 ## Required Secrets
+
+> [!NOTE]
+> Workflows in `build-release.yml` and staging deployment run only for the canonical `opensourcepos/opensourcepos` repository by default (`if: github.repository == 'opensourcepos/opensourcepos'`). To execute builds in a fork, you must intentionally update this repository guard to match your fork.
 
 To use this workflow, you need to add the following secrets to your repository:
 
@@ -41,17 +43,20 @@ The `GITHUB_TOKEN` is automatically provided by GitHub Actions.
 
 ## Workflow Triggers
 
-- **Push to master** - Runs build, Docker push (`master` + `<sha>` tags), and creates/updates the `unstable` release
-- **Push to other branches** - Runs build and Docker push (`<branch>-<sha>` tag)
-- **Push a semver tag** (e.g. `3.4.2`) - Runs build and Docker push (`<version>` + `latest` tags)
-- **Pull requests** - Runs build only (PHPUnit tests run in parallel via phpunit.yml); no Docker push
+- **Push to master** - Runs build, Docker push (`master` + `<sha>` tags, `linux/amd64`), and creates/updates the `unstable` release
+- **Push to other branches** - Runs build and Docker push (`<branch>-<sha>` tag, `linux/amd64`)
+- **Push a semver tag** (e.g. `3.4.2`) - Runs build and multi-arch Docker push (`<version>` + `latest` tags, `linux/amd64` and `linux/arm64`)
+- **Pull requests** - Runs build only for fork PRs (internal PRs build via branch push; tests run in parallel via phpunit.yml); no Docker push
 
 ## Existing Workflows
 
 This repository also has these workflows:
-- `.github/workflows/main.yml` - PHP linting with PHP-CS-Fixer
-- `.github/workflows/phpunit.yml` - PHPUnit tests (runs on all PHP versions 8.2-8.5)
-- `.github/workflows/php-linter.yml` - PHP linting
+- `.github/workflows/coding-standards.yml` (`Coding Standards (PHP-CS-Fixer)`) - PHP PSR-12 coding standards on changed files
+- `.github/workflows/phpunit.yml` (`PHPUnit Tests`) - Unit and integration tests (PHP 8.2–8.5 across 6 database engines)
+- `.github/workflows/php-linter.yml` (`PHP Syntax Linter`) - PHP syntax checks (PHP 8.2–8.5)
+- `.github/workflows/install-script-test.yml` (`Ubuntu Install Script Test`) - Automated testing for `tools/scripts/install-ubuntu.sh`
+- `.github/workflows/release.yml` (`Cut Official Release`) - Unified release cycle (git-cliff changelog, tagging, and version bumping)
+- `.github/workflows/deploy.yml` (`Deploy to Staging (Manual)`) / `deploy-pr.yml` (`Deploy PR to Staging`) / `deploy-core.yml` (`Deploy Core (Reusable)`) - Staging deployment workflows
 
 ## Testing
 

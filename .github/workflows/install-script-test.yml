@@ -1,11 +1,15 @@
-name: Install Script Test
+name: Ubuntu Install Script Test
 
 on:
   push:
+    branches:
+      - master
     paths:
       - 'tools/scripts/install-ubuntu.sh'
       - '.github/workflows/install-script-test.yml'
   pull_request:
+    branches:
+      - master
     paths:
       - 'tools/scripts/install-ubuntu.sh'
       - '.github/workflows/install-script-test.yml'
@@ -13,7 +17,7 @@ on:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
 
 permissions:
   contents: read
@@ -21,8 +25,8 @@ permissions:
 jobs:
   install-test:
     name: Test Install Script (${{ matrix.scenario }})
-    runs-on: ubuntu-22.04
-    timeout-minutes: 30
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
 
     strategy:
       fail-fast: false
@@ -35,17 +39,26 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Make install script executable
         run: chmod +x tools/scripts/install-ubuntu.sh
 
+      - name: Configure PHP 8.2 as default
+        run: |
+          if command -v update-alternatives >/dev/null 2>&1 && [ -x /usr/bin/php8.2 ]; then
+            sudo update-alternatives --set php /usr/bin/php8.2
+          fi
+
       - name: Run install script
         env:
           DB_PASS: ${{ matrix.db_pass }}
+          SCENARIO: ${{ matrix.scenario }}
         run: |
           set -o pipefail
-          echo "Running install script with scenario: ${{ matrix.scenario }}"
+          echo "Running install script with scenario: $SCENARIO"
           sudo -E bash tools/scripts/install-ubuntu.sh 2>&1 | tee install-output.log
           echo "Install completed successfully"
 
@@ -85,6 +98,26 @@ jobs:
             exit 1
           fi
 
+      - name: Verify PHP version
+        run: |
+          echo "Verifying CLI PHP version..."
+          CLI_PHP=$(php -r 'echo PHP_MAJOR_VERSION . "." . PHP_MINOR_VERSION;')
+          echo "CLI PHP Version: $CLI_PHP"
+          if [ "$CLI_PHP" != "8.2" ]; then
+            echo "::error::Expected CLI PHP 8.2, found $CLI_PHP"
+            exit 1
+          fi
+
+          echo "Verifying Apache PHP module version..."
+          sudo bash -c 'echo "<?php echo PHP_MAJOR_VERSION . \".\" . PHP_MINOR_VERSION;" > /var/www/ospos/public/phpversion.php'
+          APACHE_PHP=$(curl -s http://localhost/phpversion.php)
+          sudo rm -f /var/www/ospos/public/phpversion.php
+          echo "Apache PHP Version: $APACHE_PHP"
+          if [ "$APACHE_PHP" != "8.2" ]; then
+            echo "::error::Expected Apache PHP 8.2, found $APACHE_PHP"
+            exit 1
+          fi
+
       - name: Verify OSPOS login page
         run: |
           echo "Checking OSPOS login page..."
@@ -98,7 +131,7 @@ jobs:
 
       - name: Verify database exists
         env:
-          DB_PASS: ${{ matrix.db_pass != '' && matrix.db_pass || '' }}
+          DB_PASS: ${{ matrix.db_pass }}
         run: |
           echo "Verifying database..."
           
@@ -106,8 +139,11 @@ jobs:
           # The installer prints "  Password: <value>" (the first such line is the DB
           # password; a later one is the app login password), so anchor on it and take
           # the first match.
-          if [ -z "${{ matrix.db_pass }}" ]; then
+          if [ -z "$DB_PASS" ]; then
             GENERATED_PASS=$(grep -oP '^\s*Password: \K[^\s]+' install-output.log | head -n 1 || true)
+            if [ -z "$GENERATED_PASS" ] && [ -f /var/www/ospos/.env ]; then
+              GENERATED_PASS=$(sudo sed -nE "s/^database\.default\.password=['\"](.*)['\"]/\1/p" /var/www/ospos/.env)
+            fi
             if [ -n "$GENERATED_PASS" ]; then
               DB_PASS="$GENERATED_PASS"
             fi
@@ -132,7 +168,7 @@ jobs:
           fi
 
       - name: Upload install log
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: install-log-${{ matrix.scenario }}
