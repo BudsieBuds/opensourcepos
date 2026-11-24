@@ -6,7 +6,6 @@ import concat from 'gulp-concat';
 import cleanCSS from 'gulp-clean-css';
 import uglify from 'gulp-uglify';
 import inject from 'gulp-inject';
-import tar from 'gulp-tar';
 import zip from 'gulp-zip';
 
 import { exec } from 'node:child_process';
@@ -505,7 +504,7 @@ gulp.task('default',
         )
     ));
 
-// Archive project sources and assets into distributable tar and zip packages in dist/
+// Archive project sources and assets into distributable zip package in dist/
 gulp.task('compress', async function() {
     const sources = [
         'app/**/*',
@@ -517,18 +516,18 @@ gulp.task('compress', async function() {
         'LICENSE',
         'docker*',
         'Dockerfile',
+        '!.env',
+        '!.env.*',
         '.env.example',
         '**/.htaccess',
+        '!writable/logs/*.log',
+        '!writable/debugbar/**',
+        '!writable/cache/**',
+        '!writable/session/**',
         '!node_modules/**',
         '!dist/**',
         '!.git/**'
     ];
-
-    await pipeline(
-        gulp.src(sources, { base: '.', encoding: false }),
-        tar('opensourcepos.tar'),
-        gulp.dest('dist')
-    );
 
     await pipeline(
         gulp.src(sources, { base: '.', encoding: false }),

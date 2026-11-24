@@ -1,0 +1,182 @@
+name: Coding Standards (PHP-CS-Fixer)
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'app/**.php'
+      - '!app/Language/**'
+      - '!app/Views/errors/html/**'
+      - 'public/**.php'
+      - '.php-cs-fixer.no-header.php'
+      - 'composer.json'
+      - 'composer.lock'
+      - '.github/workflows/coding-standards.yml'
+  pull_request:
+    branches:
+      - master
+    paths:
+      - 'app/**.php'
+      - '!app/Language/**'
+      - '!app/Views/errors/html/**'
+      - 'public/**.php'
+      - '.php-cs-fixer.no-header.php'
+      - 'composer.json'
+      - 'composer.lock'
+      - '.github/workflows/coding-standards.yml'
+  workflow_dispatch:
+    inputs:
+      all_files:
+        description: 'Check all files instead of only changed files'
+        type: boolean
+        required: false
+        default: true
+      base:
+        description: 'Base ref/commit for diff when all_files is false'
+        type: string
+        required: false
+        default: ''
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref == 'refs/heads/master' && format('{0}-{1}', github.ref, github.sha) || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+
+permissions:
+  contents: read
+
+env:
+  PHP_VERSION: '8.2'
+
+jobs:
+  lint:
+    name: PHP-CS-Fixer
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2.32.0
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: tokenizer, intl
+          coverage: none
+
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache dependencies
+        uses: actions/cache@v6
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-php-${{ env.PHP_VERSION }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-${{ env.PHP_VERSION }}-
+            ${{ runner.os }}-
+
+      - name: Install dependencies
+        run: composer install --ansi --no-interaction --prefer-dist --no-progress
+
+      - name: Run lint on changed files in app/, public/
+        env:
+          ALL_FILES_INPUT: ${{ inputs.all_files }}
+          BASE_INPUT: ${{ inputs.base || '' }}
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_REF: ${{ github.base_ref }}
+          EVENT_BEFORE: ${{ github.event.before }}
+        run: |
+          set -euo pipefail
+
+          # Manual dispatch defaults to full scan unless an explicit base is provided with all_files=false
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            if [ "$ALL_FILES_INPUT" = "false" ] && [ -n "$BASE_INPUT" ]; then
+              BASE="$BASE_INPUT"
+              if ! git rev-parse --verify -q "$BASE" >/dev/null; then
+                git fetch origin "$BASE" --depth=1 2>/dev/null || true
+                if git rev-parse --verify -q "origin/$BASE" >/dev/null; then
+                  BASE="origin/$BASE"
+                fi
+              fi
+            else
+              echo "Running PHP-CS-Fixer on all configured files in app/ and public/ (workflow_dispatch)..."
+              vendor/bin/php-cs-fixer fix --verbose --ansi --dry-run --config=.php-cs-fixer.no-header.php --using-cache=no --diff
+              exit 0
+            fi
+          elif [ "${ALL_FILES_INPUT:-false}" = "true" ]; then
+            echo "Running PHP-CS-Fixer on all configured files in app/ and public/..."
+            vendor/bin/php-cs-fixer fix --verbose --ansi --dry-run --config=.php-cs-fixer.no-header.php --using-cache=no --diff
+            exit 0
+          elif [ "$EVENT_NAME" = "pull_request" ]; then
+            BASE="origin/$BASE_REF"
+            if ! git rev-parse --verify -q "$BASE" >/dev/null; then
+              git fetch origin "$BASE_REF" --depth=1 2>/dev/null || true
+            fi
+          else
+            BASE="$EVENT_BEFORE"
+            if [ -n "$BASE" ] && [ "$BASE" != "0000000000000000000000000000000000000000" ] && ! git rev-parse --verify -q "$BASE" >/dev/null; then
+              git fetch origin "$BASE" --depth=1 2>/dev/null || true
+            fi
+          fi
+
+          if [ -z "$BASE" ] || [ "$BASE" = "0000000000000000000000000000000000000000" ] || ! git rev-parse --verify -q "$BASE" >/dev/null; then
+            echo "::error::Cannot determine base commit for diff ($BASE); unable to verify changed files."
+            exit 1
+          fi
+
+          # Use three-dot diff for PRs (merge-base) and two-dot diff for pushes (direct range)
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            DIFF_RANGE="$BASE...HEAD"
+          else
+            DIFF_RANGE="$BASE..HEAD"
+          fi
+
+          # Validate .php-cs-fixer config syntax if modified
+          CONFIG_CHANGED=$(git diff --name-only "$DIFF_RANGE" -- .php-cs-fixer.no-header.php)
+          if [ -n "$CONFIG_CHANGED" ]; then
+            echo "Checking PHP syntax and validity of .php-cs-fixer.no-header.php..."
+            php -l .php-cs-fixer.no-header.php
+            php -r "require 'vendor/autoload.php'; \$config = require '.php-cs-fixer.no-header.php'; if (!\$config instanceof \PhpCsFixer\ConfigInterface) { exit(1); }"
+            SMOKE_TMP=$(mktemp --suffix=.php)
+            printf "<?php\n\ndeclare(strict_types=1);\n\nnamespace App;\n" > "$SMOKE_TMP"
+            vendor/bin/php-cs-fixer fix --verbose --ansi --dry-run --config=.php-cs-fixer.no-header.php --using-cache=no "$SMOKE_TMP"
+            rm -f "$SMOKE_TMP"
+          fi
+
+          # Find added, copied, modified, or renamed PHP files in app/ and public/, excluding error views and language catalogs (tested separately by tests/LanguageFilesTest.php)
+          NEW_FILES_TMP=$(mktemp)
+          MODIFIED_FILES_TMP=$(mktemp)
+          trap 'rm -f "$NEW_FILES_TMP" "$MODIFIED_FILES_TMP"' EXIT
+
+          git diff -z --name-only --diff-filter=AC "$DIFF_RANGE" -- \
+            'app/**.php' 'public/**.php' ':!app/Views/errors/html/**' ':!app/Language/**' ':!app/Plugins/**/Language/**' \
+            > "$NEW_FILES_TMP"
+
+          git diff -z --name-only --diff-filter=MRT "$DIFF_RANGE" -- \
+            'app/**.php' 'public/**.php' ':!app/Views/errors/html/**' ':!app/Language/**' ':!app/Plugins/**/Language/**' \
+            > "$MODIFIED_FILES_TMP"
+
+          if [ ! -s "$NEW_FILES_TMP" ] && [ ! -s "$MODIFIED_FILES_TMP" ]; then
+            echo "No changed PHP files in app/ or public/ to check."
+            exit 0
+          fi
+
+          if [ -s "$NEW_FILES_TMP" ]; then
+            echo "Enforcing PHP-CS-Fixer on newly added PHP files:"
+            tr '\0' '\n' < "$NEW_FILES_TMP"
+            xargs -0 -r -a "$NEW_FILES_TMP" vendor/bin/php-cs-fixer fix --verbose --ansi --dry-run --config=.php-cs-fixer.no-header.php --path-mode=intersection --using-cache=no --diff
+          fi
+
+          if [ -s "$MODIFIED_FILES_TMP" ]; then
+            echo "Checking PHP-CS-Fixer on modified existing PHP files (advisory diff):"
+            tr '\0' '\n' < "$MODIFIED_FILES_TMP"
+            if ! xargs -0 -r -a "$MODIFIED_FILES_TMP" vendor/bin/php-cs-fixer fix --verbose --ansi --dry-run --config=.php-cs-fixer.no-header.php --path-mode=intersection --using-cache=no --diff; then
+              echo "::warning::Modified PHP files contain coding standards violations. Note: AGENTS.md forbids reformatting untouched legacy lines; ensure only your touched lines adhere to standards."
+            fi
+          fi

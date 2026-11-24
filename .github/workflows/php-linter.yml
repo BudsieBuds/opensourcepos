@@ -1,10 +1,25 @@
-name: PHP Linting
+name: PHP Syntax Linter
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - '**.php'
+      - 'spark'
+      - '.github/workflows/php-linter.yml'
+  pull_request:
+    branches:
+      - master
+    paths:
+      - '**.php'
+      - 'spark'
+      - '.github/workflows/php-linter.yml'
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
 
 permissions:
   contents: read
@@ -13,6 +28,7 @@ jobs:
   phplint:
     name: PHP Lint ${{ matrix.php-version }}
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
@@ -24,17 +40,21 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2.32.0
         with:
           php-version: ${{ matrix.php-version }}
           coverage: none
 
       - name: Run PHP Lint
+        env:
+          PHP_VERSION: ${{ matrix.php-version }}
         run: |
-          if [ "${{ matrix.php-version }}" = "8.2" ]; then
+          if [ "$PHP_VERSION" = "8.2" ]; then
             find . -type f -name "*.php" ! -path "./vendor/*" ! -path "./node_modules/*" -exec sh -c 'for file do php -l "$file" || exit 1; done' sh {} +
           else
             find . -type f -name "*.php" ! -path "./vendor/*" ! -path "./node_modules/*" -exec php -l {} +

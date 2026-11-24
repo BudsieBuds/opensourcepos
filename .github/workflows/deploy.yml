@@ -1,10 +1,11 @@
-name: Deploy
+name: Deploy to Staging (Manual)
 
 on:
   workflow_dispatch:
     inputs:
       image_tag:
         description: 'Docker image tag to deploy (e.g., v3.4.0, latest)'
+        type: string
         required: true
         default: 'latest'
 
@@ -13,8 +14,35 @@ permissions:
   deployments: write
 
 jobs:
+  check:
+    name: Check deployment configuration
+    runs-on: ubuntu-latest
+    if: github.repository == 'opensourcepos/opensourcepos'
+    environment:
+      name: staging
+      deployment: false
+    outputs:
+      enabled: ${{ steps.check.outputs.enabled }}
+    steps:
+      - name: Check deployment configuration
+        id: check
+        env:
+          DEPLOY_WEBHOOK_URL: ${{ secrets.DEPLOY_WEBHOOK_URL }}
+        run: |
+          if [ -n "$DEPLOY_WEBHOOK_URL" ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::DEPLOY_WEBHOOK_URL secret is not configured; skipping staging deployment."
+          fi
+
   deploy:
     name: Deploy to staging
+    needs: check
+    if: github.repository == 'opensourcepos/opensourcepos' && needs.check.outputs.enabled == 'true'
+    concurrency:
+      group: deploy-staging
+      queue: max
     uses: ./.github/workflows/deploy-core.yml
     with:
       image_tag: ${{ inputs.image_tag }}

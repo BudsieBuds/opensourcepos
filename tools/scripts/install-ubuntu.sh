@@ -2,15 +2,25 @@
 
 set -e
 
-COLOR_RED='\033[0;31m'
-COLOR_GREEN='\033[0;32m'
-COLOR_YELLOW='\033[1;33m'
-COLOR_BLUE='\033[0;34m'
-COLOR_RESET='\033[0m'
+if [[ -t 1 && -z "${NO_COLOR:-}" ]]; then
+    COLOR_RED='\033[31m'
+    COLOR_GREEN='\033[32m'
+    COLOR_YELLOW='\033[33m'
+    COLOR_CYAN='\033[36m'
+    COLOR_BLUE='\033[34m'
+    COLOR_RESET='\033[0m'
+else
+    COLOR_RED=''
+    COLOR_GREEN=''
+    COLOR_YELLOW=''
+    COLOR_CYAN=''
+    COLOR_BLUE=''
+    COLOR_RESET=''
+fi
 
 echo -e "${COLOR_BLUE}╔══════════════════════════════════════════════════════════╗${COLOR_RESET}"
-echo -e "${COLOR_BLUE}║     Open Source Point of Sale - Ubuntu Installer        ║${COLOR_RESET}"
-echo -e "${COLOR_BLUE}║                    Version 3.4+                          ║${COLOR_RESET}"
+echo -e "${COLOR_BLUE}║       Open Source Point of Sale - Ubuntu Installer       ║${COLOR_RESET}"
+echo -e "${COLOR_BLUE}║                       Version 3.4+                       ║${COLOR_RESET}"
 echo -e "${COLOR_BLUE}╚══════════════════════════════════════════════════════════╝${COLOR_RESET}"
 echo ""
 
@@ -115,6 +125,7 @@ apt-get install -y -qq \
     mariadb-server \
     mariadb-client \
     php${PHP_VERSION} \
+    libapache2-mod-php${PHP_VERSION} \
     php${PHP_VERSION}-mysql \
     php${PHP_VERSION}-gd \
     php${PHP_VERSION}-bcmath \
@@ -127,6 +138,10 @@ apt-get install -y -qq \
     curl \
     unzip \
     openssl
+
+if command -v update-alternatives >/dev/null 2>&1; then
+    update-alternatives --set php "/usr/bin/php${PHP_VERSION}" 2>/dev/null || true
+fi
 
 echo -e "${COLOR_GREEN}[3/9] Starting MariaDB...${COLOR_RESET}"
 systemctl start mariadb
@@ -159,7 +174,7 @@ mysql_root() {
 }
 
 if [ -n "$MYSQL_ROOT_PASS" ]; then
-    echo -e "${COLOR_BLUE}Setting MariaDB root password...${COLOR_RESET}"
+    echo -e "${COLOR_CYAN}Setting MariaDB root password...${COLOR_RESET}"
     # Set the password via unix_socket auth (no password is set yet) and flush in the
     # same session: once a password is set, unix_socket auth for root is dropped, so a
     # separate passwordless `mysql` call would fail. The password lives only in this
@@ -170,7 +185,7 @@ if [ -n "$MYSQL_ROOT_PASS" ]; then
     mysql -u root < "$ROOT_SQL"
 else
     # No root password supplied: keep the default unix_socket authentication for root.
-    echo -e "${COLOR_BLUE}Keeping MariaDB root on unix_socket authentication...${COLOR_RESET}"
+    echo -e "${COLOR_CYAN}Keeping MariaDB root on unix_socket authentication...${COLOR_RESET}"
 fi
 
 echo -e "${COLOR_GREEN}[4/9] Creating database and user...${COLOR_RESET}"
@@ -191,11 +206,12 @@ if [ -z "$OSPOS_VERSION" ]; then
     OSPOS_VERSION=$(curl -sS https://api.github.com/repos/opensourcepos/opensourcepos/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
     if [ -z "$OSPOS_VERSION" ]; then
         echo -e "${COLOR_RED}Failed to get latest release version${COLOR_RESET}"
+        echo -e "${COLOR_YELLOW}If hitting GitHub API rate limits, specify a version: OSPOS_VERSION=3.4.2 ./install-ubuntu.sh${COLOR_RESET}"
         exit 1
     fi
 fi
 
-echo -e "${COLOR_BLUE}Downloading OSPOS version ${OSPOS_VERSION}...${COLOR_RESET}"
+echo -e "${COLOR_CYAN}Downloading OSPOS version ${OSPOS_VERSION}...${COLOR_RESET}"
 # Select the .zip asset explicitly: a release may ship both a .tar and a .zip, and the
 # one we need is the archive `unzip` can consume.
 ASSET_URL=$(curl -sS "https://api.github.com/repos/opensourcepos/opensourcepos/releases/tags/${OSPOS_VERSION}" | grep '"browser_download_url"' | grep '\.zip"' | head -1 | sed -E 's/.*"([^"]+)".*/\1/')
@@ -223,10 +239,13 @@ echo -e "${COLOR_GREEN}Downloaded OSPOS ${OSPOS_VERSION}${COLOR_RESET}"
 echo -e "${COLOR_GREEN}[6/9] Setting up OSPOS...${COLOR_RESET}"
 cd "${OSPOS_DIR}"
 
-curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer 2>/dev/null
+if ! command -v composer >/dev/null 2>&1; then
+    echo -e "${COLOR_CYAN}Installing Composer...${COLOR_RESET}"
+    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer 2>/dev/null
+fi
 
 if [ -f "composer.json" ]; then
-    echo -e "${COLOR_BLUE}Installing dependencies...${COLOR_RESET}"
+    echo -e "${COLOR_CYAN}Installing dependencies...${COLOR_RESET}"
     composer install --no-dev --optimize-autoloader --no-interaction --quiet 2>/dev/null
 fi
 
@@ -238,17 +257,17 @@ fi
 if [ -f ".env" ]; then
     # Escape special characters in password for sed
     ESCAPED_DB_PASS=$(printf '%s\n' "$DB_PASS" | sed 's/[&/\]/\\&/g')
-    
-    sed -i "s|database\.default\.hostname='localhost'|database.default.hostname='${DB_HOST}'|" .env
-    sed -i "s|database\.default\.database='ospos'|database.default.database='${DB_NAME}'|" .env
-    sed -i "s|database\.default\.username='admin'|database.default.username='${DB_USER}'|" .env
-    sed -i "s|database\.default\.password='pointofsale'|database.default.password='${ESCAPED_DB_PASS}'|" .env
+
+    sed -i -E "s|database\.default\.hostname='[^']*'|database.default.hostname='${DB_HOST}'|" .env
+    sed -i -E "s|database\.default\.database='[^']*'|database.default.database='${DB_NAME}'|" .env
+    sed -i -E "s|database\.default\.username='[^']*'|database.default.username='${DB_USER}'|" .env
+    sed -i -E "s|database\.default\.password='[^']*'|database.default.password='${ESCAPED_DB_PASS}'|" .env
     sed -i "s|CI_ENVIRONMENT=development|CI_ENVIRONMENT=production|" .env
     # Production requires an allowed-hostname whitelist (the app refuses to boot
     # without one). Default to localhost (the installer's default server name);
     # real installs with a domain should update this to their hostname(s).
     sed -i "s|app.allowedHostnames=''|app.allowedHostnames='localhost'|" .env
-    
+
     if grep -q "encryption\.key=''" .env; then
         ENCRYPTION_KEY=$(openssl rand -base64 32)
         ESCAPED_KEY=$(printf '%s\n' "$ENCRYPTION_KEY" | sed 's/[&/\]/\\&/g')
@@ -304,23 +323,23 @@ php spark migrate
 if $INTERACTIVE && [ -z "$SSL_EMAIL" ] && [ -z "$APACHE_SERVER_NAME" ]; then
     echo ""
     echo -e "${COLOR_BLUE}╔══════════════════════════════════════════════════════════╗${COLOR_RESET}"
-    echo -e "${COLOR_BLUE}║            SSL/TLS Configuration                          ║${COLOR_RESET}"
+    echo -e "${COLOR_BLUE}║                  SSL/TLS Configuration                   ║${COLOR_RESET}"
     echo -e "${COLOR_BLUE}╚══════════════════════════════════════════════════════════╝${COLOR_RESET}"
     echo ""
     echo -e "${COLOR_YELLOW}SSL provides secure HTTPS access to your OSPOS installation.${COLOR_RESET}"
     echo -e "${COLOR_YELLOW}For production, we recommend Let's Encrypt (free SSL certificate).${COLOR_RESET}"
     echo ""
-    
+
     read -p "Configure SSL? (y/n) [n]: " CONFIGURE_SSL
     CONFIGURE_SSL=${CONFIGURE_SSL:-n}
-    
+
     if [[ "$CONFIGURE_SSL" =~ ^[Yy]$ ]]; then
         read -p "Enter your domain name (e.g., pos.example.com): " SSL_DOMAIN
         SSL_DOMAIN=${SSL_DOMAIN:-localhost}
         APACHE_SERVER_NAME=$SSL_DOMAIN
-        
+
         read -p "Enter your email for Let's Encrypt notifications: " SSL_EMAIL
-        
+
         if [ -z "$SSL_EMAIL" ]; then
             echo -e "${COLOR_YELLOW}No email provided. Using self-signed certificate (not recommended for production).${COLOR_RESET}"
             SSL_TYPE="self-signed"
@@ -361,39 +380,43 @@ cat > /etc/apache2/sites-available/ospos.conf <<EOF
 </VirtualHost>
 EOF
 
+a2dismod 'php*' 2>/dev/null || true
+a2enmod "php${PHP_VERSION}" 2>/dev/null || true
 a2enmod rewrite
 a2dissite 000-default.conf
 a2ensite ospos.conf
 
 chown -R www-data:www-data "${OSPOS_DIR}"
 chmod -R 750 "${OSPOS_DIR}/writable"
+if [[ -f "${OSPOS_DIR}/.env" ]]; then
+    chmod 640 "${OSPOS_DIR}/.env"
+fi
 
-systemctl restart apache2
 systemctl enable apache2
 
 # Configure SSL if requested
 if [ -n "$SSL_EMAIL" ] && [ -n "$SSL_DOMAIN" ]; then
     # Let's Encrypt SSL
-    echo -e "${COLOR_BLUE}Installing Certbot for Let's Encrypt...${COLOR_RESET}"
+    echo -e "${COLOR_CYAN}Installing Certbot for Let's Encrypt...${COLOR_RESET}"
     apt-get install -y -qq certbot python3-certbot-apache
-    
-    echo -e "${COLOR_BLUE}Obtaining SSL certificate for ${SSL_DOMAIN}...${COLOR_RESET}"
-    certbot --apache -d ${SSL_DOMAIN} --non-interactive --agree-tos --email ${SSL_EMAIL} --redirect
-    
-    echo -e "${COLOR_BLUE}Setting up auto-renewal...${COLOR_RESET}"
+
+    echo -e "${COLOR_CYAN}Obtaining SSL certificate for ${SSL_DOMAIN}...${COLOR_RESET}"
+    certbot --apache -d "$SSL_DOMAIN" --non-interactive --agree-tos --email "$SSL_EMAIL" --redirect
+
+    echo -e "${COLOR_CYAN}Setting up auto-renewal...${COLOR_RESET}"
     systemctl enable certbot.timer
     systemctl start certbot.timer
-    
+
     PROTOCOL="https"
     FINAL_URL="https://${SSL_DOMAIN}/"
 elif [ -n "$SSL_DOMAIN" ]; then
     # Self-signed SSL
-    echo -e "${COLOR_BLUE}Generating self-signed SSL certificate...${COLOR_RESET}"
+    echo -e "${COLOR_CYAN}Generating self-signed SSL certificate...${COLOR_RESET}"
     openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
         -keyout /etc/ssl/private/ospos-selfsigned.key \
         -out /etc/ssl/certs/ospos-selfsigned.crt \
         -subj "/C=US/ST=State/L=City/O=Organization/CN=${SSL_DOMAIN}" 2>/dev/null
-    
+
     cat > /etc/apache2/sites-available/ospos-ssl.conf <<EOF
 <VirtualHost *:443>
     ServerName ${SSL_DOMAIN}
@@ -413,23 +436,23 @@ elif [ -n "$SSL_DOMAIN" ]; then
     CustomLog \${APACHE_LOG_DIR}/ospos_ssl_access.log combined
 </VirtualHost>
 EOF
-    
+
     a2enmod ssl
     a2ensite ospos-ssl.conf
-    
+
     cat > /etc/apache2/sites-available/ospos.conf <<EOF
 <VirtualHost *:80>
     ServerName ${SSL_DOMAIN}
     Redirect permanent / https://${SSL_DOMAIN}/
 </VirtualHost>
 EOF
-    
+
     a2dissite ospos.conf
     a2ensite ospos.conf
-    
+
     PROTOCOL="https"
     FINAL_URL="https://${SSL_DOMAIN}/"
-    
+
     echo -e "${COLOR_YELLOW}Note: Your browser will show a security warning for self-signed${COLOR_RESET}"
     echo -e "${COLOR_YELLOW}      certificates. For production, re-run with an email for Let's Encrypt.${COLOR_RESET}"
 else
@@ -441,7 +464,7 @@ systemctl restart apache2
 
 # Configure allowed hostnames: use the public hostname (SSL domain when present) so
 # Host-header validation accepts the domain the site is actually served at.
-if [ -f "${OSPOS_DIR}/.env" ]; then
+if [[ -f "${OSPOS_DIR}/.env" ]]; then
     ALLOWED_HOST="${SSL_DOMAIN:-$APACHE_SERVER_NAME}"
     # The shipped .env has no app.allowedHostnames line, so a plain sed is a silent
     # no-op and production then 500s on first load; append it if it's missing.
@@ -454,7 +477,7 @@ fi
 
 echo ""
 echo -e "${COLOR_GREEN}╔══════════════════════════════════════════════════════════╗${COLOR_RESET}"
-echo -e "${COLOR_GREEN}║            Installation Complete!                         ║${COLOR_RESET}"
+echo -e "${COLOR_GREEN}║                  Installation Complete!                  ║${COLOR_RESET}"
 echo -e "${COLOR_GREEN}╚══════════════════════════════════════════════════════════╝${COLOR_RESET}"
 echo ""
 echo -e "${COLOR_YELLOW}Database Credentials:${COLOR_RESET}"
@@ -474,7 +497,7 @@ fi
 echo -e "  Username: admin"
 echo -e "  Password: pointofsale"
 echo ""
-echo -e "${COLOR_RED}IMPORTANT: Change the default password after first login!${COLOR_RESET}"
+echo -e "${COLOR_RED}IMPORTANT: Change the default password after first login! ${COLOR_RESET}"
 echo ""
-echo -e "${COLOR_BLUE}Configuration file: ${OSPOS_DIR}/.env${COLOR_RESET}"
+echo -e "${COLOR_CYAN}Configuration file: ${OSPOS_DIR}/.env${COLOR_RESET}"
 echo ""

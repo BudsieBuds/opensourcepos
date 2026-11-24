@@ -20,7 +20,7 @@
         "objecttothis <objecttothis - at - gmail.com>"
     ],
     "files": [
-        "dist/opensourcepos.$version.tgz"
+        "dist/opensourcepos.zip"
     ],
     "type": "module",
     "main": "index.php",
@@ -29,6 +29,7 @@
     },
     "scripts": {
         "build": "gulp default",
+        "compress": "gulp compress",
         "gulp": "gulp"
     },
     "dependencies": {
@@ -72,7 +73,6 @@
         "gulp-concat": "^2.6.1",
         "gulp-inject": "^5.0.5",
         "gulp-rev": "^12.0.0",
-        "gulp-tar": "^5.0.0",
         "gulp-uglify": "^3.0.2",
         "gulp-zip": "^6.1.0",
         "license-report": "^6.8.6",
